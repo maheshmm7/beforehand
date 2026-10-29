@@ -49,3 +49,32 @@ export async function expectNoSidewaysScroll(page: Page): Promise<void> {
     `horizontal overflow, widest: ${report.offenders.join(' | ')}`,
   ).toBeLessThanOrEqual(1);
 }
+
+/**
+ * The bottom tab row is sticky, so it floats over the end of the page. Nothing
+ * a person can operate may end up underneath it, at any scroll position.
+ */
+export async function expectNothingUnderTheBottomBar(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+
+  const covered = await page.evaluate(() => {
+    const bar = document.querySelector('nav[aria-label="Sections"]');
+    if (bar === null) return [];
+    const over = bar.getBoundingClientRect();
+
+    return Array.from(
+      document.querySelectorAll<HTMLElement>('button, a[href], input, select, textarea'),
+    )
+      .filter((element) => element.closest('nav[aria-label="Sections"]') === null)
+      .map((element) => ({ element, box: element.getBoundingClientRect() }))
+      .filter(
+        (entry) =>
+          entry.box.width > 0 && entry.box.bottom > over.top && entry.box.top < over.bottom,
+      )
+      .map((entry) => `${entry.element.tagName}#${entry.element.id}`);
+  });
+
+  expect(covered, 'controls hidden behind the bottom bar').toEqual([]);
+}

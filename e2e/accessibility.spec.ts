@@ -1,5 +1,11 @@
 import { expect, test } from '@playwright/test';
-import { createPlan, expectNoAxeViolations, expectNoSidewaysScroll, setDarkMode } from './helpers';
+import {
+  createPlan,
+  expectNoAxeViolations,
+  expectNoSidewaysScroll,
+  expectNothingUnderTheBottomBar,
+  setDarkMode,
+} from './helpers';
 
 const STATIC_PAGES = ['/#/', '/#/new', '/#/about', '/#/privacy'] as const;
 
@@ -66,6 +72,15 @@ test('nothing is lost at 320 pixels with the largest text', async ({ page }) => 
     await page.goto(page.url().replace(/\/[a-z]+$/, `/${view}`));
     await page.addStyleTag({ content: 'html { font-size: 32px; }' });
     await expectNoSidewaysScroll(page);
+  }
+});
+
+test('nothing a person can operate hides under the bottom bar', async ({ page }) => {
+  await createPlan(page);
+
+  for (const view of ['Budget', 'Timeline', 'Vendors', 'Ideas'] as const) {
+    await page.getByRole('link', { name: view }).first().click();
+    await expectNothingUnderTheBottomBar(page);
   }
 });
 

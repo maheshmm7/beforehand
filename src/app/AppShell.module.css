@@ -1,4 +1,5 @@
 .shell {
+  --bottom-nav-space: 76px;
   min-height: 100svh;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -6,7 +7,10 @@
 }
 
 .main {
-  padding: clamp(12px, 3vw, 24px) clamp(12px, 4vw, 16px) var(--space-7);
+  /* The bottom tab row is sticky, so it floats over the end of the page.
+     Reserve its height here or the last control on a phone is unreachable. */
+  padding: clamp(12px, 3vw, 24px) clamp(12px, 4vw, 16px)
+    calc(var(--bottom-nav-space) + env(safe-area-inset-bottom));
   min-width: 0;
 }
 
@@ -100,6 +104,7 @@
   }
 
   .main {
+    /* No bottom tab row at this width, so nothing has to be reserved. */
     padding: var(--space-6) clamp(16px, 3vw, 32px) var(--space-7);
   }
 }
