@@ -33,8 +33,9 @@ export function HomePage(): React.JSX.Element {
         <h1 className={styles.heroTitle}>Know what a decision costs before you make it.</h1>
         <p className={styles.heroText}>
           Every other planner is a recorder: you decide, it stores. This one is a simulator. Invite
-          fifty more people and it tells you, right then, that it is another ₹1.2 lakh, that two
-          deadlines just moved closer, and that you now need a second serving line.
+          fifty more people to a 350-guest wedding and it tells you, right then, that it is another
+          ₹76,275 across six lines, that two deadlines just moved closer, and that you now need a
+          second serving line.
         </p>
         <div className={styles.heroActions}>
           <ButtonLink href={hrefFor({ name: 'new' })} variant="primary">
