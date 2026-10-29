@@ -1,0 +1,136 @@
+/* Design tokens. Every colour is defined once here, in both themes, so no
+   component ever hard-codes a value that breaks in dark mode. */
+
+:root {
+  --ink-900: #15140f;
+  --ink-700: #33302a;
+  --ink-500: #6e6a60;
+  --ink-300: #a8a396;
+  --paper-000: #ffffff;
+  --paper-050: #fbf9f4;
+  --paper-100: #f3efe6;
+  --paper-200: #e6e0d3;
+
+  --marigold-600: #b87a16;
+  --marigold-500: #e09a2b;
+  --marigold-100: #faecd2;
+  --teal-600: #11705a;
+  --teal-100: #d9eee7;
+  --clay-600: #b2502a;
+  --clay-100: #f7e3d9;
+  --rose-600: #a8324a;
+  --rose-100: #f9e0e5;
+
+  --bg: var(--paper-050);
+  --surface: var(--paper-000);
+  --surface-sunken: var(--paper-100);
+  --border: #e4ded1;
+  --border-strong: #cdc5b4;
+
+  --text: var(--ink-900);
+  --text-muted: var(--ink-500);
+  --text-faint: var(--ink-300);
+
+  --accent: var(--marigold-500);
+  --accent-ink: var(--marigold-600);
+  --accent-wash: var(--marigold-100);
+
+  --state-estimated-wash: var(--paper-200);
+  --state-estimated-ink: var(--ink-500);
+  --state-quoted-wash: var(--teal-100);
+  --state-quoted-ink: var(--teal-600);
+  --state-paid-wash: var(--clay-100);
+  --state-paid-ink: var(--clay-600);
+  --danger-wash: var(--rose-100);
+  --danger-ink: var(--rose-600);
+
+  --focus: #1b64c8;
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans',
+    'Noto Sans Devanagari', 'Noto Sans Telugu', sans-serif;
+  --font-num: ui-monospace, 'SF Mono', 'Cascadia Mono', 'Segoe UI Mono', monospace;
+
+  --shadow-raised: 0 1px 2px rgb(21 20 15 / 6%);
+  --shadow-float: 0 8px 24px rgb(21 20 15 / 10%);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #15140f;
+    --surface: #1d1b16;
+    --surface-sunken: #121109;
+    --border: #322e26;
+    --border-strong: #4a443a;
+
+    --text: #f2eee4;
+    --text-muted: #a8a294;
+    --text-faint: #767164;
+
+    --accent: #edac44;
+    --accent-ink: #edac44;
+    --accent-wash: #3a2c11;
+
+    --state-estimated-wash: #2b2820;
+    --state-estimated-ink: #a8a294;
+    --state-quoted-wash: #113028;
+    --state-quoted-ink: #6fc8ac;
+    --state-paid-wash: #3a1f13;
+    --state-paid-ink: #e4946f;
+    --danger-wash: #3a1620;
+    --danger-ink: #ec8198;
+
+    --focus: #74a9f0;
+
+    --shadow-raised: 0 1px 2px rgb(0 0 0 / 35%);
+    --shadow-float: 0 8px 24px rgb(0 0 0 / 45%);
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #15140f;
+  --surface: #1d1b16;
+  --surface-sunken: #121109;
+  --border: #322e26;
+  --border-strong: #4a443a;
+
+  --text: #f2eee4;
+  --text-muted: #a8a294;
+  --text-faint: #767164;
+
+  --accent: #edac44;
+  --accent-ink: #edac44;
+  --accent-wash: #3a2c11;
+
+  --state-estimated-wash: #2b2820;
+  --state-estimated-ink: #a8a294;
+  --state-quoted-wash: #113028;
+  --state-quoted-ink: #6fc8ac;
+  --state-paid-wash: #3a1f13;
+  --state-paid-ink: #e4946f;
+  --danger-wash: #3a1620;
+  --danger-ink: #ec8198;
+
+  --focus: #74a9f0;
+
+  --shadow-raised: 0 1px 2px rgb(0 0 0 / 35%);
+  --shadow-float: 0 8px 24px rgb(0 0 0 / 45%);
+
+  color-scheme: dark;
+}

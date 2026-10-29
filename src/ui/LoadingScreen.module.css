@@ -1,0 +1,15 @@
+.screen {
+  min-height: 60svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  color: var(--text);
+}
+
+.label {
+  font-size: 0.9375rem;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
