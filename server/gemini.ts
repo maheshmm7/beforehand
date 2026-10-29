@@ -25,6 +25,9 @@ function simplify(node: unknown): unknown {
       key === 'maxLength' ||
       key === 'minLength' ||
       key === 'additionalProperties' ||
+      key === 'propertyNames' ||
+      key === 'patternProperties' ||
+      key === 'unevaluatedProperties' ||
       key === '$schema' ||
       key === 'exclusiveMinimum' ||
       key === 'exclusiveMaximum' ||
@@ -152,10 +155,16 @@ export function createAssistant(config: Config): Assistant | undefined {
         );
         return parseReply(text, schema);
       } catch (error) {
-        if (error instanceof HttpError) throw error;
-        if (isBadRequest(error)) sawBadRequest = true;
-
         const last = index === attempts.length - 1;
+
+        if (error instanceof HttpError) {
+          // An unreadable reply is worth another attempt with a different
+          // model or without the schema; anything else is final.
+          if (last || error.code !== 'ai_unreadable') throw error;
+          continue;
+        }
+
+        if (isBadRequest(error)) sawBadRequest = true;
         if (last) throw new HttpError('ai_unavailable');
         if (isOverloaded(error)) await wait(RETRY_AFTER_429_MS);
       }

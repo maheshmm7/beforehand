@@ -54,7 +54,7 @@ describe('NewPlanPage', () => {
       value: {
         name: 'Priya and Arjun',
         place: 'Hyderabad',
-        values: { guests: 420 },
+        settings: [{ id: 'guests', value: '420' }],
         notes: ['Could not tell how many functions.'],
       },
     });
@@ -74,7 +74,7 @@ describe('NewPlanPage', () => {
   it('strips a phone number before asking the assistant', async () => {
     described.mockResolvedValue({
       ok: true,
-      value: { name: '', place: '', values: {}, notes: [] },
+      value: { name: '', place: '', settings: [], notes: [] },
     });
     renderWith(<NewPlanPage />);
 
@@ -101,7 +101,7 @@ describe('NewPlanPage', () => {
   it('only sends the levers the chosen pack actually has', async () => {
     described.mockResolvedValue({
       ok: true,
-      value: { name: '', place: '', values: {}, notes: [] },
+      value: { name: '', place: '', settings: [], notes: [] },
     });
     renderWith(<NewPlanPage />);
 
@@ -114,7 +114,11 @@ describe('NewPlanPage', () => {
 
     const sent = described.mock.calls[0]?.[0];
     expect(sent?.kind).toBe('community');
-    expect(sent?.variableIds).toContain('volunteers');
-    expect(sent?.variableIds).not.toContain('menuTier');
+    const ids = sent?.levers.map((lever) => lever.id) ?? [];
+    expect(ids).toContain('volunteers');
+    expect(ids).not.toContain('menuTier');
+    // A choice lever carries its options, or the model cannot pick one.
+    const venue = sent?.levers.find((lever) => lever.id === 'venue');
+    expect(venue?.options?.join(' ')).toContain('street');
   });
 });

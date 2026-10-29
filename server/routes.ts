@@ -34,9 +34,10 @@ const QUOTE_INSTRUCTION = [
 
 const DESCRIBE_INSTRUCTION = [
   'You turn a description of an event into settings for a planning tool.',
-  'You are given the ids of the settings that exist. Use only those ids.',
+  'You are given the settings that exist and the values each one accepts. Use only those ids, and for a choice use only the exact option id shown before the bracket.',
   'Omit any setting the description does not support. Never guess a budget.',
   'Numbers must be plain numbers. Choice settings take one of the ids listed for them.',
+  'settings is a list of {id, value} pairs. value is always text: a plain number for a number setting, or the exact option id for a choice.',
   'name is a short title for the plan, or an empty string.',
   'place is a city or venue, or an empty string.',
   'notes holds at most 6 short remarks about what you could not determine.',
@@ -87,17 +88,22 @@ export function createRoutes(assistant: Assistant | undefined): Router {
           instruction: DESCRIBE_INSTRUCTION,
           prompt: [
             `Event type: ${input.kind}.`,
-            `Settings that exist: ${input.variableIds.join(', ')}.`,
+            'Settings that exist, with the values each one accepts:',
+            input.levers
+              .map((lever) =>
+                lever.kind === 'number'
+                  ? `- ${lever.id} (${lever.label}): a number from ${lever.range ?? 'any'}`
+                  : `- ${lever.id} (${lever.label}): one of ${(lever.options ?? []).join(', ')}`,
+              )
+              .join('\n'),
             fence('description', redact(input.text)),
           ].join('\n\n'),
           schema: describeResponseSchema,
         });
         // Only settings this pack actually has are passed back to the client.
-        const allowed = new Set(input.variableIds);
-        const values = Object.fromEntries(
-          Object.entries(result.values).filter(([key]) => allowed.has(key)),
-        );
-        response.json({ ...result, values });
+        const allowed = new Set(input.levers.map((lever) => lever.id));
+        const settings = result.settings.filter((setting) => allowed.has(setting.id));
+        response.json({ ...result, settings });
       } catch (error) {
         next(error);
       }

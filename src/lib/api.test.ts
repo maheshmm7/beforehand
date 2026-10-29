@@ -107,8 +107,12 @@ describe('the api client', () => {
   });
 
   it('carries the describe and ideas contracts too', async () => {
-    reply(200, { name: 'A', place: 'B', values: { guests: 350 }, notes: [] });
-    const described = await describePlan({ text: 'x', kind: 'wedding', variableIds: ['guests'] });
+    reply(200, { name: 'A', place: 'B', settings: [{ id: 'guests', value: '350' }], notes: [] });
+    const described = await describePlan({
+      text: 'x',
+      kind: 'wedding',
+      levers: [{ id: 'guests', label: 'Guests', kind: 'number', range: '50 to 800' }],
+    });
     expect(described.ok).toBe(true);
 
     reply(200, { ideas: [] });

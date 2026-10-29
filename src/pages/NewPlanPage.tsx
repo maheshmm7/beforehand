@@ -1,6 +1,7 @@
 import { useId, useState } from 'react';
 import type { EventKind } from '@shared/plan';
 import { packFor, packList, defaultValues } from '@shared/packs';
+import { applyDescribedSettings, describeLevers } from '@shared/describeSettings';
 import { describePlan } from '@/lib/api';
 import { shiftDays } from '@shared/engine';
 import { redact } from '@shared/redact';
@@ -50,7 +51,7 @@ export function NewPlanPage(): React.JSX.Element {
     const result = await describePlan({
       text,
       kind,
-      variableIds: packFor(kind).variables.map((variable) => variable.id),
+      levers: describeLevers(packFor(kind)),
     });
     setBusy(false);
 
@@ -60,7 +61,10 @@ export function NewPlanPage(): React.JSX.Element {
     }
     if (result.value.name !== '' && name === '') setName(result.value.name);
     if (result.value.place !== '') setPlace(result.value.place);
-    setValues((previous) => ({ ...previous, ...result.value.values }));
+    setValues((previous) => ({
+      ...previous,
+      ...applyDescribedSettings(packFor(kind), result.value.settings),
+    }));
     setNotes(result.value.notes);
   }
 

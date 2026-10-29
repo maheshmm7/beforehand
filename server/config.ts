@@ -26,7 +26,9 @@ export interface Config {
 }
 
 const DEFAULT_MODEL = 'gemini-3.6-flash';
-const DEFAULT_FALLBACK_MODEL = 'gemini-2.5-flash';
+// Checked against the live API: gemini-2.5-flash now returns 404 for new
+// keys, so a fallback pointing at it turned every flap into a failure.
+const DEFAULT_FALLBACK_MODEL = 'gemini-3.5-flash';
 const DEFAULT_PORT = 8787;
 
 function emptyToUndefined(value: string | undefined): string | undefined {

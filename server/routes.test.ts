@@ -69,7 +69,14 @@ describe('with no assistant configured', () => {
   it('refuses every assistant route with a stable code', async () => {
     for (const [path, body] of [
       ['/api/quote', { text: 'x', lineLabel: 'Catering' }],
-      ['/api/describe', { text: 'x', kind: 'wedding', variableIds: ['guests'] }],
+      [
+        '/api/describe',
+        {
+          text: 'x',
+          kind: 'wedding',
+          levers: [{ id: 'guests', label: 'Guests', kind: 'number', range: '1 to 2' }],
+        },
+      ],
       ['/api/ideas', { kind: 'wedding', summary: 'x', headroom: 1000 }],
     ] as const) {
       const response = await post(origin, path, body);
@@ -157,7 +164,11 @@ describe('/api/describe', () => {
     const assistant = fakeAssistant({
       name: 'Priya and Arjun',
       place: 'Hyderabad',
-      values: { guests: 350, budgetTotal: 1800000, venueClass: 'hotel' },
+      settings: [
+        { id: 'guests', value: '350' },
+        { id: 'budgetTotal', value: '1800000' },
+        { id: 'venueClass', value: 'hotel' },
+      ],
       notes: [],
     });
     const { origin, close } = await serve(assistant);
@@ -165,13 +176,19 @@ describe('/api/describe', () => {
     const response = await post(origin, '/api/describe', {
       text: 'A wedding in Hyderabad',
       kind: 'wedding',
-      variableIds: ['guests', 'venueClass'],
+      levers: [
+        { id: 'guests', label: 'Guests', kind: 'number' as const, range: '50 to 800' },
+        { id: 'venueClass', label: 'Venue', kind: 'choice' as const, options: ['hotel (Hotel)'] },
+      ],
     });
 
     expect(await response.json()).toEqual({
       name: 'Priya and Arjun',
       place: 'Hyderabad',
-      values: { guests: 350, venueClass: 'hotel' },
+      settings: [
+        { id: 'guests', value: '350' },
+        { id: 'venueClass', value: 'hotel' },
+      ],
       notes: [],
     });
     await close();

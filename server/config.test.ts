@@ -8,7 +8,7 @@ describe('readConfig', () => {
 
     expect(config.geminiApiKey).toBeUndefined();
     expect(config.model).toBe('gemini-3.6-flash');
-    expect(config.fallbackModel).toBe('gemini-2.5-flash');
+    expect(config.fallbackModel).toBe('gemini-3.5-flash');
     expect(config.port).toBe(8787);
     expect(config.isProduction).toBe(false);
   });
