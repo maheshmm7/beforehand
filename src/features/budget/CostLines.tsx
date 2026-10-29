@@ -1,6 +1,7 @@
 import type { CostCategory, CostLine, Model } from '@shared/engine';
 import { money } from '@/lib/format';
 import { Chip, type ChipTone } from '@/ui/controls';
+import { Money } from '@/ui/Money';
 import styles from './budget.module.css';
 
 const GROUP_NAMES: Readonly<Record<CostCategory, string>> = {
@@ -67,7 +68,7 @@ export function CostLines({ model }: { model: Model }): React.JSX.Element {
 
       <div className={styles.total}>
         <span>Total</span>
-        <span className={styles.totalValue}>{money(model.totals.all)}</span>
+        <Money className={styles.totalValue} amount={model.totals.all} />
       </div>
     </div>
   );

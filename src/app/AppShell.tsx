@@ -2,8 +2,11 @@ import { useState, type ReactNode } from 'react';
 import { hrefFor, VIEWS, type Route } from '@/lib/router';
 import { useWorkspace } from '@/state/useWorkspace';
 import { Button } from '@/ui/controls';
+import { ThemeToggle } from '@/ui/ThemeToggle';
+import { IconChevron } from '@/ui/icons';
 import { Logo } from '@/ui/Logo';
 import { Sidebar } from './Sidebar';
+import { VIEW_ICONS } from './viewIcons';
 import { VIEW_LABELS } from './viewLabels';
 import styles from './AppShell.module.css';
 
@@ -34,16 +37,20 @@ export function AppShell({
         <a className={styles.topbarLink} href={hrefFor({ name: 'home' })}>
           <Logo size={24} />
         </a>
-        <Button
-          small
-          variant="ghost"
-          onClick={() => {
-            setPlansOpen((open) => !open);
-          }}
-        >
-          {plan?.name ?? 'Plans'}
-          <span aria-hidden="true">{plansOpen ? '▴' : '▾'}</span>
-        </Button>
+        <span className={styles.topbarActions}>
+          <ThemeToggle />
+          <Button
+            small
+            onClick={() => {
+              setPlansOpen((open) => !open);
+            }}
+          >
+            <span className={styles.planName}>{plan?.name ?? 'Plans'}</span>
+            <span className={plansOpen ? styles.chevronUp : undefined}>
+              <IconChevron size={16} />
+            </span>
+          </Button>
+        </span>
       </header>
 
       {plansOpen ? (
@@ -69,6 +76,7 @@ export function AppShell({
               href={hrefFor({ name: 'plan', planId: plan.id, view })}
               aria-current={route.name === 'plan' && route.view === view ? 'page' : undefined}
             >
+              <span aria-hidden="true">{VIEW_ICONS[view]}</span>
               {VIEW_LABELS[view]}
             </a>
           ))}

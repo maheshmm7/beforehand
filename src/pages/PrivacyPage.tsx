@@ -1,8 +1,9 @@
-import styles from './pages.module.css';
+import styles from './landing/landing.module.css';
 
 export function PrivacyPage(): React.JSX.Element {
   return (
-    <article className={styles.prose}>
+    <article className={styles.prosePage}>
+      <p className={styles.kicker}>Privacy</p>
       <h1>Privacy</h1>
 
       <h2>What is stored, and where</h2>

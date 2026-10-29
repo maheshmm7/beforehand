@@ -78,6 +78,19 @@ prompt.
 Pasted text is fenced inside a boundary that changes every request, labelled as data, and the model
 is told to ignore instructions inside it.
 
+## The interface
+
+A landing page that demonstrates the product rather than describing it: the hero carries a working
+simulator running the real engine, so dragging the guest count on the marketing page recomputes the
+same model the app uses. Below it: how it works, a side-by-side against a conventional planner, what
+you get, the three event types, the questions people ask, and a footer.
+
+Fraunces for headlines and Inter for the interface, both self-hosted so the page loads nothing from
+another domain. Light and dark themes, each defined once as tokens, with a control that remembers
+your choice. Sections settle in as they are scrolled to, money counts from the old figure to the new
+one, and the slider is a gauge — all of it skipped entirely under `prefers-reduced-motion`, and none
+of it required for the page to work.
+
 ## Running it
 
 ```bash

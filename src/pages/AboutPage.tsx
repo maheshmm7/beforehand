@@ -1,10 +1,11 @@
 import { hrefFor } from '@/lib/router';
 import { ButtonLink } from '@/ui/controls';
-import styles from './pages.module.css';
+import styles from './landing/landing.module.css';
 
 export function AboutPage(): React.JSX.Element {
   return (
-    <article className={styles.prose}>
+    <article className={styles.prosePage}>
+      <p className={styles.kicker}>The approach</p>
       <h1>How Beforehand works</h1>
 
       <p>

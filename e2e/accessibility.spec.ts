@@ -43,7 +43,7 @@ test('the whole journey can be done with the keyboard alone', async ({ page }) =
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
 
-  await page.getByRole('link', { name: 'Start a plan' }).focus();
+  await page.getByRole('link', { name: 'Start a plan' }).first().focus();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Start a plan');
 

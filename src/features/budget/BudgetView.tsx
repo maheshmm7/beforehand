@@ -19,16 +19,6 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
   return (
     <div className={styles.columns}>
       <div className={styles.left}>
-        <Card title="Levers">
-          <Levers
-            pack={pack}
-            values={scenario.values}
-            onChange={(variableId, value) => {
-              dispatch({ type: 'setValue', planId: plan.id, variableId, value });
-            }}
-          />
-        </Card>
-
         <BlastRadiusPanel
           radius={radius}
           onKeep={() => {
@@ -38,18 +28,29 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
             dispatch({ type: 'revertChanges', planId: plan.id });
           }}
         />
+
+        <Card title="Levers">
+          <Levers
+            pack={pack}
+            values={scenario.values}
+            onChange={(variableId, value) => {
+              dispatch({ type: 'setValue', planId: plan.id, variableId, value });
+            }}
+          />
+        </Card>
       </div>
 
       <div className={styles.right}>
         <Card title="Where the money stands">
           <div className={styles.stats}>
-            <Stat label="Total" value={moneyShort(totals.all)} note={money(totals.all)} />
+            <Stat label="Total" value={moneyShort(totals.all)} note={money(totals.all)} live />
             <Stat label="Paid" value={moneyShort(totals.paid)} note="gone, not reversible" />
             <Stat label="Quoted" value={moneyShort(totals.quoted)} note="promised by a vendor" />
             <Stat
               label="Still movable"
               value={moneyShort(totals.movable)}
               note="only an estimate"
+              live
             />
           </div>
 

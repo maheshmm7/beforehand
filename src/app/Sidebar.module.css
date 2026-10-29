@@ -68,7 +68,12 @@
   border-top: 1px solid var(--border);
 }
 
+.footerSpacer {
+  flex: 1;
+}
+
 .footer {
+  align-items: center;
   margin-top: var(--space-6);
   padding-top: var(--space-4);
   border-top: 1px solid var(--border);

@@ -51,6 +51,10 @@
   background: var(--surface-sunken);
 }
 
+.bar > * {
+  transition: width var(--dur-slow) var(--ease-out);
+}
+
 .barPaid {
   background: var(--state-paid-ink);
 }
@@ -120,10 +124,17 @@
 }
 
 .radiusRow {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
   gap: var(--space-3);
+}
+
+.radiusRow > :last-child {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  font-weight: 500;
 }
 
 .alert {
@@ -160,6 +171,7 @@
 }
 
 .line {
+  transition: background-color var(--dur-base) var(--ease-out);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -174,6 +186,10 @@
   align-items: center;
   gap: var(--space-2);
   flex-wrap: wrap;
+}
+
+.line:hover {
+  background: var(--surface-sunken);
 }
 
 .lineBasis {
@@ -208,6 +224,7 @@
 .total {
   display: flex;
   flex-wrap: wrap;
+  align-items: baseline;
   justify-content: space-between;
   align-items: baseline;
   padding-top: var(--space-4);
@@ -215,7 +232,9 @@
 }
 
 .totalValue {
-  font-size: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
   font-weight: 600;
+  letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
 }

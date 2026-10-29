@@ -1,100 +1,136 @@
 .button {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  min-height: 40px;
-  padding: 0 var(--space-4);
-  border-radius: var(--radius);
+  min-height: 46px;
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-pill);
   border: 1px solid var(--border-strong);
   background: var(--surface);
   color: var(--text);
   font-size: 0.9375rem;
   font-weight: 500;
+  letter-spacing: -0.01em;
   cursor: pointer;
   text-decoration: none;
+  white-space: nowrap;
+  min-width: 0;
   transition:
-    background-color 120ms ease,
-    border-color 120ms ease;
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
 }
 
 .button:hover {
   background: var(--surface-sunken);
+  border-color: var(--border-loud);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .button:active {
-  transform: translateY(0.5px);
+  transform: translateY(0) scale(0.985);
+  box-shadow: none;
 }
 
 .button[disabled] {
-  opacity: 0.55;
+  opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .primary {
   background: var(--accent);
-  border-color: var(--accent);
-  color: #241a05;
+  border-color: transparent;
+  color: var(--accent-on);
+  box-shadow: var(--shadow-accent);
+  font-weight: 600;
 }
 
 .primary:hover {
   background: var(--accent);
-  filter: brightness(1.06);
+  border-color: transparent;
+  filter: brightness(1.05);
+  box-shadow: var(--shadow-accent);
 }
 
 .ghost {
   border-color: transparent;
   background: transparent;
+  box-shadow: none;
 }
 
 .ghost:hover {
   background: var(--surface-sunken);
+  border-color: transparent;
+  box-shadow: none;
 }
 
 .danger {
-  border-color: var(--border-strong);
   color: var(--danger-ink);
 }
 
 .danger:hover {
   background: var(--danger-wash);
+  border-color: var(--danger-ink);
 }
 
 .small {
-  /* WCAG 2.2 wants 24px of clear target; 36px keeps adjacent rows apart. */
-  min-height: 36px;
-  padding: 0 var(--space-3);
-  font-size: 0.8125rem;
+  min-height: 38px;
+  padding: 0 var(--space-4);
+  font-size: var(--text-small);
+}
+
+.large {
+  min-height: 54px;
+  padding: 0 var(--space-6);
+  font-size: 1.0625rem;
 }
 
 .card {
+  position: relative;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  /* Padding in pixels, not rem: at 200% text on a 320px screen, rem padding
-     would eat the whole line and force sideways scrolling. */
-  padding: clamp(14px, 4vw, 24px);
-  box-shadow: var(--shadow-raised);
+  padding: clamp(16px, 4vw, 26px);
+  box-shadow: var(--shadow-sm);
 }
 
 .cardTitle {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: var(--text-tiny);
+  font-weight: 600;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-faint);
   margin-bottom: var(--space-4);
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
-  padding: 2px var(--space-2);
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 500;
+  gap: 5px;
+  padding: 3px var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-tiny);
+  font-weight: 600;
+  letter-spacing: 0.01em;
   white-space: nowrap;
+}
+
+.chip::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentcolor;
 }
 
 .estimated {
@@ -124,28 +160,49 @@
 
 .stat {
   background: var(--surface-sunken);
+  border: 1px solid transparent;
   border-radius: var(--radius);
   padding: var(--space-4);
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+.stat:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
+}
+
+.statLive {
+  background: var(--accent-wash);
+}
+
+.statLive .statLabel,
+.statLive .statNote {
+  color: var(--accent-ink);
 }
 
 .statLabel {
   display: block;
-  font-size: 0.8125rem;
+  font-size: var(--text-small);
   color: var(--text-muted);
 }
 
 .statValue {
   display: block;
-  margin-top: 2px;
-  font-size: 1.5rem;
-  font-weight: 550;
-  letter-spacing: -0.02em;
+  margin-top: 4px;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
+  font-family: var(--font-display);
+  font-variation-settings: 'SOFT' 20;
 }
 
 .statNote {
   display: block;
-  font-size: 0.75rem;
+  margin-top: 2px;
+  font-size: var(--text-tiny);
   color: var(--text-faint);
 }
 
@@ -160,21 +217,23 @@
   justify-content: space-between;
   align-items: baseline;
   gap: var(--space-2);
-  font-size: 0.875rem;
+  font-size: var(--text-small);
+  font-weight: 500;
   color: var(--text-muted);
   margin-bottom: var(--space-2);
 }
 
 .fieldValue {
   color: var(--text);
-  font-weight: 550;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
 }
 
 .fieldHelp {
   display: block;
   margin-top: var(--space-2);
-  font-size: 0.75rem;
+  font-size: var(--text-tiny);
   color: var(--text-faint);
 }
 
@@ -182,39 +241,134 @@
 .select,
 .textarea {
   width: 100%;
-  /* A select is as wide as its longest option unless told otherwise, which
-     pushes narrow layouts sideways. */
   min-width: 0;
   max-width: 100%;
-  min-height: 40px;
-  padding: var(--space-2) var(--space-3);
+  min-height: 46px;
+  padding: var(--space-2) var(--space-4);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--text);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.input:hover,
+.select:hover,
+.textarea:hover {
+  border-color: var(--border-loud);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--accent);
+}
+
+.select {
+  appearance: none;
+  padding-right: var(--space-7);
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentcolor 50%),
+    linear-gradient(135deg, currentcolor 50%, transparent 50%);
+  background-position:
+    calc(100% - 19px) calc(50% + 2px),
+    calc(100% - 13px) calc(50% + 2px);
+  background-size:
+    6px 6px,
+    6px 6px;
+  background-repeat: no-repeat;
+  cursor: pointer;
 }
 
 .textarea {
-  min-height: 110px;
+  min-height: 118px;
   resize: vertical;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
+/* The filled part of the track is drawn from a percentage the component sets,
+   so the slider reads as a gauge rather than a bare control. */
 .range {
+  --fill: 50%;
   width: 100%;
   min-width: 0;
-  accent-color: var(--accent);
-  height: 32px;
+  height: 34px;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.range::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    to right,
+    var(--accent) 0%,
+    var(--accent) var(--fill),
+    var(--surface-sunken) var(--fill),
+    var(--surface-sunken) 100%
+  );
+  border: 1px solid var(--border);
+}
+
+.range::-moz-range-track {
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    to right,
+    var(--accent) 0%,
+    var(--accent) var(--fill),
+    var(--surface-sunken) var(--fill),
+    var(--surface-sunken) 100%
+  );
+  border: 1px solid var(--border);
+}
+
+.range::-webkit-slider-thumb {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  margin-top: -9px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--dur-fast) var(--ease-spring),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.range::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.range:hover::-webkit-slider-thumb {
+  transform: scale(1.12);
+}
+
+.range:active::-webkit-slider-thumb {
+  transform: scale(1.04);
+  box-shadow: var(--shadow-accent);
 }
 
 .empty {
   padding: var(--space-6) var(--space-4);
   text-align: center;
   color: var(--text-muted);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface-sunken);
 }
 
 .emptyTitle {
   color: var(--text);
-  font-weight: 550;
+  font-weight: 600;
   margin-bottom: var(--space-2);
 }

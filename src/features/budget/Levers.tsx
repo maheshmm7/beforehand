@@ -1,6 +1,7 @@
 import type { EventPack, VariableValues } from '@shared/engine';
 import { Field } from '@/ui/controls';
 import { controlStyles } from '@/ui/controlStyles';
+import { fillStyle } from '@/ui/fillStyle';
 import styles from './budget.module.css';
 
 /** Every lever in the pack, rendered from its own definition. */
@@ -32,6 +33,7 @@ export function Levers({
               <input
                 id={id}
                 className={controlStyles.range}
+                style={fillStyle((value - variable.min) / (variable.max - variable.min))}
                 type="range"
                 min={variable.min}
                 max={variable.max}

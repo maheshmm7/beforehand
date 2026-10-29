@@ -7,6 +7,7 @@ import { useWorkspace } from '@/state/useWorkspace';
 import { newId } from '@/state/workspace';
 import { Button, ButtonLink } from '@/ui/controls';
 import { Logo } from '@/ui/Logo';
+import { ThemeToggle } from '@/ui/ThemeToggle';
 import styles from './Sidebar.module.css';
 
 function planMeta(plan: Plan): string {
@@ -125,6 +126,8 @@ export function Sidebar({ route }: { route: Route }): React.JSX.Element {
         <a className={styles.footerLink} href={hrefFor({ name: 'privacy' })}>
           Privacy
         </a>
+        <span className={styles.footerSpacer} />
+        <ThemeToggle />
       </div>
     </nav>
   );

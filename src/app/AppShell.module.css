@@ -1,17 +1,16 @@
+/* On a narrow screen the shell is a column with its own scroll region, so the
+   tab row is chrome beside the content rather than an overlay on top of it.
+   Nothing can ever be hidden underneath it. */
 .shell {
-  --bottom-nav-space: 76px;
+  display: flex;
+  flex-direction: column;
   min-height: 100svh;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto 1fr auto;
 }
 
 .main {
-  /* The bottom tab row is sticky, so it floats over the end of the page.
-     Reserve its height here or the last control on a phone is unreachable. */
-  padding: clamp(12px, 3vw, 24px) clamp(12px, 4vw, 16px)
-    calc(var(--bottom-nav-space) + env(safe-area-inset-bottom));
+  flex: 1;
   min-width: 0;
+  padding: clamp(12px, 3vw, 24px) clamp(12px, 4vw, 16px) var(--space-7);
 }
 
 .inner {
@@ -21,14 +20,11 @@
 }
 
 .topbar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-2) var(--space-3);
   padding: var(--space-3) var(--space-4);
   background: var(--bg);
   border-bottom: 1px solid var(--border);
@@ -37,18 +33,39 @@
 .topbarLink {
   color: inherit;
   text-decoration: none;
+  flex: none;
+}
+
+.topbarActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.planName {
+  display: inline-block;
+  max-width: 11ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevronUp {
+  display: inline-flex;
+  transform: rotate(180deg);
 }
 
 .drawer {
   padding: var(--space-3) var(--space-4) var(--space-5);
   border-bottom: 1px solid var(--border);
   background: var(--surface);
+  max-height: 60svh;
+  overflow-y: auto;
 }
 
 .bottomNav {
-  position: sticky;
-  bottom: 0;
-  z-index: 20;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: minmax(0, 1fr);
@@ -62,29 +79,53 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  justify-content: center;
+  gap: 3px;
   padding: var(--space-2) var(--space-1);
-  font-size: 0.75rem;
+  font-size: var(--text-tiny);
+  font-weight: 500;
   color: var(--text-muted);
   text-decoration: none;
-  min-height: 48px;
-  justify-content: center;
+  min-height: 52px;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.bottomNavLink:hover {
+  color: var(--text);
+  background: var(--surface-sunken);
 }
 
 .bottomNavLink[aria-current='page'] {
   color: var(--accent-ink);
-  font-weight: 550;
+  font-weight: 600;
   box-shadow: inset 0 2px 0 var(--accent);
+  background: var(--accent-wash);
 }
 
 .sidebar {
   display: none;
 }
 
+@media (max-width: 899.98px) {
+  /* The page itself does not scroll; the content region does. */
+  .shell {
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .main {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
 @media (min-width: 900px) {
   .shell {
+    display: grid;
     grid-template-columns: 252px minmax(0, 1fr);
-    grid-template-rows: 1fr;
+    align-items: start;
   }
 
   .topbar,
@@ -104,7 +145,6 @@
   }
 
   .main {
-    /* No bottom tab row at this width, so nothing has to be reserved. */
     padding: var(--space-6) clamp(16px, 3vw, 32px) var(--space-7);
   }
 }

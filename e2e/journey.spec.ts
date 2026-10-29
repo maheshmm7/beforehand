@@ -5,7 +5,8 @@ test('the landing page states what the product does', async ({ page }) => {
   await page.goto('/#/');
 
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Know what a decision costs');
-  await expect(page.getByRole('link', { name: 'Start a plan' })).toBeVisible();
+  // The header and the hero both offer it; either one is the real call.
+  await expect(page.getByRole('link', { name: 'Start a plan' }).first()).toBeVisible();
   await expectNoSidewaysScroll(page);
 });
 

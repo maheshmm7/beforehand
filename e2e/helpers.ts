@@ -39,7 +39,8 @@ export async function expectNoSidewaysScroll(page: Page): Promise<void> {
       .slice(0, 5)
       .map(
         (entry) =>
-          `${entry.element.tagName}.${entry.element.className.slice(0, 30)} right=${String(Math.round(entry.box.right))}`,
+          // An SVG element's className is not a string, so read the attribute.
+          `${entry.element.tagName}.${(entry.element.getAttribute('class') ?? '').slice(0, 30)} right=${String(Math.round(entry.box.right))}`,
       );
     return { overflow: document.documentElement.scrollWidth - viewport, offenders };
   });
@@ -55,25 +56,39 @@ export async function expectNoSidewaysScroll(page: Page): Promise<void> {
  * a person can operate may end up underneath it, at any scroll position.
  */
 export async function expectNothingUnderTheBottomBar(page: Page): Promise<void> {
+  // On a narrow screen the content scrolls inside its own region, not the page.
   await page.evaluate(() => {
-    window.scrollTo(0, document.body.scrollHeight);
+    const region = document.getElementById('main');
+    if (region !== null && region.scrollHeight > region.clientHeight) {
+      region.scrollTop = region.scrollHeight;
+    } else {
+      window.scrollTo(0, document.documentElement.scrollHeight);
+    }
   });
+  await page.waitForTimeout(150);
 
   const covered = await page.evaluate(() => {
     const bar = document.querySelector('nav[aria-label="Sections"]');
     if (bar === null) return [];
     const over = bar.getBoundingClientRect();
+    // Above the breakpoint the bar is not displayed, so it covers nothing.
+    if (over.height === 0) return [];
 
-    return Array.from(
-      document.querySelectorAll<HTMLElement>('button, a[href], input, select, textarea'),
-    )
-      .filter((element) => element.closest('nav[aria-label="Sections"]') === null)
-      .map((element) => ({ element, box: element.getBoundingClientRect() }))
-      .filter(
-        (entry) =>
-          entry.box.width > 0 && entry.box.bottom > over.top && entry.box.top < over.bottom,
-      )
-      .map((entry) => `${entry.element.tagName}#${entry.element.id}`);
+    return (
+      Array.from(document.querySelectorAll<HTMLElement>('button, a[href], input, select, textarea'))
+        .filter((element) => element.closest('nav[aria-label="Sections"]') === null)
+        .map((element) => ({ element, box: element.getBoundingClientRect() }))
+        // Only what is on screen at the end of the page: something further down
+        // is not covered, it is simply not scrolled to yet.
+        .filter(
+          (entry) =>
+            entry.box.width > 0 &&
+            entry.box.top < window.innerHeight &&
+            entry.box.bottom > over.top &&
+            entry.box.top < over.bottom,
+        )
+        .map((entry) => `${entry.element.tagName}#${entry.element.id}`)
+    );
   });
 
   expect(covered, 'controls hidden behind the bottom bar').toEqual([]);

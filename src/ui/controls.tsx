@@ -9,6 +9,7 @@ export function Button({
   onClick,
   variant = 'secondary',
   small = false,
+  large = false,
   disabled = false,
   type = 'button',
   title,
@@ -18,6 +19,7 @@ export function Button({
   onClick?: () => void;
   variant?: ButtonVariant;
   small?: boolean;
+  large?: boolean;
   disabled?: boolean;
   type?: 'button' | 'submit';
   title?: string;
@@ -32,6 +34,7 @@ export function Button({
         variant === 'ghost' && styles.ghost,
         variant === 'danger' && styles.danger,
         small && styles.small,
+        large && styles.large,
       )}
       onClick={onClick}
       disabled={disabled}
@@ -48,12 +51,14 @@ export function ButtonLink({
   href,
   variant = 'secondary',
   small = false,
+  large = false,
   className,
 }: {
   children: ReactNode;
   href: string;
   variant?: ButtonVariant;
   small?: boolean;
+  large?: boolean;
   className?: string;
 }): React.JSX.Element {
   return (
@@ -65,6 +70,7 @@ export function ButtonLink({
         variant === 'ghost' && styles.ghost,
         variant === 'danger' && styles.danger,
         small && styles.small,
+        large && styles.large,
         className,
       )}
     >
@@ -113,13 +119,16 @@ export function Stat({
   label,
   value,
   note,
+  live = false,
 }: {
   label: string;
   value: string;
   note?: string;
+  /** Marks a figure that changes as the plan changes, so it gets emphasis. */
+  live?: boolean;
 }): React.JSX.Element {
   return (
-    <div className={styles.stat}>
+    <div className={cx(styles.stat, live && styles.statLive)}>
       <span className={styles.statLabel}>{label}</span>
       <span className={styles.statValue}>{value}</span>
       {note === undefined ? null : <span className={styles.statNote}>{note}</span>}

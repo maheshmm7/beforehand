@@ -35,6 +35,13 @@ describe('parseRoute', () => {
     expect(parseRoute('#/plan/p-1/accounts')).toEqual({ name: 'notFound' });
   });
 
+  it('leaves an in-page anchor on the landing page', () => {
+    // The marketing nav uses #how and friends; they are not addresses.
+    expect(parseRoute('#how')).toEqual({ name: 'home' });
+    expect(parseRoute('#questions')).toEqual({ name: 'home' });
+    expect(parseRoute('#main')).toEqual({ name: 'home' });
+  });
+
   it('refuses anything else rather than guessing', () => {
     expect(parseRoute('#/nowhere')).toEqual({ name: 'notFound' });
     expect(parseRoute('#/plan')).toEqual({ name: 'notFound' });

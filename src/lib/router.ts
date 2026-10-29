@@ -15,8 +15,16 @@ function isView(value: string): value is View {
   return VIEWS.some((view) => view === value);
 }
 
-/** Hash routing: no router dependency, and back and forward work for free. */
+/**
+ * Hash routing: no router dependency, and back and forward work for free.
+ *
+ * Every route begins `#/`. A bare `#name` is an in-page anchor, not an
+ * address, so it leaves the landing page where it is and lets the browser
+ * scroll to it.
+ */
 export function parseRoute(hash: string): Route {
+  if (hash !== '' && hash !== '#' && !hash.startsWith('#/')) return { name: 'home' };
+
   const path = hash.replace(/^#/, '').replace(/^\/+/, '').replace(/\/+$/, '');
   if (path === '') return { name: 'home' };
 
