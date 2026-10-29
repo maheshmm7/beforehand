@@ -4,19 +4,19 @@
 :root {
   --ink-900: #15140f;
   --ink-700: #33302a;
-  --ink-500: #6e6a60;
-  --ink-300: #a8a396;
+  --ink-500: #5b574e;
+  --ink-300: #6e6a60;
   --paper-000: #ffffff;
   --paper-050: #fbf9f4;
   --paper-100: #f3efe6;
   --paper-200: #e6e0d3;
 
-  --marigold-600: #b87a16;
+  --marigold-600: #8a5a0c;
   --marigold-500: #e09a2b;
   --marigold-100: #faecd2;
   --teal-600: #11705a;
   --teal-100: #d9eee7;
-  --clay-600: #b2502a;
+  --clay-600: #9a4423;
   --clay-100: #f7e3d9;
   --rose-600: #a8324a;
   --rose-100: #f9e0e5;
@@ -79,7 +79,7 @@
 
     --text: #f2eee4;
     --text-muted: #a8a294;
-    --text-faint: #767164;
+    --text-faint: #8f8a7c;
 
     --accent: #edac44;
     --accent-ink: #edac44;
@@ -112,7 +112,7 @@
 
   --text: #f2eee4;
   --text-muted: #a8a294;
-  --text-faint: #767164;
+  --text-faint: #8f8a7c;
 
   --accent: #edac44;
   --accent-ink: #edac44;

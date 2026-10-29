@@ -1,0 +1,114 @@
+import { useState } from 'react';
+import type { Plan } from '@shared/plan';
+import { money, plural } from '@/lib/format';
+import { usePlanModel } from '@/state/usePlanModel';
+import { useWorkspace } from '@/state/useWorkspace';
+import { newId } from '@/state/workspace';
+import { Button, Card, Chip } from '@/ui/controls';
+import { QuoteForm } from './QuoteForm';
+import styles from './vendors.module.css';
+
+export function VendorsView({ plan }: { plan: Plan }): React.JSX.Element {
+  const { dispatch } = useWorkspace();
+  const { current, scenario } = usePlanModel(plan);
+  const [editing, setEditing] = useState<string | null>(null);
+
+  const unpromised = current.lines.filter((line) => line.state === 'estimated');
+  const promised = current.lines.filter((line) => line.state !== 'estimated');
+
+  return (
+    <>
+      <Card title={`Still nobody’s promise — ${plural(unpromised.length, 'line')}`}>
+        <p className={styles.intro}>
+          These are the model’s estimates. Nobody has actually agreed to them yet, which is what
+          makes this the real checklist.
+        </p>
+
+        {current.lines.map((line) => (
+          <div key={line.ruleId}>
+            <div className={styles.row}>
+              <div>
+                <span className={styles.name}>
+                  {line.label}
+                  <Chip tone={line.state}>{line.state}</Chip>
+                </span>
+                <span className={styles.detail}>
+                  {line.decision} · needs {plural(line.leadTimeDays, 'day')} of notice
+                  {line.vendor === undefined ? '' : ` · ${line.vendor}`}
+                </span>
+                {line.quote === undefined || line.quote === '' ? null : (
+                  <span className={styles.evidence}>“{line.quote}”</span>
+                )}
+              </div>
+              <div className={styles.right}>
+                <span className={styles.amount}>{money(line.amount)}</span>
+                <Button
+                  small
+                  onClick={() => {
+                    setEditing(editing === line.ruleId ? null : line.ruleId);
+                  }}
+                >
+                  {line.state === 'estimated' ? 'Record a quote' : 'Edit'}
+                </Button>
+              </div>
+            </div>
+
+            {editing === line.ruleId ? (
+              <QuoteForm
+                line={line}
+                onCancel={() => {
+                  setEditing(null);
+                }}
+                onSave={(commitment) => {
+                  dispatch({
+                    type: 'addCommitment',
+                    planId: plan.id,
+                    commitment: { ...commitment, id: newId('c') },
+                  });
+                  setEditing(null);
+                }}
+              />
+            ) : null}
+          </div>
+        ))}
+      </Card>
+
+      {promised.length === 0 ? null : (
+        <Card title="What has actually been promised">
+          <p className={styles.intro}>
+            {plural(promised.length, 'line')} of {String(current.lines.length)} are backed by a real
+            price. Together that is {money(current.totals.quoted + current.totals.paid)}.
+          </p>
+          {scenario.commitments.map((commitment) => (
+            <div key={commitment.id} className={styles.row}>
+              <div>
+                <span className={styles.name}>{commitment.vendor}</span>
+                <span className={styles.detail}>
+                  {current.lines.find((line) => line.ruleId === commitment.ruleId)?.label ??
+                    commitment.ruleId}
+                </span>
+              </div>
+              <div className={styles.right}>
+                <span className={styles.amount}>{money(commitment.amount)}</span>
+                <Button
+                  small
+                  variant="ghost"
+                  ariaLabel={`Remove the quote from ${commitment.vendor}`}
+                  onClick={() => {
+                    dispatch({
+                      type: 'removeCommitment',
+                      planId: plan.id,
+                      commitmentId: commitment.id,
+                    });
+                  }}
+                >
+                  Remove
+                </Button>
+              </div>
+            </div>
+          ))}
+        </Card>
+      )}
+    </>
+  );
+}

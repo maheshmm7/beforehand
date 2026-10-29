@@ -4,6 +4,8 @@ import rateLimit from 'express-rate-limit';
 import { type Config } from './config';
 import { errorBody, statusFor } from './errors';
 import { errorHandler } from './errorHandler';
+import { createAssistant, type Assistant } from './gemini';
+import { createRoutes } from './routes';
 
 const JSON_BODY_LIMIT = '32kb';
 
@@ -18,7 +20,12 @@ const apiLimiter = rateLimit({
   },
 });
 
-export function createApp(config: Config): Express {
+/** The assistant is injected so tests can supply a fake one and never reach
+ *  the network. */
+export function createApp(
+  config: Config,
+  assistant: Assistant | undefined = createAssistant(config),
+): Express {
   const app = express();
 
   app.disable('x-powered-by');
@@ -54,8 +61,10 @@ export function createApp(config: Config): Express {
   app.use('/api', express.json({ limit: JSON_BODY_LIMIT, strict: true }));
 
   app.get('/api/health', (_req, res) => {
-    res.json({ status: 'ok', assistant: config.geminiApiKey === undefined ? 'off' : 'on' });
+    res.json({ status: 'ok', assistant: assistant === undefined ? 'off' : 'on' });
   });
+
+  app.use('/api', createRoutes(assistant));
 
   app.use('/api', (_req, res) => {
     res.status(statusFor('not_found')).json(errorBody('not_found'));

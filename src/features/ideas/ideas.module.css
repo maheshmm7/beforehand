@@ -1,0 +1,65 @@
+.intro {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin-bottom: var(--space-4);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+.idea {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+
+.ideaHead {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.ideaTitle {
+  font-weight: 550;
+}
+
+.ideaCost {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ideaWhy {
+  margin-top: var(--space-2);
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+.ideaMeta {
+  margin-top: var(--space-2);
+  font-size: 0.8125rem;
+  color: var(--text-faint);
+}
+
+.error {
+  color: var(--danger-ink);
+  font-size: 0.875rem;
+}
+
+.note {
+  font-size: 0.75rem;
+  color: var(--text-faint);
+  margin-top: var(--space-4);
+}

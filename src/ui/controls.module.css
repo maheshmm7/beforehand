@@ -1,0 +1,220 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.button:hover {
+  background: var(--surface-sunken);
+}
+
+.button:active {
+  transform: translateY(0.5px);
+}
+
+.button[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #241a05;
+}
+
+.primary:hover {
+  background: var(--accent);
+  filter: brightness(1.06);
+}
+
+.ghost {
+  border-color: transparent;
+  background: transparent;
+}
+
+.ghost:hover {
+  background: var(--surface-sunken);
+}
+
+.danger {
+  border-color: var(--border-strong);
+  color: var(--danger-ink);
+}
+
+.danger:hover {
+  background: var(--danger-wash);
+}
+
+.small {
+  /* WCAG 2.2 wants 24px of clear target; 36px keeps adjacent rows apart. */
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  font-size: 0.8125rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  /* Padding in pixels, not rem: at 200% text on a 320px screen, rem padding
+     would eat the whole line and force sideways scrolling. */
+  padding: clamp(14px, 4vw, 24px);
+  box-shadow: var(--shadow-raised);
+}
+
+.cardTitle {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.estimated {
+  background: var(--state-estimated-wash);
+  color: var(--state-estimated-ink);
+}
+
+.quoted {
+  background: var(--state-quoted-wash);
+  color: var(--state-quoted-ink);
+}
+
+.paid {
+  background: var(--state-paid-wash);
+  color: var(--state-paid-ink);
+}
+
+.warning {
+  background: var(--accent-wash);
+  color: var(--accent-ink);
+}
+
+.error {
+  background: var(--danger-wash);
+  color: var(--danger-ink);
+}
+
+.stat {
+  background: var(--surface-sunken);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+
+.statLabel {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.statValue {
+  display: block;
+  margin-top: 2px;
+  font-size: 1.5rem;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.statNote {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+
+.field {
+  display: block;
+  min-width: 0;
+}
+
+.fieldLabel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-2);
+}
+
+.fieldValue {
+  color: var(--text);
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+}
+
+.fieldHelp {
+  display: block;
+  margin-top: var(--space-2);
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  /* A select is as wide as its longest option unless told otherwise, which
+     pushes narrow layouts sideways. */
+  min-width: 0;
+  max-width: 100%;
+  min-height: 40px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.range {
+  width: 100%;
+  min-width: 0;
+  accent-color: var(--accent);
+  height: 32px;
+}
+
+.empty {
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.emptyTitle {
+  color: var(--text);
+  font-weight: 550;
+  margin-bottom: var(--space-2);
+}

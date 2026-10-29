@@ -72,6 +72,12 @@ export default tseslint.config(
   },
 
   {
+    // Test support is never hot-reloaded, so the fast-refresh rule does not apply.
+    files: ['src/testing/**/*.tsx'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
+
+  {
     files: ['scripts/**/*.mjs', 'eslint.config.js'],
     extends: [tseslint.configs.disableTypeChecked],
   },
