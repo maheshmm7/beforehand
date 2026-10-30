@@ -32,7 +32,9 @@
   }
 }
 
-@media (min-width: 1500px) {
+/* Three columns only where each one is still wide enough to hold a label
+   like "Community hall" on one line. Below this it is two. */
+@media (min-width: 1680px) {
   .levers {
     columns: 3;
   }
@@ -85,10 +87,14 @@
 }
 
 /* A block of equal cells rather than a ragged wrap: with two or four options
-   it reads as a row, with three as a row and a half, and never as litter. */
+   it reads as a row, with three as a row and a half, and never as litter.
+   Every cell in a lever is the same size as every other, whether or not its
+   own label wrapped — ragged heights inside one group look like a mistake,
+   because they are one. */
 .options {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
   gap: 6px;
 }
 
@@ -101,7 +107,7 @@
   align-items: center;
   justify-content: center;
   min-height: var(--control-md);
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-2) var(--space-3);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);

@@ -46,7 +46,7 @@ export const birthdayPack: EventPack = {
         { id: 'child', label: 'A child' },
         { id: 'teen', label: 'A teenager' },
         { id: 'adult', label: 'An adult' },
-        { id: 'milestone', label: 'A milestone birthday', note: 'Sixtieth, eightieth, and such' },
+        { id: 'milestone', label: 'A milestone', note: 'A sixtieth, an eightieth, and such' },
       ],
     },
     {
@@ -58,7 +58,7 @@ export const birthdayPack: EventPack = {
         { id: 'home', label: 'At home' },
         { id: 'restaurant', label: 'A restaurant' },
         { id: 'partyHall', label: 'A party hall' },
-        { id: 'outdoor', label: 'A park or terrace' },
+        { id: 'outdoor', label: 'A park', note: 'A park, a terrace, anywhere outdoors' },
       ],
     },
     {
@@ -79,9 +79,9 @@ export const birthdayPack: EventPack = {
       fallback: 'none',
       options: [
         { id: 'none', label: 'None' },
-        { id: 'host', label: 'A host or anchor' },
+        { id: 'host', label: 'A host', note: 'Somebody to run the afternoon' },
         { id: 'performer', label: 'A performer' },
-        { id: 'activity', label: 'An activity or workshop' },
+        { id: 'activity', label: 'An activity', note: 'A workshop, a craft table, a game' },
       ],
     },
   ],

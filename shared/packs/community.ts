@@ -64,7 +64,7 @@ export const communityPack: EventPack = {
       label: 'Where',
       fallback: 'ground',
       options: [
-        { id: 'street', label: 'A street or lane', note: 'Needs road permission' },
+        { id: 'street', label: 'A street', note: 'A street or a lane. Needs road permission' },
         { id: 'park', label: 'A park' },
         { id: 'ground', label: 'An open ground' },
         { id: 'hall', label: 'An indoor hall' },
@@ -76,10 +76,10 @@ export const communityPack: EventPack = {
       label: 'What kind',
       fallback: 'festival',
       options: [
-        { id: 'festival', label: 'Festival or cultural day' },
-        { id: 'sports', label: 'Sports day' },
-        { id: 'drive', label: 'Clean-up or service drive' },
-        { id: 'meeting', label: 'Public meeting' },
+        { id: 'festival', label: 'A festival', note: 'A cultural day, a mela, a fair' },
+        { id: 'sports', label: 'A sports day' },
+        { id: 'drive', label: 'A drive', note: 'A clean-up, a donation, a service drive' },
+        { id: 'meeting', label: 'A meeting', note: 'A public meeting or consultation' },
       ],
     },
   ],

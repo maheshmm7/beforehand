@@ -163,6 +163,31 @@ test('a plan fits a desktop window with nothing to scroll', async ({ page }) => 
   }
 });
 
+for (const width of [1440, 1728, 1920]) {
+  test(`every option in a lever matches its neighbours at ${String(width)}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 923 });
+
+    for (const kind of ['Wedding', 'Birthday', 'Community event']) {
+      await page.goto('/#/new');
+      await page.getByRole('radio', { name: kind }).check();
+      await page.getByRole('textbox', { name: 'Name it' }).fill('Test');
+      await page.getByRole('button', { name: 'Create the plan' }).click();
+      await page.waitForTimeout(400);
+
+      const groups = await page.evaluate(() =>
+        Array.from(document.querySelectorAll<HTMLElement>('[class*=options]')).map((group) =>
+          Array.from(group.children).map((cell) => Math.round(cell.getBoundingClientRect().height)),
+        ),
+      );
+
+      // One label wrapping used to make its own cell taller than the three
+      // beside it, which reads as a mistake because it is one.
+      const ragged = groups.filter((hs) => Math.max(...hs) - Math.min(...hs) > 1);
+      expect(ragged, `${kind} has options of different heights`).toEqual([]);
+    }
+  });
+}
+
 test('buttons come from one scale', async ({ page }) => {
   const seen = new Set<number>();
 
