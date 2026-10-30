@@ -268,9 +268,13 @@
 .demoTotal {
   display: block;
   font-family: var(--font-display);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings:
+    'lnum' 1,
+    'tnum' 1;
   font-size: clamp(2rem, 1.3rem + 2.6vw, 2.75rem);
   font-weight: 600;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.015em;
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
@@ -643,7 +647,7 @@
   font-family: var(--font-display);
   font-size: var(--text-h3);
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.012em;
 }
 
 .planMeta {

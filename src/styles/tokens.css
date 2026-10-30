@@ -1,107 +1,111 @@
 /* Design tokens. Every colour, size and motion value is defined once here, in
    both themes, so no component can hard-code something that breaks elsewhere.
 
-   The scheme is an instrument, not a brochure: a cool, quiet surface so that
-   the only coloured things on screen are the three kinds of consequence a
-   decision has — money, the calendar, and work for somebody — plus one blue
-   for anything you can act on. A warm cream and gold palette read as a
-   wedding invitation; this is a tool for deciding what one costs. */
+   The scheme is luxury editorial: ivory paper, a serif for anything that
+   announces itself, gold reserved for the one thing on a screen you are meant
+   to do next, and a pastel tint per kind of thing so a status can be read
+   without reading. Weight comes from space and from type, not from borders. */
 
 :root {
-  /* Surface, lightest to deepest. Barely blue, never pure white. */
-  --slate-000: #ffffff;
-  --slate-025: #f7f9fb;
-  --slate-050: #f1f4f8;
-  --slate-100: #e7ebf1;
-  --slate-200: #d6dde6;
-  --slate-400: #8b97a6;
-  --slate-600: #51607180;
-  --ink-900: #0d1420;
-  --ink-700: #1f2a3a;
-  --ink-500: #4a5868;
-  --ink-300: #5a6778;
+  /* Paper, lightest to deepest. Warm, never grey, never pure white on white. */
+  --ivory-000: #ffffff;
+  --ivory-025: #fdfbf8;
+  --ivory-050: #faf7f2;
+  --ivory-100: #f4efe7;
+  --ivory-200: #ece5d9;
 
-  /* One blue for anything a person can act on. */
-  --blue-700: #1b3fb8;
-  --blue-600: #2450d8;
-  --blue-500: #3a6bf0;
-  --blue-300: #8fb0ff;
-  --blue-050: #e9efff;
+  --ink-900: #1c1917;
+  --ink-700: #3b352f;
+  --ink-500: #6b635a;
+  --ink-300: #8a8075;
 
-  /* The three consequences, and the one failure. */
-  --amber-700: #8a5305;
-  --amber-500: #d98208;
-  --amber-300: #f2b24a;
-  --amber-050: #fdf1dd;
-  --violet-700: #5b32b8;
-  --violet-500: #7c4ddb;
-  --violet-300: #b79bf5;
-  --violet-050: #f1ebff;
-  --teal-700: #06635a;
-  --teal-500: #0d9488;
-  --teal-300: #4fd5c3;
-  --teal-050: #dff5f1;
-  --rose-700: #a81638;
-  --rose-500: #d92a52;
-  --rose-300: #fb8da8;
-  --rose-050: #fdeaef;
+  /* Gold: the house colour, and the only one used for an action. */
+  --gold-800: #6f4e12;
+  --gold-700: #8a6214;
+  --gold-600: #a97c1e;
+  --gold-500: #c89b37;
+  --gold-300: #e5c57e;
+  --gold-100: #f8ecd4;
+  --gold-050: #fdf6e8;
 
-  --bg: var(--slate-025);
-  --surface: var(--slate-000);
-  --surface-raised: var(--slate-000);
-  --surface-sunken: var(--slate-050);
-  --border: #e3e8ef;
-  --border-strong: #c7d0dc;
+  /* A tint per kind of thing. Pale enough to sit under text, distinct enough
+     to be told apart at a glance. */
+  --sage-700: #1f6b45;
+  --sage-500: #3f9168;
+  --sage-100: #e6f2ea;
+  --sky-700: #1f5684;
+  --sky-500: #3d82bd;
+  --sky-100: #e7f0f8;
+  --lilac-700: #51398f;
+  --lilac-500: #7a5fc0;
+  --lilac-100: #efebf9;
+  --clay-700: #9c3d22;
+  --clay-500: #c25f3c;
+  --clay-100: #fbeae2;
+  --rose-700: #a32035;
+  --rose-500: #cf4258;
+  --rose-100: #fcebee;
+
+  --bg: var(--ivory-050);
+  --surface: var(--ivory-000);
+  --surface-raised: var(--ivory-000);
+  --surface-sunken: var(--ivory-025);
+  --border: #efe8dd;
+  --border-strong: #e2d9ca;
   --border-loud: var(--ink-700);
 
   --text: var(--ink-900);
   --text-muted: var(--ink-500);
-  --text-faint: var(--ink-300);
-  --text-inverse: var(--slate-025);
+  --text-faint: #756b61;
+  --text-inverse: var(--ivory-025);
 
-  --accent: var(--blue-600);
-  --accent-ink: var(--blue-700);
-  --accent-deep: var(--blue-700);
-  --accent-wash: var(--blue-050);
+  --accent: var(--gold-600);
+  --accent-ink: var(--gold-700);
+  --accent-deep: var(--gold-800);
+  --accent-wash: var(--gold-050);
   --accent-on: #ffffff;
+  /* Gold is a light colour. Anything that carries white text has to be the
+     deeper one, or the label on it falls under 4.5 to 1. */
+  --accent-strong: var(--gold-700);
 
-  /* Money, the calendar, work. Used by the rings, the tags beside them and
-     every row that belongs to one of the three. */
-  --money: var(--amber-500);
-  --money-ink: var(--amber-700);
-  --money-wash: var(--amber-050);
-  --time: var(--violet-500);
-  --time-ink: var(--violet-700);
-  --time-wash: var(--violet-050);
-  --work: var(--teal-500);
-  --work-ink: var(--teal-700);
-  --work-wash: var(--teal-050);
+  /* The three consequences a decision has. */
+  --money: var(--gold-600);
+  --money-ink: var(--gold-700);
+  --money-wash: var(--gold-050);
+  --time: var(--lilac-500);
+  --time-ink: var(--lilac-700);
+  --time-wash: var(--lilac-100);
+  --work: var(--sage-500);
+  --work-ink: var(--sage-700);
+  --work-wash: var(--sage-100);
 
-  --state-estimated-wash: var(--slate-100);
+  --state-estimated-wash: var(--ivory-100);
   --state-estimated-ink: var(--ink-500);
-  --state-quoted-wash: var(--teal-050);
-  --state-quoted-ink: var(--teal-700);
-  --state-paid-wash: var(--violet-050);
-  --state-paid-ink: var(--violet-700);
-  --danger-wash: var(--rose-050);
+  --state-quoted-wash: var(--sage-100);
+  --state-quoted-ink: var(--sage-700);
+  --state-paid-wash: var(--clay-100);
+  --state-paid-ink: var(--clay-700);
+  --danger-wash: var(--rose-100);
   --danger-ink: var(--rose-700);
 
-  --focus: var(--blue-500);
+  --focus: var(--sky-700);
 
-  /* A cool wash behind the hero and section breaks. */
+  /* A gilt wash behind the hero and section breaks. */
   --veil: radial-gradient(
     120% 100% at 50% 0%,
-    rgb(36 80 216 / 10%) 0%,
-    rgb(36 80 216 / 3%) 42%,
+    rgb(169 124 30 / 10%) 0%,
+    rgb(169 124 30 / 3%) 42%,
     transparent 72%
   );
-  --hairline: rgb(13 20 32 / 8%);
+  --hairline: rgb(28 25 23 / 7%);
 
   /* Control sizes. sm is for an action inside a row, md is the default for
      any action in a form or panel, lg is reserved for a page's main call. */
   --control-sm: 36px;
   --control-md: 44px;
   --control-lg: 52px;
+  /* The tinted square that carries an icon beside a figure or a row. */
+  --chip-size: 36px;
 
   /* One padding for every card, everywhere. */
   --pad-card: clamp(16px, 3vw, 22px);
@@ -111,10 +115,10 @@
      resting as it is full, on every screen. */
   --dock-height: 140px;
 
-  --radius-sm: 6px;
-  --radius: 9px;
-  --radius-lg: 13px;
-  --radius-xl: 18px;
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
   --radius-pill: 999px;
 
   --space-1: 0.25rem;
@@ -127,14 +131,13 @@
   --space-8: 4.5rem;
   --space-9: 6.5rem;
 
-  --font-display:
-    'Bricolage Grotesque Variable', 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  /* A serif for anything that announces itself, a quiet sans for everything
+     that has to be read quickly. */
+  --font-display: 'Playfair Display Variable', ui-serif, Georgia, 'Times New Roman', serif;
   --font-sans:
-    'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans',
+    'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans',
     'Noto Sans Devanagari', 'Noto Sans Telugu', sans-serif;
-  /* The arithmetic behind a figure reads as working, so it is set in a
-     monospace: the columns line up and nobody mistakes it for prose. */
-  --font-num: 'Geist Mono Variable', ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', monospace;
+  --font-num: var(--font-sans);
 
   /* A type scale that holds together from a phone to a wide screen. */
   --text-display: clamp(2.5rem, 1.5rem + 4.4vw, 4.5rem);
@@ -152,12 +155,13 @@
   --text-caption: 0.8125rem;
   --text-tiny: 0.75rem;
 
-  --shadow-raised: 0 1px 2px rgb(13 20 32 / 5%);
-  --shadow-sm: 0 1px 3px rgb(13 20 32 / 7%);
-  --shadow-md: 0 10px 28px -12px rgb(13 20 32 / 20%);
-  --shadow-lg: 0 28px 60px -28px rgb(13 20 32 / 28%);
+  /* Barely there. On ivory a shadow is a suggestion of lift, not a drop. */
+  --shadow-raised: 0 1px 2px rgb(28 25 23 / 4%);
+  --shadow-sm: 0 2px 6px -2px rgb(28 25 23 / 7%);
+  --shadow-md: 0 12px 30px -16px rgb(28 25 23 / 18%);
+  --shadow-lg: 0 30px 64px -32px rgb(28 25 23 / 26%);
   --shadow-float: var(--shadow-md);
-  --shadow-accent: 0 10px 24px -12px rgb(36 80 216 / 55%);
+  --shadow-accent: 0 10px 24px -14px rgb(169 124 30 / 55%);
 
   --dur-fast: 120ms;
   --dur-base: 220ms;
@@ -182,122 +186,124 @@
   }
 }
 
-/* The dark scheme is the same instrument at night: the surfaces go to a blue
-   charcoal and the three consequence colours lift rather than change. */
+/* The same paper by lamplight: espresso rather than black, the gold warmer,
+   the tints deepened just enough to hold their meaning. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #0a0d13;
-    --surface: #121722;
-    --surface-raised: #171d29;
-    --surface-sunken: #0e131c;
-    --border: #202838;
-    --border-strong: #313c50;
-    --border-loud: #55637a;
+    --bg: #15120f;
+    --surface: #1d1915;
+    --surface-raised: #241f1a;
+    --surface-sunken: #191511;
+    --border: #2e2822;
+    --border-strong: #433a31;
+    --border-loud: #6b5f52;
 
-    --text: #e9eef6;
-    --text-muted: #9fadc0;
-    --text-faint: #7a899e;
-    --text-inverse: #0a0d13;
+    --text: #f6f1e8;
+    --text-muted: #b6aa9b;
+    --text-faint: #a3988b;
+    --text-inverse: #15120f;
 
-    --accent: #3663ea;
-    --accent-ink: var(--blue-300);
-    --accent-deep: var(--blue-300);
-    --accent-wash: #15233f;
-    --accent-on: #ffffff;
+    --accent: var(--gold-500);
+    --accent-ink: var(--gold-300);
+    --accent-deep: var(--gold-300);
+    --accent-wash: #332715;
+    --accent-on: #1c1308;
+    --accent-strong: var(--gold-500);
 
-    --money: var(--amber-300);
-    --money-ink: var(--amber-300);
-    --money-wash: #2c2110;
-    --time: var(--violet-300);
-    --time-ink: var(--violet-300);
-    --time-wash: #241a3a;
-    --work: var(--teal-300);
-    --work-ink: var(--teal-300);
-    --work-wash: #0d2a28;
+    --money: var(--gold-500);
+    --money-ink: var(--gold-300);
+    --money-wash: #332715;
+    --time: #a98fe0;
+    --time-ink: #c3b1ee;
+    --time-wash: #2b2340;
+    --work: #67b68c;
+    --work-ink: #8fd3ae;
+    --work-wash: #16301f;
 
-    --state-estimated-wash: #1d2534;
-    --state-estimated-ink: #9fadc0;
-    --state-quoted-wash: #0d2a28;
-    --state-quoted-ink: var(--teal-300);
-    --state-paid-wash: #241a3a;
-    --state-paid-ink: var(--violet-300);
-    --danger-wash: #35121f;
-    --danger-ink: var(--rose-300);
+    --state-estimated-wash: #2a241e;
+    --state-estimated-ink: #b6aa9b;
+    --state-quoted-wash: #16301f;
+    --state-quoted-ink: #8fd3ae;
+    --state-paid-wash: #3a211a;
+    --state-paid-ink: #e59a77;
+    --danger-wash: #3b1620;
+    --danger-ink: #f093a4;
 
-    --focus: var(--blue-300);
+    --focus: #8fb8e8;
 
     --veil: radial-gradient(
       120% 100% at 50% 0%,
-      rgb(58 107 240 / 12%) 0%,
-      rgb(58 107 240 / 4%) 42%,
+      rgb(200 155 55 / 12%) 0%,
+      rgb(200 155 55 / 4%) 42%,
       transparent 72%
     );
-    --hairline: rgb(233 238 246 / 9%);
+    --hairline: rgb(246 241 232 / 9%);
 
     --shadow-raised: 0 1px 2px rgb(0 0 0 / 40%);
-    --shadow-sm: 0 1px 3px rgb(0 0 0 / 50%);
-    --shadow-md: 0 12px 30px -14px rgb(0 0 0 / 70%);
-    --shadow-lg: 0 30px 64px -30px rgb(0 0 0 / 80%);
-    --shadow-accent: 0 10px 24px -14px rgb(58 107 240 / 60%);
+    --shadow-sm: 0 2px 6px -2px rgb(0 0 0 / 50%);
+    --shadow-md: 0 12px 30px -16px rgb(0 0 0 / 70%);
+    --shadow-lg: 0 30px 64px -32px rgb(0 0 0 / 80%);
+    --shadow-accent: 0 10px 24px -14px rgb(200 155 55 / 50%);
 
     color-scheme: dark;
   }
 }
 
 :root[data-theme='dark'] {
-  --bg: #0a0d13;
-  --surface: #121722;
-  --surface-raised: #171d29;
-  --surface-sunken: #0e131c;
-  --border: #202838;
-  --border-strong: #313c50;
-  --border-loud: #55637a;
+  --bg: #15120f;
+  --surface: #1d1915;
+  --surface-raised: #241f1a;
+  --surface-sunken: #191511;
+  --border: #2e2822;
+  --border-strong: #433a31;
+  --border-loud: #6b5f52;
 
-  --text: #e9eef6;
-  --text-muted: #9fadc0;
-  --text-faint: #7a899e;
-  --text-inverse: #0a0d13;
+  --text: #f6f1e8;
+  --text-muted: #b6aa9b;
+  --text-faint: #a3988b;
+  --text-inverse: #15120f;
 
-  --accent: #3663ea;
-  --accent-ink: var(--blue-300);
-  --accent-deep: var(--blue-300);
-  --accent-wash: #15233f;
-  --accent-on: #ffffff;
+  --accent: var(--gold-500);
+  --accent-ink: var(--gold-300);
+  --accent-deep: var(--gold-300);
+  --accent-wash: #332715;
+  --accent-on: #1c1308;
+  --accent-strong: var(--gold-500);
 
-  --money: var(--amber-300);
-  --money-ink: var(--amber-300);
-  --money-wash: #2c2110;
-  --time: var(--violet-300);
-  --time-ink: var(--violet-300);
-  --time-wash: #241a3a;
-  --work: var(--teal-300);
-  --work-ink: var(--teal-300);
-  --work-wash: #0d2a28;
+  --money: var(--gold-500);
+  --money-ink: var(--gold-300);
+  --money-wash: #332715;
+  --time: #a98fe0;
+  --time-ink: #c3b1ee;
+  --time-wash: #2b2340;
+  --work: #67b68c;
+  --work-ink: #8fd3ae;
+  --work-wash: #16301f;
 
-  --state-estimated-wash: #1d2534;
-  --state-estimated-ink: #9fadc0;
-  --state-quoted-wash: #0d2a28;
-  --state-quoted-ink: var(--teal-300);
-  --state-paid-wash: #241a3a;
-  --state-paid-ink: var(--violet-300);
-  --danger-wash: #35121f;
-  --danger-ink: var(--rose-300);
+  --state-estimated-wash: #2a241e;
+  --state-estimated-ink: #b6aa9b;
+  --state-quoted-wash: #16301f;
+  --state-quoted-ink: #8fd3ae;
+  --state-paid-wash: #3a211a;
+  --state-paid-ink: #e59a77;
+  --danger-wash: #3b1620;
+  --danger-ink: #f093a4;
 
-  --focus: var(--blue-300);
+  --focus: #8fb8e8;
 
   --veil: radial-gradient(
     120% 100% at 50% 0%,
-    rgb(58 107 240 / 12%) 0%,
-    rgb(58 107 240 / 4%) 42%,
+    rgb(200 155 55 / 12%) 0%,
+    rgb(200 155 55 / 4%) 42%,
     transparent 72%
   );
-  --hairline: rgb(233 238 246 / 9%);
+  --hairline: rgb(246 241 232 / 9%);
 
   --shadow-raised: 0 1px 2px rgb(0 0 0 / 40%);
-  --shadow-sm: 0 1px 3px rgb(0 0 0 / 50%);
-  --shadow-md: 0 12px 30px -14px rgb(0 0 0 / 70%);
-  --shadow-lg: 0 30px 64px -30px rgb(0 0 0 / 80%);
-  --shadow-accent: 0 10px 24px -14px rgb(58 107 240 / 60%);
+  --shadow-sm: 0 2px 6px -2px rgb(0 0 0 / 50%);
+  --shadow-md: 0 12px 30px -16px rgb(0 0 0 / 70%);
+  --shadow-lg: 0 30px 64px -32px rgb(0 0 0 / 80%);
+  --shadow-accent: 0 10px 24px -14px rgb(200 155 55 / 50%);
 
   color-scheme: dark;
 }

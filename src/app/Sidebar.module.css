@@ -14,12 +14,25 @@
   margin-bottom: var(--space-4);
 }
 
+/* A tinted mark, a word, and the rule under it: the way a section is headed
+   in print. */
 .groupLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   font-size: var(--text-tiny);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-faint);
   margin: var(--space-4) 0 var(--space-2);
+}
+
+.groupLabel::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold-300);
 }
 
 .list {
@@ -55,10 +68,10 @@
 
 .item[aria-current='page'],
 .item[aria-current='true'] {
-  background: var(--surface);
-  border-color: var(--border);
-  color: var(--text);
-  font-weight: 550;
+  background: var(--accent-wash);
+  border-color: transparent;
+  color: var(--accent-ink);
+  font-weight: 600;
 }
 
 .itemMeta {

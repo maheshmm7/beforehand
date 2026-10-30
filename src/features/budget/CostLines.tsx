@@ -78,7 +78,7 @@ export function CostLines({ model }: { model: Model }): React.JSX.Element {
   }
 
   return (
-    <div>
+    <div className={styles.ledger}>
       <div className={styles.groups}>
         {groups.map((group) => (
           <details

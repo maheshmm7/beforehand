@@ -52,20 +52,25 @@ body {
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.6;
-  font-feature-settings: 'cv11' 1;
+  font-feature-settings:
+    'cv05' 1,
+    'ss03' 1;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
+/* The serif is the voice of the product: it says the name of a thing, the
+   figure it costs, and nothing else. */
 h1,
 h2,
 h3,
 h4 {
   margin: 0;
   font-family: var(--font-display);
-  font-weight: 650;
-  line-height: 1.08;
-  letter-spacing: -0.028em;
+  font-variant-numeric: lining-nums;
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.012em;
   text-wrap: balance;
 }
 

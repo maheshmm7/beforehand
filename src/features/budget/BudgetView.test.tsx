@@ -47,7 +47,7 @@ describe('BudgetView', () => {
   it('says how much of the plan is still only an estimate', () => {
     show();
 
-    expect(screen.getByText('Still movable')).toBeInTheDocument();
+    expect(screen.getByText('Movable')).toBeInTheDocument();
     expect(screen.getByText('only an estimate')).toBeInTheDocument();
     expect(screen.getByText('Estimated ₹12,69,775')).toBeInTheDocument();
   });

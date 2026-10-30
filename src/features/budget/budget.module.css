@@ -64,7 +64,7 @@
 
 .leverValue {
   color: var(--text);
-  font-weight: 650;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
   font-feature-settings: 'tnum' 1;
 }
@@ -98,10 +98,10 @@
   align-items: center;
   justify-content: center;
   min-height: var(--control-sm);
-  padding: 0 var(--space-2);
+  padding: 0 var(--space-3);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface-sunken);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
   color: var(--text-muted);
   font-size: var(--text-caption);
   line-height: 1.25;
@@ -126,7 +126,8 @@
 }
 
 .option:hover {
-  border-color: var(--border-strong);
+  border-color: var(--gold-300);
+  background: var(--accent-wash);
   color: var(--text);
 }
 
@@ -136,10 +137,13 @@
 }
 
 .option[data-on] {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-strong);
+  border-color: transparent;
   color: var(--accent-on);
   font-weight: 600;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 16%),
+    var(--shadow-accent);
 }
 
 /* Where the money stands ------------------------------------------------ */
@@ -158,11 +162,10 @@
 
 .bar {
   display: flex;
-  height: 8px;
+  height: 7px;
   border-radius: var(--radius-pill);
   overflow: hidden;
-  background: var(--surface-sunken);
-  border: 1px solid var(--border);
+  background: var(--ivory-100);
 }
 
 .bar > * {
@@ -178,7 +181,7 @@
 }
 
 .barEstimated {
-  background: var(--border-strong);
+  background: var(--gold-300);
 }
 
 .legend {
@@ -191,9 +194,9 @@
 
 .swatch {
   display: inline-block;
-  width: 9px;
-  height: 9px;
-  border-radius: 2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
   margin-right: var(--space-2);
 }
 
@@ -206,7 +209,7 @@
 }
 
 .swatchEstimated {
-  background: var(--border-strong);
+  background: var(--gold-300);
 }
 
 .alerts {
@@ -219,14 +222,14 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--danger-ink);
-  border-left-width: 3px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--danger-ink);
   border-radius: var(--radius);
   background: var(--danger-wash);
   color: var(--danger-ink);
   font-size: var(--text-caption);
-  line-height: 1.4;
+  line-height: 1.45;
   font-weight: 600;
 }
 
@@ -238,6 +241,19 @@
 }
 
 /* Every line ------------------------------------------------------------ */
+
+/* The card is taller than the groups when the window is tall. Rather than
+   leaving the bottom of it empty, the total sits at the foot of the sheet,
+   the way it would on a printed statement. */
+.ledger {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.groups {
+  min-width: 0;
+}
 
 .lineGroup {
   break-inside: avoid;
@@ -283,12 +299,17 @@
   color: var(--text);
 }
 
+.groupTotal,
+.lineAmount,
+.totalValue {
+  font-feature-settings: 'tnum' 1;
+}
+
 .groupCount {
   min-width: 19px;
   padding: 0 5px;
   border-radius: var(--radius-pill);
-  background: var(--surface-sunken);
-  border: 1px solid var(--border);
+  background: var(--ivory-100);
   color: var(--text-faint);
   font-size: var(--text-tiny);
   font-variant-numeric: tabular-nums;
@@ -357,17 +378,21 @@
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  margin-top: var(--space-3);
-  padding-top: var(--space-3);
-  border-top: 2px solid var(--border-strong);
+  margin-top: auto;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-strong);
   font-weight: 550;
 }
 
 .totalValue {
   font-family: var(--font-display);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings:
+    'lnum' 1,
+    'tnum' 1;
   font-size: var(--text-figure);
-  font-weight: 650;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  letter-spacing: -0.012em;
   font-variant-numeric: tabular-nums;
 }
 
@@ -402,6 +427,13 @@
     grid-column: 2;
     grid-row: 1 / 3;
     align-self: stretch;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .breakdown > :last-child {
+    flex: 1;
+    min-height: 0;
   }
 
   .stats {

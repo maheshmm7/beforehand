@@ -1,3 +1,7 @@
+/* Luxury editorial. Weight comes from space and from type: a card is a sheet
+   of paper with a hairline round it, a heading is set in the serif, and gold
+   is spent only on the one thing you are meant to do next. */
+
 .button {
   position: relative;
   display: inline-flex;
@@ -12,7 +16,7 @@
   color: var(--text);
   font-size: var(--text-body);
   font-weight: 500;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
@@ -32,30 +36,34 @@
 }
 
 .button:active {
-  transform: translateY(0) scale(0.985);
+  transform: translateY(0) scale(0.99);
   box-shadow: none;
 }
 
 .button[disabled] {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
 .primary {
-  background: var(--accent);
+  background: var(--accent-strong);
   border-color: transparent;
   color: var(--accent-on);
-  box-shadow: var(--shadow-accent);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 16%),
+    var(--shadow-accent);
   font-weight: 600;
 }
 
 .primary:hover {
-  background: var(--accent);
+  background: var(--accent-strong);
   border-color: transparent;
-  filter: brightness(1.05);
-  box-shadow: var(--shadow-accent);
+  filter: brightness(1.08);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 16%),
+    var(--shadow-accent);
 }
 
 .ghost {
@@ -91,6 +99,7 @@
   font-size: var(--text-lead);
 }
 
+/* A sheet of paper. */
 .card {
   position: relative;
   background: var(--surface);
@@ -100,35 +109,83 @@
   box-shadow: var(--shadow-raised);
 }
 
+/* Sentence case with a tinted mark beside it, the way a section is titled in
+   print — not a row of tracked-out capitals. */
 .cardTitle {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-3);
-  font-size: var(--text-tiny);
+  font-size: var(--text-body);
   font-weight: 600;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--text-faint);
-  margin-bottom: var(--space-2);
+  letter-spacing: -0.006em;
+  color: var(--text);
+  margin-bottom: var(--space-3);
+}
+
+.cardTitleText {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Playfair sets old-style figures by default, which drop below the baseline
+   and read as decoration. Money is not decoration. */
+.statValue,
+.emptyTitle {
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings:
+    'lnum' 1,
+    'tnum' 1;
+}
+
+/* The tinted square that carries an icon. */
+.chipIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--chip-size);
+  height: var(--chip-size);
+  border-radius: var(--radius);
+  background: var(--accent-wash);
+  color: var(--accent-ink);
+}
+
+.toneMoney {
+  background: var(--money-wash);
+  color: var(--money-ink);
+}
+
+.toneTime {
+  background: var(--time-wash);
+  color: var(--time-ink);
+}
+
+.toneWork {
+  background: var(--work-wash);
+  color: var(--work-ink);
+}
+
+.toneQuiet {
+  background: var(--state-estimated-wash);
+  color: var(--state-estimated-ink);
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 3px var(--space-3);
+  padding: 2px var(--space-3);
   border-radius: var(--radius-pill);
   font-size: var(--text-tiny);
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.005em;
   white-space: nowrap;
 }
 
 .chip::before {
   content: '';
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: currentcolor;
 }
@@ -158,64 +215,68 @@
   color: var(--danger-ink);
 }
 
-/* A figure, not a card: a tile wide enough to read and no taller than it has
-   to be, with a rule along the top that carries the colour. */
+/* A figure on its own sheet, with a tinted mark to say what kind it is. */
 .stat {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: var(--surface-sunken);
+  gap: 2px;
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   padding: var(--space-2) var(--space-3) var(--space-3);
-  overflow: hidden;
-  transition: border-color var(--dur-base) var(--ease-out);
-}
-
-.stat::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto;
-  height: 2px;
-  background: var(--border-strong);
+  box-shadow: var(--shadow-raised);
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
 }
 
 .stat:hover {
   border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
 }
 
-.statLive::before {
-  background: var(--accent);
-}
-
-.statLive .statValue {
-  color: var(--accent-ink);
-}
-
-.statLabel {
-  display: block;
-  font-size: var(--text-tiny);
-  font-weight: 600;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--text-faint);
+.statLive {
+  border-color: var(--gold-300);
+  background: linear-gradient(180deg, var(--accent-wash), var(--surface) 70%);
 }
 
 .statValue {
   display: block;
-  margin-top: 1px;
-  font-size: 1.4rem;
-  font-weight: 650;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-  font-variant-numeric: tabular-nums;
   font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.012em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The mark and the name of the figure on one line, the figure under them. */
+.statHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.statHead .chipIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+}
+
+.statLabel {
+  font-size: var(--text-caption);
+  font-weight: 500;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .statNote {
   display: block;
-  margin-top: 1px;
   font-size: var(--text-tiny);
   color: var(--text-faint);
 }
@@ -278,6 +339,7 @@
 .select:focus,
 .textarea:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-wash);
 }
 
 .select {
@@ -315,39 +377,37 @@
 }
 
 .range::-webkit-slider-runnable-track {
-  height: 8px;
+  height: 6px;
   border-radius: var(--radius-pill);
   background: linear-gradient(
     to right,
-    var(--accent) 0%,
+    var(--gold-500) 0%,
     var(--accent) var(--fill),
-    var(--surface-sunken) var(--fill),
-    var(--surface-sunken) 100%
+    var(--ivory-100) var(--fill),
+    var(--ivory-100) 100%
   );
-  border: 1px solid var(--border);
 }
 
 .range::-moz-range-track {
-  height: 8px;
+  height: 6px;
   border-radius: var(--radius-pill);
   background: linear-gradient(
     to right,
-    var(--accent) 0%,
+    var(--gold-500) 0%,
     var(--accent) var(--fill),
-    var(--surface-sunken) var(--fill),
-    var(--surface-sunken) 100%
+    var(--ivory-100) var(--fill),
+    var(--ivory-100) 100%
   );
-  border: 1px solid var(--border);
 }
 
 .range::-webkit-slider-thumb {
   appearance: none;
-  width: 24px;
-  height: 24px;
-  margin-top: -9px;
+  width: 20px;
+  height: 20px;
+  margin-top: -7px;
   border-radius: 50%;
   background: var(--surface);
-  border: 2px solid var(--accent);
+  border: 3px solid var(--accent);
   box-shadow: var(--shadow-sm);
   transition:
     transform var(--dur-fast) var(--ease-spring),
@@ -355,20 +415,20 @@
 }
 
 .range::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: var(--surface);
-  border: 2px solid var(--accent);
+  border: 3px solid var(--accent);
   box-shadow: var(--shadow-sm);
 }
 
 .range:hover::-webkit-slider-thumb {
-  transform: scale(1.12);
+  transform: scale(1.1);
 }
 
 .range:active::-webkit-slider-thumb {
-  transform: scale(1.04);
+  transform: scale(1.02);
   box-shadow: var(--shadow-accent);
 }
 
@@ -377,12 +437,14 @@
   text-align: center;
   color: var(--text-muted);
   border: 1px dashed var(--border-strong);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   background: var(--surface-sunken);
 }
 
 .emptyTitle {
   color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
   font-weight: 600;
   margin-bottom: var(--space-2);
 }

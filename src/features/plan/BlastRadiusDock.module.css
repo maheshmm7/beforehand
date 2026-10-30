@@ -26,7 +26,7 @@
 /* A live dock is lifted and ruled, not flooded: a full-width wash of accent
    colour under every screen was the loudest thing in the application. */
 .dockLive {
-  background: var(--surface-raised);
+  background: linear-gradient(180deg, var(--accent-wash), var(--surface));
   box-shadow: inset 0 2px 0 var(--accent);
 }
 
@@ -116,16 +116,21 @@
 .caption {
   font-size: var(--text-tiny);
   font-weight: 600;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-faint);
 }
 
 .delta {
+  font-family: var(--font-display);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings:
+    'lnum' 1,
+    'tnum' 1;
   font-size: var(--text-figure);
   font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  line-height: 1.12;
+  letter-spacing: -0.012em;
   font-variant-numeric: tabular-nums;
   color: var(--text-muted);
 }

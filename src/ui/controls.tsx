@@ -79,13 +79,44 @@ export function ButtonLink({
   );
 }
 
+/** Which of the three kinds of thing a tinted mark belongs to. */
+export type Tone = 'accent' | 'money' | 'time' | 'work' | 'quiet';
+
+const TONES: Readonly<Record<Tone, string | undefined>> = {
+  accent: undefined,
+  money: styles.toneMoney,
+  time: styles.toneTime,
+  work: styles.toneWork,
+  quiet: styles.toneQuiet,
+};
+
+/** A tinted square carrying an icon, beside a title or a figure. */
+export function ChipIcon({
+  tone = 'accent',
+  children,
+}: {
+  tone?: Tone;
+  children: ReactNode;
+}): React.JSX.Element {
+  return (
+    <span className={cx(styles.chipIcon, TONES[tone])} aria-hidden="true">
+      {children}
+    </span>
+  );
+}
+
 export function Card({
   title,
+  icon,
+  tone,
   children,
   actions,
   className,
 }: {
   title?: string;
+  /** Shown in a tinted square before the title. */
+  icon?: ReactNode;
+  tone?: Tone;
   children: ReactNode;
   actions?: ReactNode;
   className?: string;
@@ -94,7 +125,8 @@ export function Card({
     <section className={cx(styles.card, className)}>
       {title === undefined ? null : (
         <header className={styles.cardTitle}>
-          <span>{title}</span>
+          {icon === undefined ? null : <ChipIcon tone={tone}>{icon}</ChipIcon>}
+          <span className={styles.cardTitleText}>{title}</span>
           {actions}
         </header>
       )}
@@ -119,17 +151,24 @@ export function Stat({
   label,
   value,
   note,
+  icon,
+  tone,
   live = false,
 }: {
   label: string;
   value: string;
   note?: string;
+  icon?: ReactNode;
+  tone?: Tone;
   /** Marks a figure that changes as the plan changes, so it gets emphasis. */
   live?: boolean;
 }): React.JSX.Element {
   return (
     <div className={cx(styles.stat, live && styles.statLive)}>
-      <span className={styles.statLabel}>{label}</span>
+      <span className={styles.statHead}>
+        {icon === undefined ? null : <ChipIcon tone={tone}>{icon}</ChipIcon>}
+        <span className={styles.statLabel}>{label}</span>
+      </span>
       <span className={styles.statValue}>{value}</span>
       {note === undefined ? null : <span className={styles.statNote}>{note}</span>}
     </div>

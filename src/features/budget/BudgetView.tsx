@@ -3,6 +3,7 @@ import { money, moneyShort } from '@/lib/format';
 import { usePlanModel } from '@/state/usePlanModel';
 import { useWorkspace } from '@/state/useWorkspace';
 import { Card, Stat } from '@/ui/controls';
+import { IconLock, IconReceipt, IconRipple, IconScale } from '@/ui/icons';
 import { cx } from '@/ui/cx';
 import { CostLines } from './CostLines';
 import { Levers } from './Levers';
@@ -23,7 +24,7 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
 
   return (
     <div className={styles.board}>
-      <Card title="Levers">
+      <Card title="Levers" tone="accent" icon={<IconScale size={18} />}>
         <Levers
           pack={pack}
           values={scenario.values}
@@ -36,13 +37,32 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
       <div className={styles.side}>
         <section className={styles.money} aria-label="Where the money stands">
           <div className={styles.stats}>
-            <Stat label="Total" value={moneyShort(totals.all)} note={money(totals.all)} live />
-            <Stat label="Paid" value={moneyShort(totals.paid)} note="gone, not reversible" />
-            <Stat label="Quoted" value={moneyShort(totals.quoted)} note="promised by a vendor" />
             <Stat
-              label="Still movable"
+              label="Total"
+              value={moneyShort(totals.all)}
+              note={money(totals.all)}
+              icon={<IconScale size={17} />}
+              live
+            />
+            <Stat
+              label="Paid"
+              value={moneyShort(totals.paid)}
+              note="gone, not reversible"
+              icon={<IconLock size={17} />}
+              tone="quiet"
+            />
+            <Stat
+              label="Quoted"
+              value={moneyShort(totals.quoted)}
+              note="promised by a vendor"
+              icon={<IconReceipt size={17} />}
+              tone="work"
+            />
+            <Stat
+              label="Movable"
               value={moneyShort(totals.movable)}
               note="only an estimate"
+              icon={<IconRipple size={17} />}
               live
             />
           </div>
@@ -83,7 +103,12 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
         )}
       </div>
 
-      <Card title="Every line, and how we got there" className={styles.breakdown}>
+      <Card
+        title="Every line, and how we got there"
+        tone="money"
+        icon={<IconReceipt size={18} />}
+        className={styles.breakdown}
+      >
         <CostLines model={current} />
       </Card>
     </div>
