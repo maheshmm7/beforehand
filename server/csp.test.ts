@@ -6,6 +6,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { createApp } from './app';
 import { readConfig } from './config';
+import { SECURITY_HEADERS } from './securityHeaders';
 
 /**
  * The policy is declared twice: Helmet serves it for the API, and vercel.json
@@ -53,6 +54,35 @@ afterAll(async () => {
     server.close(() => {
       resolve();
     });
+  });
+});
+
+function normalise(value: string): string {
+  return value.replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+describe('the security headers', () => {
+  it('are all present on the api, with the agreed values', async () => {
+    const response = await fetch(`${origin}/api/health`);
+
+    for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+      expect(normalise(response.headers.get(name) ?? ''), name).toBe(normalise(value));
+    }
+  });
+
+  it('are all present on the static host, with the same values', () => {
+    const config = vercelSchema.parse(JSON.parse(readFileSync('vercel.json', 'utf8')));
+    const served = new Map(
+      config.headers
+        .filter((entry) => entry.source === '/(.*)')
+        .flatMap((entry) => entry.headers)
+        .map((header) => [header.key.toLowerCase(), header.value] as const),
+    );
+
+    // Set in two files, so the only thing stopping them drifting is this.
+    for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+      expect(normalise(served.get(name) ?? ''), name).toBe(normalise(value));
+    }
   });
 });
 

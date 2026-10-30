@@ -128,10 +128,18 @@ api/        one serverless entry point mounting the same app
 ```
 
 **Security.** The API key is read on the server only and never reaches the browser bundle. Helmet
-with a strict content security policy, per-IP rate limiting applied before body parsing, a 32 kB
-body limit, `Cache-Control: no-store`, `strictObject` schemas that reject unknown fields, and stable
-error codes that never carry a stack trace or an upstream message. There are no accounts, no
-passwords and no user database, which removes that attack surface rather than defending it.
+with a strict content security policy, a 32 kB body limit, `Cache-Control: no-store`, `strictObject`
+schemas that reject unknown fields, and stable error codes that never carry a stack trace or an
+upstream message. There are no accounts, no passwords and no user database, which removes that
+attack surface rather than defending it.
+
+Rate limiting is applied before body parsing and keyed on an address the client cannot write. A
+proxy appends the address it saw to the end of `x-forwarded-for`, so only the last hops mean
+anything; `TRUSTED_PROXY_HOPS` says how many proxies are actually in front, and defaults to none.
+Reading the first hop instead — which is what Express's `trust proxy` does — let anyone rotate a
+header and hold an unlimited number of budgets. The same nine headers are sent by the API and by
+the static host, declared once in `server/securityHeaders.ts` and asserted on both sides by a test,
+because a header set in one file and forgotten in the other is the usual way a policy rots.
 
 **Efficiency.** The plan screens are code-split, so the landing page does not carry the engine. CI
 enforces a gzipped budget measured from the Vite manifest, counting the entry chunk and its static

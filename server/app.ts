@@ -1,13 +1,47 @@
-import express, { type Express, type RequestHandler, type Response } from 'express';
+import express, { type Express, type Request, type RequestHandler, type Response } from 'express';
 import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
+import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 import { type Config } from './config';
 import { errorBody, statusFor } from './errors';
 import { errorHandler } from './errorHandler';
 import { createAssistant, type Assistant } from './gemini';
 import { createRoutes } from './routes';
+import { HSTS_MAX_AGE_SECONDS, PERMISSIONS_POLICY } from './securityHeaders';
 
 const JSON_BODY_LIMIT = '32kb';
+
+/**
+ * Who a request is from, for the purpose of spending a budget.
+ *
+ * A proxy appends the address it saw to the end of `x-forwarded-for`, so with
+ * one proxy in front the last hop is the only part of that header a client
+ * cannot write. Reading the first hop — which is what `trust proxy` does —
+ * lets anyone rotate a header and hold an unlimited number of budgets, which
+ * was true of this server until it was measured: seventy requests with a
+ * rotating header drew no refusals at all, and twenty assistant calls against
+ * a limit of twelve drew none either.
+ *
+ * With no proxy in front, the header is ignored outright.
+ */
+export function clientKey(request: Request, trustedHops: number): string {
+  const direct = request.socket.remoteAddress ?? 'unknown';
+  if (trustedHops <= 0) return ipKeyGenerator(direct);
+
+  const header = request.headers['x-forwarded-for'];
+  const chain = Array.isArray(header) ? header.join(',') : (header ?? '');
+  const hops = chain
+    .split(',')
+    .map((hop) => hop.trim())
+    .filter((hop) => hop !== '');
+
+  // Count back past the proxies we actually have. With one proxy in front,
+  // that is the last hop — the only one a client cannot write.
+  const observed = hops[hops.length - trustedHops];
+
+  // ipKeyGenerator collapses an IPv6 address to its /56, so a client cannot
+  // simply move along its own prefix to get another budget.
+  return ipKeyGenerator(observed ?? direct);
+}
 
 /** Rate limiting runs before body parsing so a flood costs us no parse work. */
 export function createApp(
@@ -27,6 +61,7 @@ export function createApp(
       limit,
       standardHeaders: 'draft-7',
       legacyHeaders: false,
+      keyGenerator: (request: Request) => clientKey(request, config.trustedProxyHops),
       handler: refuse,
     });
 
@@ -36,7 +71,9 @@ export function createApp(
   const assistantLimiter = limiter(12);
 
   app.disable('x-powered-by');
-  app.set('trust proxy', 1);
+  // Nothing in this app may take a client's word for where it came from. The
+  // one thing that needs an address builds its own, above.
+  app.set('trust proxy', false);
 
   app.use(
     helmet({
@@ -60,8 +97,19 @@ export function createApp(
       },
       referrerPolicy: { policy: 'no-referrer' },
       crossOriginOpenerPolicy: { policy: 'same-origin' },
+      // The static host sends DENY; the two had disagreed, with Helmet
+      // defaulting to SAMEORIGIN.
+      frameguard: { action: 'deny' },
+      hsts: { maxAge: HSTS_MAX_AGE_SECONDS, includeSubDomains: true, preload: false },
     }),
   );
+
+  // Helmet has no permissions policy of its own. Nothing here asks for a
+  // camera, a microphone or a location, so nothing is granted one.
+  app.use((_req, res, next) => {
+    res.setHeader('Permissions-Policy', PERMISSIONS_POLICY);
+    next();
+  });
 
   app.use('/api', apiLimiter);
   for (const route of ['/api/quote', '/api/describe', '/api/ideas']) {

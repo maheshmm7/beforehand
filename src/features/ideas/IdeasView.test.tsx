@@ -37,8 +37,13 @@ describe('IdeasView', () => {
 
     await user.click(screen.getByRole('button', { name: 'Suggest ideas' }));
 
+    // The screen promises "no names, dates or messages". All three have to
+    // hold, not just the first.
     const sent = asked.mock.calls[0]?.[0];
     expect(sent?.summary).not.toContain('Priya');
+    expect(sent?.summary).not.toContain('Hyderabad');
+    expect(sent?.summary).not.toMatch(/\d{4}-\d{2}-\d{2}/);
+    expect(sent?.summary).not.toMatch(/2027|Mar/);
     expect(sent?.summary).toContain('wedding');
     expect(sent?.headroom).toBeGreaterThan(0);
   });

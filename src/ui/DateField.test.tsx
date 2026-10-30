@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { addDays } from '@/lib/calendar';
 import { longDate, todayIso } from '@/lib/format';
 import { user } from '@/testing/support';
@@ -21,6 +21,10 @@ function showDate(props: Partial<Parameters<typeof DateField>[0]> = {}): {
   );
   return { onChange };
 }
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('DateField', () => {
   it('shows the date in words rather than a form of digits', () => {
@@ -134,6 +138,45 @@ describe('DateField', () => {
     await user.click(document.body);
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('opens upward when there is no room below it', async () => {
+    // jsdom gives every box zero size, so the geometry is supplied here.
+    const near = { top: 700, bottom: 740, left: 100, right: 300, width: 200, height: 40 };
+    vi.spyOn(HTMLButtonElement.prototype, 'getBoundingClientRect').mockReturnValue(near as DOMRect);
+    vi.spyOn(HTMLDivElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      ...near,
+      top: 0,
+      bottom: 420,
+      height: 420,
+    } as DOMRect);
+    showDate();
+
+    await user.click(screen.getByRole('button', { name: /2 Mar 2027/ }));
+
+    expect(screen.getByRole('dialog')).toHaveAttribute('data-place', 'above');
+  });
+
+  it('hangs from the other edge when there is no room to the right', async () => {
+    // jsdom's window is 1024 wide, so a panel opening at 900 runs off it.
+    const atTheEdge = { top: 10, bottom: 50, left: 900, right: 960, width: 60, height: 40 };
+    vi.spyOn(HTMLButtonElement.prototype, 'getBoundingClientRect').mockReturnValue(
+      atTheEdge as DOMRect,
+    );
+    vi.spyOn(HTMLDivElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      ...atTheEdge,
+      left: 900,
+      right: 1188,
+      width: 288,
+      height: 420,
+    } as DOMRect);
+    showDate();
+
+    await user.click(screen.getByRole('button', { name: /2 Mar 2027/ }));
+
+    const panel = screen.getByRole('dialog');
+    expect(panel).toHaveAttribute('data-place', 'below');
+    expect(panel).toHaveAttribute('data-align', 'end');
   });
 
   it('offers the dates somebody actually wants', async () => {

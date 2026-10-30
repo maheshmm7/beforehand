@@ -15,6 +15,8 @@ const EnvSchema = z.object({
   GEMINI_FALLBACK_MODEL: presentString,
   PORT: presentString,
   NODE_ENV: presentString,
+  TRUSTED_PROXY_HOPS: presentString,
+  VERCEL: presentString,
 });
 
 export interface Config {
@@ -23,6 +25,12 @@ export interface Config {
   readonly fallbackModel: string;
   readonly port: number;
   readonly isProduction: boolean;
+  /**
+   * How many proxies sit in front of this server. Every hop in
+   * `x-forwarded-for` beyond this count was written by the client and means
+   * nothing. Zero — the default — trusts the header not at all.
+   */
+  readonly trustedProxyHops: number;
 }
 
 const DEFAULT_MODEL = 'gemini-3.6-flash';
@@ -42,9 +50,12 @@ export function readConfig(source: Record<string, string | undefined> = process.
     GEMINI_FALLBACK_MODEL: emptyToUndefined(source.GEMINI_FALLBACK_MODEL),
     PORT: emptyToUndefined(source.PORT),
     NODE_ENV: emptyToUndefined(source.NODE_ENV),
+    TRUSTED_PROXY_HOPS: emptyToUndefined(source.TRUSTED_PROXY_HOPS),
+    VERCEL: emptyToUndefined(source.VERCEL),
   });
 
   const port = Number.parseInt(parsed.PORT ?? '', 10);
+  const hops = Number.parseInt(parsed.TRUSTED_PROXY_HOPS ?? '', 10);
 
   return {
     geminiApiKey: parsed.GEMINI_API_KEY,
@@ -52,5 +63,9 @@ export function readConfig(source: Record<string, string | undefined> = process.
     fallbackModel: parsed.GEMINI_FALLBACK_MODEL ?? DEFAULT_FALLBACK_MODEL,
     port: Number.isFinite(port) && port > 0 ? port : DEFAULT_PORT,
     isProduction: parsed.NODE_ENV === 'production',
+    // Vercel puts exactly one proxy in front and writes the header itself.
+    // Anywhere else, say so deliberately or the header is ignored.
+    trustedProxyHops:
+      Number.isInteger(hops) && hops >= 0 ? hops : parsed.VERCEL === undefined ? 0 : 1,
   };
 }

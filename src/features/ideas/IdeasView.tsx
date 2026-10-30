@@ -7,15 +7,21 @@ import { usePlanModel } from '@/state/usePlanModel';
 import { Button, Card, Chip, EmptyState } from '@/ui/controls';
 import styles from './ideas.module.css';
 
-/** A one-paragraph description of the plan, built from the model rather than
- *  from anything the planner typed, so nothing personal is sent. */
+/**
+ * A one-paragraph description of the plan, built from the model rather than
+ * from anything the planner typed, so nothing personal is sent. The kind of
+ * event and the shape of its spending, and nothing else: not the name, not
+ * the place, and not the date — the screen promises as much, so it has to be
+ * true. Lead times come back from the model and are compared against the real
+ * date here.
+ */
 function summarise(plan: Plan, lines: readonly { label: string; amount: number }[]): string {
   const biggest = [...lines]
     .sort((a, b) => b.amount - a.amount)
     .slice(0, 5)
     .map((line) => `${line.label} ${String(Math.round(line.amount))}`)
     .join(', ');
-  return `A ${plan.kind} on ${plan.eventDateIso}. Largest lines: ${biggest}.`;
+  return `A ${plan.kind}. Largest lines: ${biggest}.`;
 }
 
 export function IdeasView({ plan }: { plan: Plan }): React.JSX.Element {

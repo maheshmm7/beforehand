@@ -25,11 +25,13 @@ export default defineConfig({
         'server/dev.ts',
         '**/types.ts',
       ],
+      // Set just under what the suite actually reaches, so a change that
+      // drops coverage fails here rather than being noticed later.
       thresholds: {
-        statements: 90,
-        branches: 80,
-        functions: 85,
-        lines: 90,
+        statements: 97,
+        branches: 92,
+        functions: 96,
+        lines: 97,
       },
     },
   },
