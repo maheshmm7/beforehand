@@ -31,7 +31,10 @@ describe('VendorsView', () => {
     show();
 
     expect(screen.getByText(/Still nobody’s promise/i)).toBeInTheDocument();
-    expect(screen.getAllByText('estimated').length).toBeGreaterThan(5);
+    // Nothing is marked "estimated": the card's own title says that about
+    // every row in it, so a mark on each one would say it twice.
+    expect(screen.queryAllByText('estimated')).toHaveLength(0);
+    expect(screen.getByText('Catering')).toBeInTheDocument();
   });
 
   it('says how much notice each line needs', () => {

@@ -16,8 +16,11 @@ describe('PlanHeader', () => {
     show();
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Priya and Arjun');
-    expect(screen.getByText(/Wedding · Hyderabad · 2 Mar 2027/)).toBeInTheDocument();
+    // The date and the place are fields beside it, not facts repeated here.
+    expect(screen.getByText(/Wedding · \d+ days away/)).toBeInTheDocument();
     expect(screen.getByText(/Plan A/)).toBeInTheDocument();
+    expect(screen.getByLabelText('Date')).toHaveTextContent('2 Mar 2027');
+    expect(screen.getByLabelText('Where')).toHaveValue('Hyderabad');
   });
 
   it('labels the time field with the pack’s own fixed moment, in the clock people read', () => {
@@ -33,7 +36,7 @@ describe('PlanHeader', () => {
     const grid = screen.getByRole('grid');
     await user.click(within(grid).getByRole('gridcell', { name: '5 Mar 2027' }));
 
-    expect(screen.getByText(/Wedding · Hyderabad · 5 Mar 2027/)).toBeInTheDocument();
+    expect(screen.getByLabelText('Date')).toHaveTextContent('5 Mar 2027');
   });
 
   it('pages to another month without changing the plan', async () => {
@@ -43,7 +46,7 @@ describe('PlanHeader', () => {
     await user.click(screen.getByRole('button', { name: 'Next month' }));
 
     expect(screen.getByRole('grid')).toHaveAccessibleName('April 2027');
-    expect(screen.getByText(/Wedding · Hyderabad · 2 Mar 2027/)).toBeInTheDocument();
+    expect(screen.getByLabelText('Date')).toHaveTextContent('2 Mar 2027');
   });
 
   it('moves the fixed moment of the day', async () => {
@@ -63,6 +66,6 @@ describe('PlanHeader', () => {
     await user.clear(place);
     await user.type(place, 'Chennai');
 
-    expect(screen.getByText(/Chennai/)).toBeInTheDocument();
+    expect(place).toHaveValue('Chennai');
   });
 });

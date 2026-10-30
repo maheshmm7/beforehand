@@ -4,7 +4,6 @@ import { usePlanModel } from '@/state/usePlanModel';
 import { useWorkspace } from '@/state/useWorkspace';
 import { Card, Stat } from '@/ui/controls';
 import { IconLock, IconReceipt, IconRipple, IconScale } from '@/ui/icons';
-import { cx } from '@/ui/cx';
 import { CostLines } from './CostLines';
 import { Levers } from './Levers';
 import styles from './budget.module.css';
@@ -75,20 +74,6 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
               style={{ width: width(Math.max(totals.estimated, 0)) }}
             />
           </div>
-          <p className={styles.legend}>
-            <span>
-              <span className={cx(styles.swatch, styles.swatchPaid)} />
-              Paid {money(totals.paid)}
-            </span>
-            <span>
-              <span className={cx(styles.swatch, styles.swatchQuoted)} />
-              Quoted {money(totals.quoted)}
-            </span>
-            <span>
-              <span className={cx(styles.swatch, styles.swatchEstimated)} />
-              Estimated {money(totals.estimated)}
-            </span>
-          </p>
         </section>
 
         {violations.length === 0 ? null : (

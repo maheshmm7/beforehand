@@ -15,13 +15,6 @@ function tally(count: number, none: string, one: string, many: string): string {
   return many.replace('#', String(count));
 }
 
-/** What each ring stands for, said plainly while there is nothing to report. */
-const RINGS = [
-  { id: 'money', where: 'Inner ring', means: 'money' },
-  { id: 'time', where: 'Middle ring', means: 'the calendar' },
-  { id: 'work', where: 'Outer ring', means: 'work for somebody' },
-] as const;
-
 /** The dock lists what fits in its own height and counts the rest. Nothing in
  *  the dock scrolls: a scrollbar inside a strip this size is noise. */
 const SHOWN = 4;
@@ -192,23 +185,12 @@ export function BlastRadiusDock({
             </p>
           ) : (
             <p className={styles.counts}>
-              <span>Move a lever to see what it sets off.</span>
+              <span>Move a lever to see what it sets off: money, dates, work.</span>
             </p>
           )}
         </div>
 
         <div className={styles.consequences}>
-          {!live ? (
-            <div className={styles.legend}>
-              <p className={styles.legendLead}>The rings light from the inside out.</p>
-              {RINGS.map((ring) => (
-                <div key={ring.id} className={cx(styles.row, styles[ring.id])}>
-                  <span className={styles.what}>{ring.where}</span>
-                  <span className={styles.detail}>{ring.means}</span>
-                </div>
-              ))}
-            </div>
-          ) : null}
           {live ? (
             <ul className={styles.list}>
               {radius.newViolations.map((violation) => (

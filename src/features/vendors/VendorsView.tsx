@@ -34,7 +34,11 @@ export function VendorsView({ plan }: { plan: Plan }): React.JSX.Element {
                 <div>
                   <span className={styles.name}>
                     {line.label}
-                    <Chip tone={line.state}>{line.state}</Chip>
+                    {/* The card is titled "still nobody's promise": saying
+                        "estimated" on every row in it adds nothing. */}
+                    {line.state === 'estimated' ? null : (
+                      <Chip tone={line.state}>{line.state}</Chip>
+                    )}
                   </span>
                   <span className={styles.detail}>
                     {line.decision} · needs {plural(line.leadTimeDays, 'day')} of notice

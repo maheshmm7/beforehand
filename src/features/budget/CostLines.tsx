@@ -103,7 +103,11 @@ export function CostLines({ model }: { model: Model }): React.JSX.Element {
                 <div className={styles.lineMain}>
                   <span className={styles.lineName}>
                     {line.label}
-                    <Chip tone={TONE[line.state]}>{line.state}</Chip>
+                    {/* Estimated is the state of every line until somebody
+                        quotes it. A mark that is on everything marks nothing. */}
+                    {line.state === 'estimated' ? null : (
+                      <Chip tone={TONE[line.state]}>{line.state}</Chip>
+                    )}
                   </span>
                   <span className={styles.lineBasis}>{line.basis}</span>
                   {line.quote === undefined ? null : (

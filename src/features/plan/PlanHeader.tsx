@@ -1,6 +1,6 @@
 import { packFor } from '@shared/packs';
 import { activeScenarioOf, type Plan } from '@shared/plan';
-import { countdown, longDate, todayIso } from '@/lib/format';
+import { countdown, todayIso } from '@/lib/format';
 import { useWorkspace } from '@/state/useWorkspace';
 import { DateField } from '@/ui/DateField';
 import { TimeField } from '@/ui/TimeField';
@@ -21,10 +21,10 @@ export function PlanHeader({ plan }: { plan: Plan }): React.JSX.Element {
     <header className={styles.header}>
       <div className={styles.who}>
         <h1 className={styles.title}>{plan.name}</h1>
+        {/* The date and the place are editable fields an inch to the right.
+            Printing them again here was the same fact three times over. */}
         <p className={styles.meta}>
-          {pack.label}
-          {plan.place === '' ? '' : ` · ${plan.place}`} · {longDate(plan.eventDateIso)} ·{' '}
-          {countdown(todayIso(), plan.eventDateIso)} away ·{' '}
+          {pack.label} · {countdown(todayIso(), plan.eventDateIso)} away ·{' '}
           <span className={styles.scenarioTag}>{scenario.name}</span>
         </p>
       </div>
