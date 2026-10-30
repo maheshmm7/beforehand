@@ -65,6 +65,16 @@
   );
   --hairline: rgb(20 19 14 / 8%);
 
+  /* Control sizes. sm is for an action inside a row, md is the default for
+     any action in a form or panel, lg is reserved for a page's main call. */
+  --control-sm: 36px;
+  --control-md: 44px;
+  --control-lg: 52px;
+
+  /* One padding for every card, everywhere. */
+  --pad-card: clamp(16px, 4vw, 26px);
+  --pad-section: clamp(32px, 6vw, 56px);
+
   --radius-sm: 8px;
   --radius: 12px;
   --radius-lg: 18px;
@@ -93,7 +103,14 @@
   --text-h2: clamp(1.5rem, 1.25rem + 1.1vw, 2rem);
   --text-h3: clamp(1.125rem, 1.05rem + 0.4vw, 1.3125rem);
   --text-lead: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+  /* Figures and the wordmark are fixed: they must not scale with the
+     viewport the way prose does. */
+  --text-figure-lg: 1.75rem;
+  --text-figure: 1.6rem;
+  --text-logo: 1.0625rem;
+  --text-body: 0.9375rem;
   --text-small: 0.875rem;
+  --text-caption: 0.8125rem;
   --text-tiny: 0.75rem;
 
   --shadow-raised: 0 1px 2px rgb(20 19 14 / 6%);

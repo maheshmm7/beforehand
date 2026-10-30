@@ -77,7 +77,7 @@
 }
 
 .word {
-  font-size: 1.0625rem;
+  font-size: var(--text-logo);
   font-weight: 550;
   letter-spacing: -0.015em;
 }

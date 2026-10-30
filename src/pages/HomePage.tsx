@@ -14,7 +14,6 @@ import {
   IconLock,
   IconReceipt,
   IconRipple,
-  IconScale,
   IconSpark,
 } from '@/ui/icons';
 import { HeroDemo } from './landing/HeroDemo';
@@ -249,6 +248,14 @@ export function HomePage(): React.JSX.Element {
         <div className={styles.sectionHead}>
           <p className={styles.kicker}>What you get</p>
           <h2 className={styles.sectionTitle}>Six things no other planner does</h2>
+          <p className={styles.sectionLead}>
+            A language model reads what you paste and proposes ideas. It never does the arithmetic:
+            every figure is computed by ordinary code, which is why each one can show its working.{' '}
+            <a className={styles.inlineLink} href={hrefFor({ name: 'about' })}>
+              How that works
+            </a>
+            .
+          </p>
         </div>
 
         <div className={styles.features}>
@@ -283,50 +290,6 @@ export function HomePage(): React.JSX.Element {
               </p>
             </article>
           ))}
-        </div>
-      </Reveal>
-
-      <Reveal className={cx(styles.section, styles.wrap)}>
-        <div className={styles.sectionHead}>
-          <p className={styles.kicker}>Where the AI sits</p>
-          <h2 className={styles.sectionTitle}>It reads and proposes. It never does the sums.</h2>
-          <p className={styles.sectionLead}>
-            Every figure is computed by ordinary code, which is why each one shows its working
-            underneath it — “770 servings × 450” — and why a number can never be invented.
-          </p>
-        </div>
-
-        <div className={styles.features}>
-          <article className={styles.feature}>
-            <span className={styles.featureIcon}>
-              <IconScale />
-            </span>
-            <h3 className={styles.featureTitle}>Checked, not trusted</h3>
-            <p className={styles.featureText}>
-              What the model returns is validated against the same contract the app was promised. A
-              reply that invents a field or wanders off the shape is refused, not shown.
-            </p>
-          </article>
-          <article className={styles.feature}>
-            <span className={styles.featureIcon}>
-              <IconLock />
-            </span>
-            <h3 className={styles.featureTitle}>Stripped before sending</h3>
-            <p className={styles.featureText}>
-              Phone numbers, emails and links are removed in the browser and again on the server.
-              Only the extract you pasted is sent, never your plan.
-            </p>
-          </article>
-          <article className={styles.feature}>
-            <span className={styles.featureIcon}>
-              <IconCheck />
-            </span>
-            <h3 className={styles.featureTitle}>Optional by design</h3>
-            <p className={styles.featureText}>
-              Turn the assistant off and everything else still works. The engine has no opinion
-              about whether a language model is available.
-            </p>
-          </article>
         </div>
       </Reveal>
 

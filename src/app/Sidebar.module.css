@@ -6,7 +6,7 @@
 }
 
 .groupLabel {
-  font-size: 0.6875rem;
+  font-size: var(--text-tiny);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -23,12 +23,20 @@
 }
 
 .item {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--control-md);
+  text-align: left;
+  background: none;
+  border: 1px solid transparent;
+  cursor: pointer;
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius);
   color: var(--text-muted);
   text-decoration: none;
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
 }
 
 .item:hover {
@@ -39,14 +47,14 @@
 .item[aria-current='page'],
 .item[aria-current='true'] {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border-color: var(--border);
   color: var(--text);
-  font-weight: 500;
+  font-weight: 550;
 }
 
 .itemMeta {
   display: block;
-  font-size: 0.75rem;
+  font-size: var(--text-tiny);
   color: var(--text-faint);
   margin-top: 1px;
 }
@@ -80,7 +88,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
-  font-size: 0.75rem;
+  font-size: var(--text-tiny);
 }
 
 .footerLink {

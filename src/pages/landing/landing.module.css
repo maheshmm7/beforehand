@@ -65,7 +65,7 @@
   right: var(--space-3);
   bottom: 6px;
   height: 1.5px;
-  border-radius: 2px;
+  border-radius: var(--radius-pill);
   background: var(--accent);
   transform: scaleX(0);
   transform-origin: left;
@@ -124,7 +124,7 @@
 
 .hero {
   position: relative;
-  padding-block: clamp(40px, 8vw, 88px) clamp(48px, 9vw, 104px);
+  padding-block: clamp(36px, 6vw, 72px) clamp(40px, 7vw, 80px);
   overflow: hidden;
 }
 
@@ -250,7 +250,7 @@
 }
 
 .demoBody {
-  padding: clamp(16px, 4vw, 24px);
+  padding: var(--pad-card);
   display: grid;
   gap: var(--space-4);
 }
@@ -365,13 +365,13 @@
 /* ---------- sections ---------- */
 
 .section {
-  padding-block: clamp(48px, 8vw, 96px);
+  padding-block: var(--pad-section);
   border-top: 1px solid var(--hairline);
 }
 
 .sectionHead {
   max-width: 54ch;
-  margin-bottom: clamp(28px, 4vw, 48px);
+  margin-bottom: clamp(24px, 3vw, 36px);
 }
 
 .kicker {
@@ -395,6 +395,20 @@
 
 /* ---------- comparison ---------- */
 
+/* Every panel on this page is the same surface; only the accents differ. */
+.panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--pad-card);
+  background: var(--surface);
+}
+
+.inlineLink {
+  color: var(--accent-ink);
+  font-weight: 550;
+  text-underline-offset: 3px;
+}
+
 .compare {
   display: grid;
   gap: var(--space-4);
@@ -407,10 +421,7 @@
 }
 
 .compareCard {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: clamp(18px, 4vw, 28px);
-  background: var(--surface);
+  composes: panel;
 }
 
 .compareCardUs {
@@ -448,7 +459,7 @@
   gap: var(--space-3);
   align-items: flex-start;
   color: var(--text-muted);
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
 }
 
 .compareItem svg {
@@ -473,10 +484,7 @@
 }
 
 .feature {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: clamp(18px, 4vw, 26px);
-  background: var(--surface);
+  composes: panel;
   transition:
     transform var(--dur-base) var(--ease-out),
     box-shadow var(--dur-base) var(--ease-out),
@@ -508,7 +516,7 @@
 .featureText {
   margin-top: var(--space-2);
   color: var(--text-muted);
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
 }
 
 /* ---------- steps ---------- */
@@ -557,7 +565,7 @@
 .stepText {
   margin-top: var(--space-2);
   color: var(--text-muted);
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
 }
 
 /* ---------- kinds ---------- */
@@ -569,12 +577,9 @@
 }
 
 .kind {
+  composes: panel;
   position: relative;
   overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: clamp(18px, 4vw, 26px);
-  background: var(--surface);
   transition:
     transform var(--dur-base) var(--ease-out),
     box-shadow var(--dur-base) var(--ease-out);
@@ -592,7 +597,7 @@
 .kindBlurb {
   margin-top: var(--space-2);
   color: var(--text-muted);
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
 }
 
 .kindMeta {
@@ -621,11 +626,8 @@
 }
 
 .planCard {
+  composes: panel;
   display: block;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
-  background: var(--surface);
   text-decoration: none;
   color: inherit;
   transition:
@@ -642,7 +644,7 @@
 
 .planName {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: var(--text-h3);
   font-weight: 600;
   letter-spacing: -0.02em;
 }
@@ -730,8 +732,8 @@
 
 .closing {
   position: relative;
-  margin-block: clamp(48px, 8vw, 96px);
-  padding: clamp(32px, 6vw, 64px);
+  margin-block: clamp(40px, 6vw, 72px) clamp(32px, 5vw, 56px);
+  padding: var(--pad-section);
   border-radius: var(--radius-xl);
   border: 1px solid var(--border);
   background: var(--surface);
@@ -776,23 +778,45 @@
 .footer {
   border-top: 1px solid var(--border);
   background: var(--surface-sunken);
-  padding-block: clamp(36px, 6vw, 64px) var(--space-6);
+  padding-block: clamp(32px, 5vw, 48px) var(--space-5);
 }
 
+/* The brand column carries a paragraph and the others carry short links, so
+   they are not the same width. */
 .footerGrid {
   display: grid;
-  gap: var(--space-6);
-  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: var(--space-6) var(--space-5);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 620px) {
+  .footerGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .footerAbout {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 920px) {
+  .footerGrid {
+    grid-template-columns: minmax(0, 1.7fr) repeat(3, minmax(0, 1fr));
+  }
+
+  .footerAbout {
+    grid-column: auto;
+  }
 }
 
 .footerAbout {
-  max-width: 34ch;
+  max-width: 38ch;
 }
 
 .footerText {
   margin-top: var(--space-3);
   color: var(--text-muted);
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
 }
 
 .footerHeading {
@@ -817,7 +841,7 @@
   padding: 3px 0;
   color: var(--text-muted);
   text-decoration: none;
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
 }
 
 .footerLink:hover {
@@ -827,7 +851,7 @@
 }
 
 .footerBottom {
-  margin-top: var(--space-7);
+  margin-top: var(--space-5);
   padding-top: var(--space-4);
   border-top: 1px solid var(--border);
   display: flex;
@@ -839,14 +863,13 @@
 }
 
 .disclaimer {
-  margin-top: var(--space-4);
-  padding: var(--space-4);
+  margin-top: var(--space-6);
+  padding: var(--space-4) var(--space-5);
   border-left: 3px solid var(--accent);
   background: var(--surface);
   border-radius: 0 var(--radius) var(--radius) 0;
   color: var(--text-muted);
-  font-size: 0.9375rem;
-  max-width: 70ch;
+  font-size: var(--text-small);
 }
 
 /* ---------- long-form pages ---------- */
@@ -871,7 +894,7 @@
 .prosePage li {
   margin-top: var(--space-4);
   color: var(--text-muted);
-  font-size: 1.0625rem;
+  font-size: var(--text-lead);
 }
 
 .prosePage strong {

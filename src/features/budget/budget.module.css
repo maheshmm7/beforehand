@@ -45,7 +45,7 @@
 .bar {
   display: flex;
   height: 10px;
-  border-radius: 5px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
   margin: var(--space-4) 0 var(--space-3);
   background: var(--surface-sunken);
@@ -71,7 +71,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-4);
-  font-size: 0.8125rem;
+  font-size: var(--text-caption);
   color: var(--text-muted);
 }
 
@@ -79,8 +79,20 @@
   display: inline-block;
   width: 10px;
   height: 10px;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   margin-right: var(--space-2);
+}
+
+.swatchPaid {
+  background: var(--state-paid-ink);
+}
+
+.swatchQuoted {
+  background: var(--state-quoted-ink);
+}
+
+.swatchEstimated {
+  background: var(--border-strong);
 }
 
 .radius {
@@ -88,13 +100,35 @@
   background: var(--accent-wash);
 }
 
+/* A reserved body: empty and full differ by a little, not by a lot, so the
+   column below does not lurch as a lever moves. */
+.radiusBody {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.radiusEmpty {
+  border-color: var(--border);
+  background: var(--surface);
+}
+
+.radiusEmpty .radiusQuiet {
+  margin: auto 0;
+}
+
+.radiusMore {
+  color: var(--text-faint);
+  font-style: italic;
+}
+
 .radiusQuiet {
   color: var(--text-muted);
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
 }
 
 .delta {
-  font-size: 1.75rem;
+  font-size: var(--text-figure-lg);
   font-weight: 600;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
@@ -111,7 +145,7 @@
 .counts {
   margin-top: var(--space-1);
   color: var(--text-muted);
-  font-size: 0.875rem;
+  font-size: var(--text-small);
 }
 
 .radiusList {
@@ -120,7 +154,7 @@
   padding: 0;
   display: grid;
   gap: var(--space-2);
-  font-size: 0.875rem;
+  font-size: var(--text-small);
 }
 
 .radiusRow {
@@ -143,7 +177,7 @@
   border-radius: var(--radius);
   background: var(--danger-wash);
   color: var(--danger-ink);
-  font-size: 0.875rem;
+  font-size: var(--text-small);
 }
 
 .alertHint {
@@ -163,7 +197,7 @@
 }
 
 .groupName {
-  font-size: 0.75rem;
+  font-size: var(--text-tiny);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -195,7 +229,7 @@
 .lineBasis {
   display: block;
   margin-top: 2px;
-  font-size: 0.75rem;
+  font-size: var(--text-tiny);
   color: var(--text-faint);
   font-family: var(--font-num);
 }
@@ -203,7 +237,7 @@
 .lineQuote {
   display: block;
   margin-top: var(--space-1);
-  font-size: 0.8125rem;
+  font-size: var(--text-caption);
   color: var(--state-quoted-ink);
 }
 
@@ -215,7 +249,7 @@
 
 .lineWas {
   display: block;
-  font-size: 0.75rem;
+  font-size: var(--text-tiny);
   color: var(--text-faint);
   font-weight: 400;
   text-align: right;
@@ -233,8 +267,17 @@
 
 .totalValue {
   font-family: var(--font-display);
-  font-size: 1.75rem;
+  font-size: var(--text-figure-lg);
   font-weight: 600;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 1000px) {
+  /* Declared last so it wins over the base rule above: the second column has
+     the room, so reserve the space the answer will occupy rather than letting
+     the card appear out of nothing. */
+  .radiusBody {
+    min-height: 300px;
+  }
 }

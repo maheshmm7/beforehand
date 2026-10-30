@@ -45,7 +45,9 @@ export function AppShell({
               setPlansOpen((open) => !open);
             }}
           >
-            <span className={styles.planName}>{plan?.name ?? 'Plans'}</span>
+            <span className={styles.planName} title={plan?.name}>
+              {plan?.name ?? 'Plans'}
+            </span>
             <span className={plansOpen ? styles.chevronUp : undefined}>
               <IconChevron size={16} />
             </span>

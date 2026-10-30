@@ -3,6 +3,7 @@ import { money, moneyShort } from '@/lib/format';
 import { usePlanModel } from '@/state/usePlanModel';
 import { useWorkspace } from '@/state/useWorkspace';
 import { Card, Stat } from '@/ui/controls';
+import { cx } from '@/ui/cx';
 import { BlastRadiusPanel } from './BlastRadiusPanel';
 import { CostLines } from './CostLines';
 import { Levers } from './Levers';
@@ -19,16 +20,6 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
   return (
     <div className={styles.columns}>
       <div className={styles.left}>
-        <BlastRadiusPanel
-          radius={radius}
-          onKeep={() => {
-            dispatch({ type: 'keepChanges', planId: plan.id });
-          }}
-          onUndo={() => {
-            dispatch({ type: 'revertChanges', planId: plan.id });
-          }}
-        />
-
         <Card title="Levers">
           <Levers
             pack={pack}
@@ -41,6 +32,16 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
       </div>
 
       <div className={styles.right}>
+        <BlastRadiusPanel
+          radius={radius}
+          onKeep={() => {
+            dispatch({ type: 'keepChanges', planId: plan.id });
+          }}
+          onUndo={() => {
+            dispatch({ type: 'revertChanges', planId: plan.id });
+          }}
+        />
+
         <Card title="Where the money stands">
           <div className={styles.stats}>
             <Stat label="Total" value={moneyShort(totals.all)} note={money(totals.all)} live />
@@ -64,15 +65,15 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
           </div>
           <p className={styles.legend}>
             <span>
-              <span className={styles.swatch} style={{ background: 'var(--state-paid-ink)' }} />
+              <span className={cx(styles.swatch, styles.swatchPaid)} />
               Paid {money(totals.paid)}
             </span>
             <span>
-              <span className={styles.swatch} style={{ background: 'var(--state-quoted-ink)' }} />
+              <span className={cx(styles.swatch, styles.swatchQuoted)} />
               Quoted {money(totals.quoted)}
             </span>
             <span>
-              <span className={styles.swatch} style={{ background: 'var(--border-strong)' }} />
+              <span className={cx(styles.swatch, styles.swatchEstimated)} />
               Estimated {money(totals.estimated)}
             </span>
           </p>

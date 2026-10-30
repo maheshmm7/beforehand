@@ -100,8 +100,8 @@ export function NewPlanPage(): React.JSX.Element {
 
   return (
     <div>
-      <h1 className={styles.heroTitle}>Start a plan</h1>
-      <p className={styles.heroText}>
+      <h1 className={styles.title}>Start a plan</h1>
+      <p className={styles.intro}>
         Rough numbers are fine. Everything is a lever you can move afterwards, and nothing is
         committed until you say so.
       </p>
@@ -113,7 +113,7 @@ export function NewPlanPage(): React.JSX.Element {
           create();
         }}
       >
-        <fieldset style={{ border: 0, margin: 0, padding: 0 }}>
+        <fieldset className={styles.fieldset}>
           <legend className={controlStyles.fieldLabel}>What are you planning?</legend>
           <div className={styles.kindRow}>
             {packList.map((pack) => (
@@ -196,7 +196,7 @@ export function NewPlanPage(): React.JSX.Element {
               }}
             />
           </Field>
-          <div className={styles.heroActions}>
+          <div className={styles.actions}>
             <Button
               disabled={busy}
               onClick={() => {
@@ -220,7 +220,7 @@ export function NewPlanPage(): React.JSX.Element {
 
         {problem === null ? null : <p className={styles.error}>{problem}</p>}
 
-        <div className={styles.heroActions}>
+        <div className={styles.actions}>
           <Button type="submit" variant="primary">
             Create the plan
           </Button>

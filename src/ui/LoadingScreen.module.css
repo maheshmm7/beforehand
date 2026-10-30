@@ -9,7 +9,7 @@
 }
 
 .label {
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
   letter-spacing: 0.14em;
   color: var(--text-muted);
 }
