@@ -138,3 +138,11 @@ a {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Holds the dock's place while the plan screens arrive, so nothing jumps when
+   they do. */
+.dock-placeholder {
+  height: var(--dock-height);
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}

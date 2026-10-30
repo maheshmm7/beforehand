@@ -1,28 +1,48 @@
 /* The new-plan screen. It lives inside the app shell, so it uses the app's
-   scale rather than the landing page's hero type. */
+   scale rather than the landing page's hero type, and it is laid out to be
+   read in one screenful rather than scrolled through. */
+
+.form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.head {
+  max-width: 62ch;
+}
 
 .title {
   font-size: var(--text-h2);
 }
 
 .intro {
-  margin-top: var(--space-3);
-  max-width: 54ch;
+  margin-top: var(--space-2);
   color: var(--text-muted);
-}
-
-.form {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-5);
-  max-width: 36rem;
-  margin-top: var(--space-6);
+  font-size: var(--text-small);
 }
 
 .fieldset {
   border: 0;
   margin: 0;
   padding: 0;
+  min-width: 0;
+}
+
+.legend,
+.label {
+  display: block;
+  padding: 0;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.field {
+  min-width: 0;
 }
 
 .pair {
@@ -31,57 +51,203 @@
   gap: var(--space-3);
 }
 
+/* What are you planning ------------------------------------------------- */
+
 .kindRow {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
-  gap: var(--space-2);
+  grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr));
+  gap: var(--space-3);
 }
 
-.kindOption {
-  display: block;
+.kind {
+  position: relative;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  grid-template-areas:
+    'mark name'
+    '.    blurb';
+  align-items: center;
+  /* Packed to the top, so the three names line up however long the blurb
+     under each one runs. */
+  align-content: start;
+  gap: 2px var(--space-3);
+  padding: var(--space-3) var(--space-4);
   border: 1px solid var(--border-strong);
-  border-radius: var(--radius);
-  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
   cursor: pointer;
   transition:
     border-color var(--dur-fast) var(--ease-out),
-    background-color var(--dur-fast) var(--ease-out);
+    background-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
 }
 
-.kindOption:hover {
+.kind:hover {
   border-color: var(--border-loud);
+  transform: translateY(-1px);
 }
 
-.kindOption:has(input:checked) {
+.kind input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.kind:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Our own mark rather than the browser's blue dot, which arrived in another
+   product's colour and another product's size. */
+.kindMark {
+  grid-area: mark;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-strong);
+  border-radius: 50%;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.kind:has(input:checked) {
   border-color: var(--accent);
   background: var(--accent-wash);
 }
 
+.kind:has(input:checked) .kindMark {
+  border-color: var(--accent);
+  box-shadow:
+    inset 0 0 0 3px var(--surface),
+    inset 0 0 0 9px var(--accent);
+}
+
 .kindName {
-  display: block;
-  font-weight: 550;
+  grid-area: name;
+  font-weight: 600;
 }
 
 .kindBlurb {
-  display: block;
+  grid-area: blurb;
   font-size: var(--text-caption);
   color: var(--text-muted);
-  margin-top: 2px;
 }
 
-.actions {
+/* The two halves -------------------------------------------------------- */
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  justify-items: stretch;
+}
+
+.facts > button {
+  justify-self: start;
+}
+
+.preview {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface-sunken);
+}
+
+.previewLabel {
+  font-size: var(--text-tiny);
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.previewFigure {
+  font-family: var(--font-display);
+  font-size: var(--text-figure);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.previewNote {
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.describe {
+  padding: var(--pad-card);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-lg);
+  background: var(--accent-wash);
+  min-width: 0;
+}
+
+.describeTitle {
+  display: flex;
   align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  font-family: var(--font-sans);
+  font-size: var(--text-tiny);
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+
+.describe textarea {
+  min-height: 96px;
+}
+
+.describeFoot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.notes {
+  margin-top: var(--space-3);
+  padding-left: var(--space-5);
+  font-size: var(--text-caption);
+  color: var(--text-muted);
 }
 
 .error {
   color: var(--danger-ink);
   font-size: var(--text-small);
+  font-weight: 500;
 }
 
 .hint {
-  font-size: var(--text-caption);
+  font-size: var(--text-tiny);
   color: var(--text-muted);
+}
+
+@media (min-width: 820px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .describeFoot {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-3);
+  }
 }

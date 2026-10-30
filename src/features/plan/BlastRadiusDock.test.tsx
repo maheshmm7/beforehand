@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import type { BlastRadius } from '@shared/engine';
-import { BlastRadiusPanel } from './BlastRadiusPanel';
+import { BlastRadiusDock } from './BlastRadiusDock';
 
 const empty: BlastRadius = {
   totalDelta: 0,
@@ -28,7 +28,7 @@ function changed(count: number): BlastRadius['changedLines'] {
 
 function show(radius: Partial<BlastRadius>): void {
   render(
-    <BlastRadiusPanel
+    <BlastRadiusDock
       radius={{ ...empty, isEmpty: false, ...radius }}
       onKeep={vi.fn()}
       onUndo={vi.fn()}
@@ -36,11 +36,12 @@ function show(radius: Partial<BlastRadius>): void {
   );
 }
 
-describe('BlastRadiusPanel', () => {
+describe('BlastRadiusDock', () => {
   it('invites a change when nothing has moved, and offers nothing to accept', () => {
-    render(<BlastRadiusPanel radius={empty} onKeep={vi.fn()} onUndo={vi.fn()} />);
+    render(<BlastRadiusDock radius={empty} onKeep={vi.fn()} onUndo={vi.fn()} />);
 
-    expect(screen.getByText(/Move a lever to see what it costs/)).toBeInTheDocument();
+    expect(screen.getByText('Nothing pending')).toBeInTheDocument();
+    expect(screen.getByText(/Move a lever/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Keep this change' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Undo' })).toBeDisabled();
   });
@@ -75,23 +76,23 @@ describe('BlastRadiusPanel', () => {
     expect(rows[2]).toContain('Line 0');
   });
 
-  it('shows a fixed number of rows and counts the rest, so it cannot grow', () => {
-    show({ totalDelta: 1000, changedLines: changed(20) });
+  it('counts each kind of consequence, so the rings can be read', () => {
+    show({
+      totalDelta: 1000,
+      changedLines: changed(2),
+      newTasks: [{ id: 't1', label: 'A task', leadTimeDays: 10 }],
+      movedDeadlines: [
+        { id: 'd1', label: 'Caterer', from: '2027-01-10', to: '2027-01-09', days: -1 },
+      ],
+    });
 
-    const rows = screen.getAllByRole('listitem');
-    // Seven consequences plus the line that counts what is left.
-    expect(rows).toHaveLength(8);
-    expect(screen.getByText('and 13 other changes')).toBeInTheDocument();
+    const status = screen.getByRole('status');
+    expect(status).toHaveTextContent('2 lines moved');
+    expect(status).toHaveTextContent('1 deadline shifted');
+    expect(status).toHaveTextContent('1 task changed');
   });
 
-  it('says nothing about a remainder when everything fits', () => {
-    show({ totalDelta: 1000, changedLines: changed(3) });
-
-    expect(screen.getAllByRole('listitem')).toHaveLength(3);
-    expect(screen.queryByText(/other change/)).not.toBeInTheDocument();
-  });
-
-  it('raises a broken constraint with what to do about it', () => {
+  it('raises a broken constraint ahead of everything else, with what to do about it', () => {
     show({
       totalDelta: 1000,
       changedLines: changed(1),
@@ -105,23 +106,15 @@ describe('BlastRadiusPanel', () => {
       ],
     });
 
-    expect(screen.getByText('More guests than the venue holds.')).toBeInTheDocument();
-    expect(screen.getByText('Cut the list.')).toBeInTheDocument();
+    const rows = screen.getAllByRole('listitem').map((item) => item.textContent);
+    expect(rows[0]).toContain('More guests than the venue holds.');
+    expect(rows[0]).toContain('Cut the list.');
+    expect(screen.getByRole('status')).toHaveTextContent('1 constraint broken');
   });
 
-  it('counts each kind of consequence in its summary', () => {
-    show({
-      totalDelta: 1000,
-      changedLines: changed(2),
-      addedLines: [],
-      newTasks: [{ id: 't1', label: 'A task', leadTimeDays: 10 }],
-      movedDeadlines: [
-        { id: 'd1', label: 'Caterer', from: '2027-01-10', to: '2027-01-09', days: -1 },
-      ],
-    });
+  it('says nothing about constraints when none broke', () => {
+    show({ totalDelta: 1000, changedLines: changed(1) });
 
-    expect(screen.getByRole('status')).toHaveTextContent(
-      '2 lines moved · 1 deadline shifted · 1 new task · 0 constraints broken',
-    );
+    expect(screen.getByRole('status')).not.toHaveTextContent('broken');
   });
 });

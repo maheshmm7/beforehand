@@ -1,0 +1,343 @@
+/* The dock. One height, resting or full, because it is the one thing on the
+   screen that must never move anything else when it changes. */
+
+.dock {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: 'gauge readout actions';
+  align-items: center;
+  gap: var(--space-4);
+  height: var(--dock-height);
+  overflow: hidden;
+  padding: var(--space-3) clamp(12px, 3vw, 24px);
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  transition: background-color var(--dur-base) var(--ease-out);
+}
+
+.dockLive {
+  background: var(--accent-wash);
+  border-top-color: var(--accent);
+}
+
+.gauge {
+  grid-area: gauge;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+}
+
+.rings {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.ring {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-width: 2.5;
+  opacity: 0.45;
+  transition:
+    stroke var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out);
+}
+
+.ringOn {
+  opacity: 1;
+  stroke-width: 3.5;
+}
+
+.ringMoney.ringOn {
+  stroke: var(--accent);
+}
+
+.ringTime.ringOn {
+  stroke: var(--state-quoted-ink);
+}
+
+.ringWork.ringOn {
+  stroke: var(--state-paid-ink);
+}
+
+.core {
+  fill: var(--border-strong);
+  transition: fill var(--dur-base) var(--ease-out);
+}
+
+.coreLive {
+  fill: var(--accent-ink);
+}
+
+.ripple {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  transform-origin: 36px 36px;
+  animation: ripple 900ms var(--ease-out);
+}
+
+@keyframes ripple {
+  from {
+    opacity: 0.8;
+    transform: scale(0.35);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(3.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ripple {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+.readout {
+  grid-area: readout;
+  min-width: 0;
+}
+
+.caption {
+  font-size: var(--text-tiny);
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.delta {
+  font-size: var(--text-figure);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.deltaUp {
+  color: var(--danger-ink);
+}
+
+.deltaDown {
+  color: var(--state-quoted-ink);
+}
+
+.counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px var(--space-3);
+  margin-top: 2px;
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.counts > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.tagMoney::before,
+.tagTime::before,
+.tagWork::before,
+.tagBroken::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentcolor;
+}
+
+.tagMoney {
+  color: var(--accent-ink);
+}
+
+.tagTime {
+  color: var(--state-quoted-ink);
+}
+
+.tagWork {
+  color: var(--state-paid-ink);
+}
+
+.tagBroken {
+  color: var(--danger-ink);
+  font-weight: 600;
+}
+
+/* Hidden on a narrow screen, where the readout alone is the dock. */
+.consequences {
+  display: none;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 1px;
+}
+
+.legendLead {
+  margin-bottom: var(--space-1);
+  padding-left: var(--space-4);
+  font-size: var(--text-caption);
+  color: var(--text-faint);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 1px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: 3px var(--space-3) 3px var(--space-4);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-caption);
+  position: relative;
+}
+
+.row::before {
+  content: '';
+  position: absolute;
+  left: var(--space-1);
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+}
+
+.money::before {
+  background: var(--accent);
+}
+
+.time::before {
+  background: var(--state-quoted-ink);
+}
+
+.work::before {
+  background: var(--state-paid-ink);
+}
+
+.rowBroken {
+  background: var(--danger-wash);
+  color: var(--danger-ink);
+  font-weight: 500;
+}
+
+.rowBroken::before {
+  background: var(--danger-ink);
+}
+
+.what {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-muted);
+}
+
+.rowBroken .what {
+  color: inherit;
+}
+
+.detail {
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.rowBroken .detail {
+  color: inherit;
+  font-weight: 400;
+}
+
+.actions {
+  grid-area: actions;
+  display: flex;
+  gap: var(--space-2);
+}
+
+@media (max-width: 599.98px) {
+  /* The one place the height gives: at 320 pixels with the text at 200% the
+     two actions cannot sit on one line, and a control that cannot be reached
+     is worse than a dock that grew by a row. At any ordinary size the content
+     fits the height exactly, resting or full, so nothing moves. */
+  .dock {
+    height: auto;
+    min-height: var(--dock-height);
+    overflow: visible;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      'gauge readout'
+      'actions actions';
+    align-content: center;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .gauge {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* The dock says what it is in the resting line; on a phone the caption is
+     one row too many. */
+  .caption {
+    display: none;
+  }
+
+  .delta {
+    font-size: var(--text-lead);
+  }
+
+  /* Two lines at most, still laid out as a row of tags: clamping with a
+     -webkit-box would drop the flex gaps and run the counts together. */
+  .counts {
+    max-height: calc(2 * 1.5em);
+    overflow: hidden;
+  }
+
+  .actions {
+    flex-wrap: wrap;
+  }
+
+  .actions > * {
+    flex: 1;
+  }
+}
+
+@media (min-width: 1000px) {
+  .dock {
+    grid-template-columns: auto minmax(0, 260px) minmax(0, 1fr) auto;
+    grid-template-areas: 'gauge readout list actions';
+    gap: var(--space-5);
+  }
+
+  .consequences {
+    grid-area: list;
+    display: block;
+    min-width: 0;
+    height: calc(var(--dock-height) - var(--space-6));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-left: 1px solid var(--border);
+    padding-left: var(--space-4);
+  }
+}

@@ -1,14 +1,19 @@
 .header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-3);
-  margin-bottom: var(--space-5);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: end;
+  gap: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.who {
+  min-width: 0;
 }
 
 .title {
   font-size: clamp(1.375rem, 1.1rem + 1.1vw, 1.75rem);
+  line-height: 1.15;
 }
 
 .meta {
@@ -24,7 +29,27 @@
 
 .fields {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr));
   gap: var(--space-3);
-  margin-bottom: var(--space-5);
+  min-width: 0;
+}
+
+.field {
+  min-width: 0;
+}
+
+.fieldLabel {
+  display: block;
+  margin-bottom: 4px;
+  font-size: var(--text-tiny);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+@media (min-width: 900px) {
+  .header {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
+  }
 }

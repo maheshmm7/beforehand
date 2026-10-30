@@ -4,14 +4,13 @@ import { usePlanModel } from '@/state/usePlanModel';
 import { useWorkspace } from '@/state/useWorkspace';
 import { Card, Stat } from '@/ui/controls';
 import { cx } from '@/ui/cx';
-import { BlastRadiusPanel } from './BlastRadiusPanel';
 import { CostLines } from './CostLines';
 import { Levers } from './Levers';
 import styles from './budget.module.css';
 
 export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
   const { dispatch } = useWorkspace();
-  const { pack, scenario, current, radius } = usePlanModel(plan);
+  const { pack, scenario, current } = usePlanModel(plan);
   const { totals, violations } = current;
 
   const span = Math.max(totals.paid + totals.quoted + Math.max(totals.estimated, 0), 1);
@@ -32,16 +31,6 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
       </div>
 
       <div className={styles.right}>
-        <BlastRadiusPanel
-          radius={radius}
-          onKeep={() => {
-            dispatch({ type: 'keepChanges', planId: plan.id });
-          }}
-          onUndo={() => {
-            dispatch({ type: 'revertChanges', planId: plan.id });
-          }}
-        />
-
         <Card title="Where the money stands">
           <div className={styles.stats}>
             <Stat label="Total" value={moneyShort(totals.all)} note={money(totals.all)} live />
@@ -80,14 +69,14 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
         </Card>
 
         {violations.length === 0 ? null : (
-          <Card title="Worth knowing">
+          <div className={styles.alerts}>
             {violations.map((violation) => (
               <p key={violation.id} className={styles.alert}>
                 {violation.message}
                 <span className={styles.alertHint}>{violation.hint}</span>
               </p>
             ))}
-          </Card>
+          </div>
         )}
 
         <Card title="Every line, and how we got there">

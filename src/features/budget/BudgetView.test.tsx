@@ -1,6 +1,6 @@
-import { fireEvent, screen, within } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { makePlan, PlanHost, renderWith, user, workspaceWith } from '@/testing/support';
+import { makePlan, PlanHost, renderWith, workspaceWith } from '@/testing/support';
 import { BudgetView } from './BudgetView';
 
 function show(): void {
@@ -20,63 +20,19 @@ describe('BudgetView', () => {
     expect(screen.getByText('35 tables × 900')).toBeInTheDocument();
   });
 
-  it('starts with nothing pending and invites a change', () => {
+  it('lays the levers out as options rather than hiding them in a menu', () => {
     show();
 
-    expect(screen.getByText(/Move a lever to see what it costs/)).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'Banquet hall' })).toBeChecked();
+    expect(screen.getByRole('radio', { name: 'Open lawn' })).not.toBeChecked();
   });
 
-  it('reports the blast radius once a lever moves', () => {
+  it('folds each category away with its total still showing', () => {
     show();
 
-    // jsdom does not implement keyboard stepping on a range input; the real
-    // keyboard journey is covered by the browser tests.
-    fireEvent.change(screen.getByLabelText('Guests'), { target: { value: '400' } });
-
-    const radius = screen.getByRole('status');
-    expect(within(radius).getByText('+₹76,275')).toBeInTheDocument();
-    expect(radius).toHaveTextContent('1 new task');
-    expect(radius).toHaveTextContent('Add a second serving line');
-  });
-
-  it('keeps a change, which clears the pending difference', async () => {
-    show();
-
-    fireEvent.change(screen.getByLabelText('Guests'), { target: { value: '400' } });
-    await user.click(screen.getByRole('button', { name: 'Keep this change' }));
-
-    expect(screen.getByText(/Move a lever to see what it costs/)).toBeInTheDocument();
-  });
-
-  it('undoes a change, putting the total back', async () => {
-    show();
-    const totalBefore = screen.getAllByText('₹12,69,775')[0];
-    expect(totalBefore).toBeDefined();
-
-    fireEvent.change(screen.getByLabelText('Guests'), { target: { value: '400' } });
-    await user.click(screen.getByRole('button', { name: 'Undo' }));
-
-    expect(screen.getAllByText('₹12,69,775').length).toBeGreaterThan(0);
-  });
-
-  it('adds the lines an open lawn implies, and says they are new', async () => {
-    show();
-
-    await user.selectOptions(screen.getByLabelText('Venue'), 'lawn');
-
-    const radius = screen.getByRole('status');
-    expect(radius).toHaveTextContent('Rain cover');
-    expect(radius).toHaveTextContent('Power backup');
-  });
-
-  it('removes lines again when the venue goes back indoors', async () => {
-    show();
-
-    await user.selectOptions(screen.getByLabelText('Venue'), 'lawn');
-    await user.click(screen.getByRole('button', { name: 'Keep this change' }));
-    await user.selectOptions(screen.getByLabelText('Venue'), 'hotel');
-
-    expect(screen.getByRole('status')).toHaveTextContent('no longer needed');
+    const food = screen.getByText('Food').closest('summary');
+    expect(food).not.toBeNull();
+    expect(food).toHaveTextContent('₹3,46,500');
   });
 
   it('warns when the venue is too small, with what to do about it', () => {

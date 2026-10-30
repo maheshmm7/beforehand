@@ -1,3 +1,12 @@
+/* A column that fills the rail, so About and Privacy sit at the bottom of the
+   sidebar whether a plan is open or not. They used to follow the content and
+   so appeared to jump halfway down the screen the moment a plan was made. */
+.rail {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
 .brand {
   display: inline-flex;
   color: inherit;
@@ -80,9 +89,19 @@
   flex: 1;
 }
 
+/* The same warning the public pages carry, where somebody reading the figures
+   can actually see it. */
+.disclaimer {
+  margin-top: auto;
+  padding-top: var(--space-5);
+  font-size: var(--text-tiny);
+  line-height: 1.4;
+  color: var(--text-faint);
+}
+
 .footer {
   align-items: center;
-  margin-top: var(--space-6);
+  margin-top: var(--space-3);
   padding-top: var(--space-4);
   border-top: 1px solid var(--border);
   display: flex;

@@ -29,13 +29,13 @@ test('moving a lever never moves the lever', async ({ page }) => {
   }
 });
 
-test('the consequence panel keeps a steady height as a lever moves', async ({ page }) => {
+test('the dock is the same height resting as it is full', async ({ page }) => {
   await createPlan(page);
 
-  const panel = page.getByRole('status');
+  const dock = page.getByRole('region', { name: 'Blast radius' });
   const guests = page.getByRole('slider', { name: 'Guests', exact: true });
   const keep = page.getByRole('button', { name: 'Keep this change' });
-  const resting = Math.round((await panel.boundingBox())?.height ?? 0);
+  const resting = Math.round((await dock.boundingBox())?.height ?? 0);
 
   // Wait until it is actually showing something before sampling, or the first
   // sample is still the resting height.
@@ -43,28 +43,37 @@ test('the consequence panel keeps a steady height as a lever moves', async ({ pa
   await page.keyboard.press('ArrowRight');
   await expect(keep).toBeEnabled();
 
-  const active: number[] = [];
+  const heights = [resting];
   for (let step = 0; step < 6; step += 1) {
     await guests.focus();
     await page.keyboard.press('ArrowRight');
     await page.waitForTimeout(140);
-    active.push(Math.round((await panel.boundingBox())?.height ?? 0));
+    heights.push(Math.round((await dock.boundingBox())?.height ?? 0));
   }
 
-  // Once it is showing consequences it must not resize again, however many
-  // there are: that is what made the panel feel unstable.
-  const spread = Math.max(...active) - Math.min(...active);
-  expect(spread, `panel heights were ${active.join(', ')}`).toBeLessThanOrEqual(8);
+  // However many consequences there are, and whether or not there are any, the
+  // dock occupies exactly the same row.
+  expect(
+    Math.max(...heights) - Math.min(...heights),
+    `dock heights were ${heights.join(', ')}`,
+  ).toBeLessThanOrEqual(1);
+});
 
-  // Where there are two columns the space is reserved, so going from resting
-  // to showing something barely moves. On a narrow screen the panel sits below
-  // the levers and simply fills in, which moves nothing the hand is using.
-  if ((page.viewportSize()?.width ?? 0) >= 1000) {
-    const firstStep = Math.abs((active[0] ?? 0) - resting);
-    expect(firstStep, `resting ${String(resting)} then ${String(active[0])}`).toBeLessThanOrEqual(
-      120,
-    );
-  }
+test('nothing above the dock moves when the dock fills', async ({ page }) => {
+  await createPlan(page);
+
+  const region = page.locator('#main');
+  const guests = page.getByRole('slider', { name: 'Guests', exact: true });
+  const before = await region.boundingBox();
+
+  await guests.focus();
+  for (let press = 0; press < 4; press += 1) await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(200);
+
+  const after = await region.boundingBox();
+  expect(Math.round(after?.height ?? 0), 'the content region was resized').toBe(
+    Math.round(before?.height ?? 0),
+  );
 });
 
 test('buttons come from one scale', async ({ page }) => {
@@ -83,9 +92,6 @@ test('buttons come from one scale', async ({ page }) => {
   }
 
   // 36 for an action inside a row, 44 for the default, 52 for a page's call.
-  expect([...seen].sort((a, b) => a - b)).toEqual(
-    expect.arrayContaining([...seen].filter((height) => [36, 44, 52].includes(height))),
-  );
   expect(
     [...seen].filter((height) => ![36, 44, 52].includes(height)),
     'button heights outside the scale',
@@ -102,8 +108,8 @@ test('no page runs away in length', async ({ page }) => {
   const narrow = (page.viewportSize()?.width ?? 1280) < 900;
   const budgets: { path: string; screens: number }[] = [
     { path: '/#/', screens: narrow ? 8 : 5.5 },
-    { path: '/#/new', screens: narrow ? 4 : 3 },
-    { path: planUrl, screens: narrow ? 7 : 6 },
+    { path: '/#/new', screens: narrow ? 4 : 1.1 },
+    { path: planUrl, screens: narrow ? 4 : 1.7 },
   ];
 
   for (const budget of budgets) {
@@ -116,7 +122,8 @@ test('no page runs away in length', async ({ page }) => {
         region !== null && region.scrollHeight > region.clientHeight
           ? region.scrollHeight
           : document.documentElement.scrollHeight;
-      return height / window.innerHeight;
+      const seen = region === null ? window.innerHeight : region.clientHeight;
+      return height / seen;
     });
 
     expect(Number(screens.toFixed(1)), `${budget.path} is too long`).toBeLessThanOrEqual(
@@ -144,4 +151,21 @@ test('the footer lines up with the page it sits under', async ({ page }) => {
   expect(report).not.toBeNull();
   expect(report?.disclaimerLeft).toBe(report?.gridLeft);
   expect(report?.disclaimerRight).toBe(report?.gridRight);
+});
+
+test('About and Privacy stay where they were put', async ({ page }) => {
+  // They sit at the foot of the sidebar. Before, they followed the content, so
+  // making a plan appeared to shove them down the screen.
+  await page.goto('/#/new');
+  if ((page.viewportSize()?.width ?? 0) < 900) {
+    test.skip(true, 'the sidebar is a drawer on a narrow screen');
+  }
+
+  const about = page.getByRole('link', { name: 'About' }).first();
+  const before = Math.round((await about.boundingBox())?.y ?? 0);
+
+  await createPlan(page);
+  const after = Math.round((await about.boundingBox())?.y ?? 0);
+
+  expect(Math.abs(after - before), 'About moved when a plan was opened').toBeLessThanOrEqual(1);
 });

@@ -1,0 +1,288 @@
+/* The date and time pickers. Both are drawn here rather than by the browser,
+   so they carry the same paper, the same type and the same radii as the rest
+   of the application in every engine. */
+
+.anchor {
+  position: relative;
+  min-width: 0;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-width: 0;
+  min-height: var(--control-md);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-body);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.trigger:hover {
+  border-color: var(--border-loud);
+}
+
+.triggerOpen {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.triggerInvalid {
+  border-color: var(--danger-ink);
+}
+
+.triggerText {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.triggerNote {
+  flex: none;
+  font-size: var(--text-tiny);
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.panel {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: min(288px, calc(100vw - 24px));
+  padding: var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-lg);
+  animation: drop var(--dur-base) var(--ease-out);
+}
+
+.panel[data-place='above'] {
+  top: auto;
+  bottom: calc(100% + 6px);
+  animation-name: rise;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+}
+
+/* Hung from the other end when there is no room on this one, so the panel
+   cannot run off the side of the window. */
+.panel[data-align='end'] {
+  left: auto;
+  right: 0;
+}
+
+.panelHead {
+  display: grid;
+  grid-template-columns: var(--control-sm) minmax(0, 1fr) var(--control-sm);
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.panelTitle {
+  text-align: center;
+  font-weight: 600;
+  font-size: var(--text-small);
+}
+
+.step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-sm);
+  height: var(--control-sm);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.step:hover {
+  background: var(--surface-sunken);
+  color: var(--text);
+}
+
+.stepBack {
+  display: inline-flex;
+  transform: rotate(180deg);
+}
+
+.weekdays,
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 2px;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+}
+
+.weekdays {
+  margin-bottom: 2px;
+  font-size: var(--text-tiny);
+  color: var(--text-faint);
+  text-align: center;
+}
+
+.day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--control-sm);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.day:hover:not([disabled]) {
+  background: var(--accent-wash);
+}
+
+.day[disabled] {
+  color: var(--text-faint);
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.dayOutside {
+  color: var(--text-faint);
+}
+
+.dayToday {
+  border-color: var(--border-strong);
+  font-weight: 600;
+}
+
+.daySelected,
+.daySelected:hover:not([disabled]) {
+  background: var(--accent);
+  border-color: transparent;
+  color: var(--accent-on);
+  font-weight: 650;
+}
+
+.panelFoot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.quick {
+  min-height: var(--control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--text-caption);
+  cursor: pointer;
+}
+
+.quick:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.clock {
+  display: grid;
+  grid-template-columns: var(--control-lg) minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+.column {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+  max-height: 232px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.columnWide {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: var(--space-2);
+}
+
+.tick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.tick:hover {
+  border-color: var(--accent);
+}
+
+.tickOn {
+  background: var(--accent);
+  border-color: transparent;
+  color: var(--accent-on);
+  font-weight: 650;
+}
+
+.meridiem {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}

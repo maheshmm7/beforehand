@@ -13,6 +13,9 @@ import { LoadingScreen } from './ui/LoadingScreen';
 // The plan screens carry every view; they are not needed to paint the landing
 // page, so they arrive on their own.
 const PlanPage = lazy(async () => import('./app/PlanPage'));
+// The dock is pinned outside the scrolling region, so it is mounted by the
+// shell rather than by the page, and arrives with the same plan screens.
+const PlanDock = lazy(async () => import('./features/plan/PlanDock'));
 
 function NotFound({ title }: { title: string }): React.JSX.Element {
   return (
@@ -52,7 +55,16 @@ export function App(): React.JSX.Element {
     route.name === 'plan' ? workspace.plans.find((one) => one.id === route.planId) : undefined;
 
   return (
-    <AppShell route={route}>
+    <AppShell
+      route={route}
+      dock={
+        plan === undefined ? undefined : (
+          <Suspense fallback={<div className="dock-placeholder" />}>
+            <PlanDock plan={plan} />
+          </Suspense>
+        )
+      }
+    >
       {route.name === 'new' ? <NewPlanPage /> : null}
       {route.name === 'notFound' ? <NotFound title="There is nothing at that address." /> : null}
       {route.name === 'plan' ? (

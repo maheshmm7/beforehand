@@ -132,3 +132,16 @@ export const IconMenu = (props: IconProps): React.JSX.Element => (
     <path d="M4 7h16M4 12h16M4 17h16" />
   </Icon>
 );
+
+export const IconClock = (props: IconProps): React.JSX.Element => (
+  <Icon {...props}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 7.2V12l3.2 2" />
+  </Icon>
+);
+
+export const IconPlus = (props: IconProps): React.JSX.Element => (
+  <Icon {...props}>
+    <path d="M12 5v14M5 12h14" />
+  </Icon>
+);

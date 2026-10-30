@@ -21,7 +21,7 @@ export function Sidebar({ route }: { route: Route }): React.JSX.Element {
   const plan = workspace.plans.find((one) => one.id === activePlanId);
 
   return (
-    <nav aria-label="Plans and sections">
+    <nav className={styles.rail} aria-label="Plans and sections">
       <a className={styles.brand} href={hrefFor({ name: 'home' })}>
         <Logo />
       </a>
@@ -118,6 +118,10 @@ export function Sidebar({ route }: { route: Route }): React.JSX.Element {
           </div>
         </>
       )}
+
+      <p className={styles.disclaimer}>
+        Every figure here is a planning estimate, not a quote, until a vendor gives you one.
+      </p>
 
       <div className={styles.footer}>
         <a className={styles.footerLink} href={hrefFor({ name: 'about' })}>

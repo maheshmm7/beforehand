@@ -1,10 +1,15 @@
 import type { EventPack, VariableValues } from '@shared/engine';
-import { Field } from '@/ui/controls';
 import { controlStyles } from '@/ui/controlStyles';
 import { fillStyle } from '@/ui/fillStyle';
 import styles from './budget.module.css';
 
-/** Every lever in the pack, rendered from its own definition. */
+/**
+ * Every lever in the pack, rendered from its own definition.
+ *
+ * Choices are laid out as a row of options rather than hidden inside a drop
+ * down: which ones exist, and how far the chosen one sits from the cheap end,
+ * is half of what somebody is trying to work out.
+ */
 export function Levers({
   pack,
   values,
@@ -18,18 +23,19 @@ export function Levers({
     <div className={styles.levers}>
       {pack.variables.map((variable) => {
         const id = `lever-${variable.id}`;
-        const stored = values[variable.id];
 
         if (variable.kind === 'number') {
+          const stored = values[variable.id];
           const value = typeof stored === 'number' ? stored : variable.fallback;
           return (
-            <Field
-              key={variable.id}
-              htmlFor={id}
-              label={variable.label}
-              value={`${String(value)}${variable.unit === undefined ? '' : ` ${variable.unit}`}`}
-              help={variable.help}
-            >
+            <div key={variable.id} className={styles.lever}>
+              <div className={styles.leverHead}>
+                <label htmlFor={id}>{variable.label}</label>
+                <span className={styles.leverValue}>
+                  {value}
+                  {variable.unit === undefined ? '' : ` ${variable.unit}`}
+                </span>
+              </div>
               <input
                 id={id}
                 className={controlStyles.range}
@@ -43,30 +49,42 @@ export function Levers({
                   onChange(variable.id, Number(event.target.value));
                 }}
               />
-            </Field>
+              <p className={styles.leverNote}>{variable.help}</p>
+            </div>
           );
         }
 
-        const chosen = typeof stored === 'string' ? stored : variable.fallback;
+        const storedChoice = values[variable.id];
+        const chosen = typeof storedChoice === 'string' ? storedChoice : variable.fallback;
         const note = variable.options.find((option) => option.id === chosen)?.note;
 
         return (
-          <Field key={variable.id} htmlFor={id} label={variable.label} help={note ?? variable.help}>
-            <select
-              id={id}
-              className={controlStyles.select}
-              value={chosen}
-              onChange={(event) => {
-                onChange(variable.id, event.target.value);
-              }}
-            >
+          <div key={variable.id} className={styles.lever}>
+            <div className={styles.leverHead} id={`${id}-label`}>
+              <span>{variable.label}</span>
+            </div>
+            <div className={styles.options} role="radiogroup" aria-labelledby={`${id}-label`}>
               {variable.options.map((option) => (
-                <option key={option.id} value={option.id}>
-                  {option.label}
-                </option>
+                <label
+                  key={option.id}
+                  className={styles.option}
+                  data-on={option.id === chosen ? 'true' : undefined}
+                >
+                  <input
+                    type="radio"
+                    name={id}
+                    value={option.id}
+                    checked={option.id === chosen}
+                    onChange={() => {
+                      onChange(variable.id, option.id);
+                    }}
+                  />
+                  <span>{option.label}</span>
+                </label>
               ))}
-            </select>
-          </Field>
+            </div>
+            <p className={styles.leverNote}>{note ?? variable.help}</p>
+          </div>
         );
       })}
     </div>

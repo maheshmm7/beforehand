@@ -1,20 +1,25 @@
-/* On a narrow screen the shell is a column with its own scroll region, so the
-   tab row is chrome beside the content rather than an overlay on top of it.
-   Nothing can ever be hidden underneath it. */
+/* The shell is the window. The content region is the only thing that scrolls,
+   so the sidebar, the dock and the tab row are chrome beside the content
+   rather than an overlay on top of it, and nothing can ever be hidden
+   underneath them. */
 .shell {
   display: flex;
   flex-direction: column;
-  min-height: 100svh;
+  height: 100svh;
+  overflow: hidden;
 }
 
 .main {
   flex: 1;
   min-width: 0;
-  padding: clamp(12px, 3vw, 24px) clamp(12px, 4vw, 16px) var(--space-7);
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(12px, 3vw, 24px) clamp(12px, 4vw, 16px) var(--space-6);
 }
 
 .inner {
-  max-width: 1040px;
+  max-width: 1120px;
   margin: 0 auto;
   min-width: 0;
 }
@@ -65,6 +70,10 @@
   overflow-y: auto;
 }
 
+.dock {
+  flex: none;
+}
+
 .bottomNav {
   display: grid;
   grid-auto-flow: column;
@@ -108,24 +117,13 @@
   display: none;
 }
 
-@media (max-width: 899.98px) {
-  /* The page itself does not scroll; the content region does. */
-  .shell {
-    height: 100svh;
-    overflow: hidden;
-  }
-
-  .main {
-    overflow-y: auto;
-    overscroll-behavior: contain;
-  }
-}
-
 @media (min-width: 900px) {
+  /* Sidebar down the left across both rows; content above the dock on the
+     right. The dock is a row of the grid, never a layer over the content. */
   .shell {
     display: grid;
     grid-template-columns: 252px minmax(0, 1fr);
-    align-items: start;
+    grid-template-rows: minmax(0, 1fr) auto;
   }
 
   .topbar,
@@ -136,15 +134,22 @@
 
   .sidebar {
     display: block;
-    border-right: 1px solid var(--border);
+    grid-column: 1;
+    grid-row: 1 / 3;
+    min-height: 0;
     padding: var(--space-5) var(--space-4);
-    position: sticky;
-    top: 0;
-    height: 100svh;
+    border-right: 1px solid var(--border);
     overflow-y: auto;
   }
 
   .main {
-    padding: var(--space-6) clamp(16px, 3vw, 32px) var(--space-7);
+    grid-column: 2;
+    grid-row: 1;
+    padding: var(--space-5) clamp(16px, 3vw, 32px) var(--space-6);
+  }
+
+  .dock {
+    grid-column: 2;
+    grid-row: 2;
   }
 }

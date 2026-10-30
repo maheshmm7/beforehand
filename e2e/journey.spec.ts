@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { createPlan, expectNoSidewaysScroll } from './helpers';
+import { createPlan, expectNoSidewaysScroll, openGroup, wide } from './helpers';
 
 test('the landing page states what the product does', async ({ page }) => {
   await page.goto('/#/');
@@ -14,29 +14,32 @@ test('a plan can be created and shows costs derived from the model', async ({ pa
   await createPlan(page);
 
   await expect(page.getByText('Catering')).toBeVisible();
-  // Every figure shows the arithmetic that produced it.
+  // Every figure shows the arithmetic that produced it. The group holding the
+  // money is open already; the rest open on asking.
   await expect(page.getByText('770 servings × 450 (Standard)')).toBeVisible();
+  await openGroup(page, 'Things to hire');
   await expect(page.getByText('35 tables × 900')).toBeVisible();
 });
 
 test('moving a lever reports its blast radius before it is accepted', async ({ page }) => {
   await createPlan(page);
 
-  const radius = page.getByRole('status');
-  await expect(page.getByText('Move a lever to see what it costs')).toBeVisible();
+  const dock = page.getByRole('region', { name: 'Blast radius' });
+  await expect(page.getByText('Nothing pending')).toBeVisible();
 
   const guests = page.getByRole('slider', { name: /Guests/ }).first();
   await guests.focus();
   for (let press = 0; press < 5; press += 1) await page.keyboard.press('ArrowRight');
 
-  await expect(radius).toContainText('+₹76,275');
-  await expect(radius).toContainText('1 new task');
-  await expect(radius).toContainText('Add a second serving line');
+  await expect(page.getByRole('status')).toContainText('+₹76,275');
+  await expect(page.getByRole('status')).toContainText('1 task changed');
   // A longer guest list takes longer to print and cater for.
-  await expect(radius).toContainText('2 deadlines shifted');
+  await expect(page.getByRole('status')).toContainText('2 deadlines shifted');
+  // Which lines moved is listed where there is room to list it.
+  if (wide(page)) await expect(dock).toContainText('Add a second serving line');
 
   await page.getByRole('button', { name: 'Keep this change' }).click();
-  await expect(page.getByText('Move a lever to see what it costs')).toBeVisible();
+  await expect(page.getByText('Nothing pending')).toBeVisible();
 });
 
 test('undo puts the plan back the way it was', async ({ page }) => {
@@ -55,12 +58,20 @@ test('undo puts the plan back the way it was', async ({ page }) => {
 test('a venue change adds the lines an open lawn implies', async ({ page }) => {
   await createPlan(page);
 
-  await page.getByRole('combobox', { name: 'Venue' }).selectOption('lawn');
+  await page.getByRole('radio', { name: 'Open lawn' }).click();
 
-  const radius = page.getByRole('status');
-  await expect(radius).toContainText('Rain cover');
-  await expect(radius).toContainText('Power backup');
-  await expect(radius).toContainText('Water and sanitation');
+  const added = ['Rain cover', 'Power backup', 'Water and sanitation'];
+
+  // The dock names them as consequences where it has the room to.
+  if (wide(page)) {
+    const dock = page.getByRole('region', { name: 'Blast radius' });
+    for (const line of added) await expect(dock).toContainText(line);
+  }
+
+  // And they are in the breakdown on every screen, under the group they belong
+  // to, priced.
+  const group = await openGroup(page, 'Things to hire');
+  for (const line of added) await expect(group.getByText(line)).toBeVisible();
 });
 
 test('the timeline gives decision deadlines and a run of show', async ({ page }) => {

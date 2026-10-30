@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { makePlan, PlanHost, renderWith, user, workspaceWith } from '@/testing/support';
 import { PlanHeader } from './PlanHeader';
@@ -20,19 +20,40 @@ describe('PlanHeader', () => {
     expect(screen.getByText(/Plan A/)).toBeInTheDocument();
   });
 
-  it('labels the time field with the pack’s own fixed moment', () => {
+  it('labels the time field with the pack’s own fixed moment, in the clock people read', () => {
     show();
 
-    expect(screen.getByLabelText('The ceremony')).toHaveValue('09:30');
+    expect(screen.getByLabelText('The ceremony')).toHaveTextContent('9:30 am');
   });
 
-  it('moves the date, and the heading with it', () => {
+  it('moves the date from the calendar, and the heading with it', async () => {
     show();
 
-    // A date input takes a whole value, not keystrokes.
-    fireEvent.change(screen.getByLabelText('Date'), { target: { value: '2027-06-05' } });
+    await user.click(screen.getByLabelText('Date'));
+    const grid = screen.getByRole('grid');
+    await user.click(within(grid).getByRole('gridcell', { name: '5 Mar 2027' }));
 
-    expect(screen.getByText(/5 Jun 2027/)).toBeInTheDocument();
+    expect(screen.getByText(/Wedding · Hyderabad · 5 Mar 2027/)).toBeInTheDocument();
+  });
+
+  it('pages to another month without changing the plan', async () => {
+    show();
+
+    await user.click(screen.getByLabelText('Date'));
+    await user.click(screen.getByRole('button', { name: 'Next month' }));
+
+    expect(screen.getByRole('grid')).toHaveAccessibleName('April 2027');
+    expect(screen.getByText(/Wedding · Hyderabad · 2 Mar 2027/)).toBeInTheDocument();
+  });
+
+  it('moves the fixed moment of the day', async () => {
+    show();
+
+    await user.click(screen.getByLabelText('The ceremony'));
+    await user.click(screen.getByRole('button', { name: ':30', pressed: true }));
+    await user.click(screen.getByRole('button', { name: '11' }));
+
+    expect(screen.getByLabelText('The ceremony')).toHaveTextContent('11:30 am');
   });
 
   it('changes where it is', async () => {
@@ -43,13 +64,5 @@ describe('PlanHeader', () => {
     await user.type(place, 'Chennai');
 
     expect(screen.getByText(/Chennai/)).toBeInTheDocument();
-  });
-
-  it('ignores an emptied date rather than breaking the plan', () => {
-    show();
-
-    fireEvent.change(screen.getByLabelText('Date'), { target: { value: '' } });
-
-    expect(screen.getByText(/2 Mar 2027/)).toBeInTheDocument();
   });
 });

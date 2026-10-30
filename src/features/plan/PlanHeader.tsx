@@ -2,67 +2,68 @@ import { packFor } from '@shared/packs';
 import { activeScenarioOf, type Plan } from '@shared/plan';
 import { countdown, longDate, todayIso } from '@/lib/format';
 import { useWorkspace } from '@/state/useWorkspace';
-import { Field } from '@/ui/controls';
+import { DateField } from '@/ui/DateField';
+import { TimeField } from '@/ui/TimeField';
 import { controlStyles } from '@/ui/controlStyles';
 import styles from './PlanHeader.module.css';
 
+/**
+ * One bar, not a block: who and what on the left, the three facts that move
+ * everything else on the right. It stays the same height on every view, so
+ * switching between them does not shift the page.
+ */
 export function PlanHeader({ plan }: { plan: Plan }): React.JSX.Element {
   const { dispatch } = useWorkspace();
   const pack = packFor(plan.kind);
   const scenario = activeScenarioOf(plan);
 
   return (
-    <>
-      <header className={styles.header}>
-        <div>
-          <h1 className={styles.title}>{plan.name}</h1>
-          <p className={styles.meta}>
-            {pack.label}
-            {plan.place === '' ? '' : ` · ${plan.place}`} · {longDate(plan.eventDateIso)} ·{' '}
-            {countdown(todayIso(), plan.eventDateIso)} away ·{' '}
-            <span className={styles.scenarioTag}>{scenario.name}</span>
-          </p>
-        </div>
-      </header>
+    <header className={styles.header}>
+      <div className={styles.who}>
+        <h1 className={styles.title}>{plan.name}</h1>
+        <p className={styles.meta}>
+          {pack.label}
+          {plan.place === '' ? '' : ` · ${plan.place}`} · {longDate(plan.eventDateIso)} ·{' '}
+          {countdown(todayIso(), plan.eventDateIso)} away ·{' '}
+          <span className={styles.scenarioTag}>{scenario.name}</span>
+        </p>
+      </div>
 
       <div className={styles.fields}>
-        <Field label="Date" htmlFor="plan-date">
-          <input
+        <div className={styles.field}>
+          <label className={styles.fieldLabel} htmlFor="plan-date">
+            Date
+          </label>
+          <DateField
             id="plan-date"
-            className={controlStyles.input}
-            type="date"
+            label="Choose the date of the event"
+            note={false}
             value={plan.eventDateIso}
-            onChange={(event) => {
-              if (event.target.value !== '') {
-                dispatch({
-                  type: 'setPlanDate',
-                  planId: plan.id,
-                  eventDateIso: event.target.value,
-                });
-              }
+            onChange={(eventDateIso) => {
+              dispatch({ type: 'setPlanDate', planId: plan.id, eventDateIso });
             }}
           />
-        </Field>
+        </div>
 
-        <Field label={pack.anchorLabel} htmlFor="plan-anchor">
-          <input
+        <div className={styles.field}>
+          <label className={styles.fieldLabel} htmlFor="plan-anchor">
+            {pack.anchorLabel}
+          </label>
+          <TimeField
             id="plan-anchor"
-            className={controlStyles.input}
-            type="time"
+            label={`Choose when ${pack.anchorLabel.toLowerCase()} happens`}
+            note={false}
             value={plan.anchorTime}
-            onChange={(event) => {
-              if (event.target.value !== '') {
-                dispatch({
-                  type: 'setAnchorTime',
-                  planId: plan.id,
-                  anchorTime: event.target.value,
-                });
-              }
+            onChange={(anchorTime) => {
+              dispatch({ type: 'setAnchorTime', planId: plan.id, anchorTime });
             }}
           />
-        </Field>
+        </div>
 
-        <Field label="Where" htmlFor="plan-place">
+        <div className={styles.field}>
+          <label className={styles.fieldLabel} htmlFor="plan-place">
+            Where
+          </label>
           <input
             id="plan-place"
             className={controlStyles.input}
@@ -74,8 +75,8 @@ export function PlanHeader({ plan }: { plan: Plan }): React.JSX.Element {
               dispatch({ type: 'setPlace', planId: plan.id, place: event.target.value });
             }}
           />
-        </Field>
+        </div>
       </div>
-    </>
+    </header>
   );
 }

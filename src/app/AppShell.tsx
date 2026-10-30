@@ -11,15 +11,22 @@ import { VIEW_LABELS } from './viewLabels';
 import styles from './AppShell.module.css';
 
 /**
- * A sidebar on a wide screen; a top bar and a bottom tab row on a narrow one.
+ * A workspace, not a document: the shell is exactly the height of the window,
+ * the content region scrolls inside it, and the chrome around it — sidebar,
+ * dock, tab row — stays put. Nothing the hand is using can be pushed away by
+ * something appearing somewhere else.
+ *
  * No drawer and no focus trap: the plan switcher opens inline, so keyboard and
  * screen reader order stay in the normal flow of the page.
  */
 export function AppShell({
   route,
+  dock,
   children,
 }: {
   route: Route;
+  /** Pinned under the content region, on every screen. */
+  dock?: ReactNode;
   children: ReactNode;
 }): React.JSX.Element {
   const { workspace } = useWorkspace();
@@ -68,6 +75,8 @@ export function AppShell({
       <main id="main" className={styles.main}>
         <div className={styles.inner}>{children}</div>
       </main>
+
+      {dock === undefined ? null : <div className={styles.dock}>{dock}</div>}
 
       {plan === undefined ? null : (
         <nav className={styles.bottomNav} aria-label="Sections">
