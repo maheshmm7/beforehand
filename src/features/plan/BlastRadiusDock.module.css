@@ -355,6 +355,11 @@
     justify-content: flex-end;
   }
 
+  /* The rule belongs to the list, so it is only drawn when there is one. */
+  .dockLive .consequences {
+    border-left: 1px solid var(--border);
+  }
+
   .consequences {
     grid-area: list;
     display: block;
@@ -362,7 +367,6 @@
     max-width: 440px;
     height: calc(var(--dock-height) - var(--space-6));
     overflow: hidden;
-    border-left: 1px solid var(--border);
     padding-left: var(--space-4);
   }
 }

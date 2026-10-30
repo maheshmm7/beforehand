@@ -41,13 +41,13 @@
 .lever {
   min-width: 0;
   break-inside: avoid;
-  padding-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
 }
 
 /* Pulls back the last lever's own spacing, which would otherwise leave a
    band of nothing along the bottom of the card. */
 .levers {
-  margin-bottom: calc(-1 * var(--space-5));
+  margin-bottom: calc(-1 * var(--space-4));
 }
 
 .leverHead {
@@ -92,19 +92,22 @@
   gap: 6px;
 }
 
+/* A cell with no vertical padding is fine until a label wraps, and then the
+   two lines sit against the top and bottom edges. A pill end crowds wrapped
+   text from the sides as well, so these are rounded rectangles. */
 .option {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: var(--control-sm);
-  padding: 0 var(--space-3);
+  min-height: var(--control-md);
+  padding: var(--space-2) var(--space-4);
   border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius);
   background: var(--surface);
   color: var(--text-muted);
-  font-size: var(--text-caption);
-  line-height: 1.25;
+  font-size: var(--text-small);
+  line-height: 1.4;
   text-align: center;
   cursor: pointer;
   transition:

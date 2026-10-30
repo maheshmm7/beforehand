@@ -98,6 +98,63 @@ async function spacingFaults(page: Page, where: string): Promise<string[]> {
   }, where);
 }
 
+/**
+ * A control sized by min-height alone is fine until its label wraps, and then
+ * the two lines sit against the top and bottom edges of it. Reported as the
+ * option cells on the budget screen.
+ */
+async function crampedControls(page: Page): Promise<string[]> {
+  return page.evaluate(() =>
+    Array.from(document.querySelectorAll<HTMLElement>('button, label, a'))
+      .filter((el) => {
+        const style = getComputedStyle(el);
+        if (style.display === 'none' || style.visibility === 'hidden') return false;
+        if (style.cursor !== 'pointer') return false;
+        return el.textContent.trim() !== '';
+      })
+      .map((el) => {
+        const box = el.getBoundingClientRect();
+        // The label's own words, not the invisible input filling the cell.
+        const inner = el.querySelector('span') ?? el;
+        const range = document.createRange();
+        range.selectNodeContents(inner);
+        const ink = range.getBoundingClientRect();
+        range.detach();
+        return {
+          text: el.textContent.trim().slice(0, 24),
+          above: Math.round(ink.top - box.top),
+          below: Math.round(box.bottom - ink.bottom),
+          wrapped: ink.height > Number.parseFloat(getComputedStyle(el).lineHeight) * 1.4,
+        };
+      })
+      // Only a label that actually wrapped can be crowded by the box around
+      // it; a single line inside a 44 pixel control never is.
+      .filter((c) => c.wrapped && (c.above < 4 || c.below < 4))
+      .map(
+        (c) => `"${c.text}" has ${String(Math.min(c.above, c.below))}px above or below its label`,
+      ),
+  );
+}
+
+test('no control is tighter than its own label', async ({ page }) => {
+  const found: string[] = [];
+
+  await createPlan(page, 'Priya and Arjun');
+  const base = page.url().replace(/\/[a-z]+$/, '');
+  for (const view of ['budget', 'vendors']) {
+    await page.goto(`${base}/${view}`);
+    await page.waitForTimeout(300);
+    found.push(...(await crampedControls(page)));
+  }
+  for (const path of ['/#/', '/#/new']) {
+    await page.goto(path);
+    await page.waitForTimeout(400);
+    found.push(...(await crampedControls(page)));
+  }
+
+  expect([...new Set(found)]).toEqual([]);
+});
+
 test('nothing is set so close it reads as one word', async ({ page }) => {
   const found: string[] = [];
 
