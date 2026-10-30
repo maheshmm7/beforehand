@@ -12,6 +12,10 @@ test('moving a lever never moves the lever', async ({ page }) => {
   await createPlan(page);
 
   const guests = page.getByRole('slider', { name: 'Guests', exact: true });
+  // Measured from where the slider sits once it has been reached, not from
+  // where it sat before: on a phone, bringing it into view is the browser
+  // scrolling the page, which is not the panel moving under a thumb.
+  await guests.focus();
   const before = await guests.boundingBox();
   expect(before).not.toBeNull();
 

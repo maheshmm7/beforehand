@@ -1,19 +1,11 @@
-/* Three bands: the levers across the top, then the money and anything broken
-   beside the breakdown. */
-
+/* The figures and the warnings across the top, then the levers on one side
+   and the breakdown on the other: the answer first, then what moves it and
+   what makes it up. */
 .board {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-3);
   align-content: start;
-}
-
-.side {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-3);
-  align-content: start;
-  min-width: 0;
 }
 
 /* Levers --------------------------------------------------------------- */
@@ -43,13 +35,13 @@
 .lever {
   min-width: 0;
   break-inside: avoid;
-  padding-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
 }
 
 /* Pulls back the last lever's own spacing, which would otherwise leave a
    band of nothing along the bottom of the card. */
 .levers {
-  margin-bottom: calc(-1 * var(--space-4));
+  margin-bottom: calc(-1 * var(--space-3));
 }
 
 .leverHead {
@@ -71,15 +63,28 @@
   font-feature-settings: 'tnum' 1;
 }
 
-/* Two lines, always: a longer note for one option than another must not make
-   the lever taller and push the one below it down the column. */
+/* On the label's line, one line only: a longer note for one option than
+   another must not make the lever taller and push the one below it down. */
 .leverNote {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-tiny);
+  font-weight: 400;
+  color: var(--text-faint);
+}
+
+/* Under the sliders, whose help is a sentence rather than a gloss on one
+   option. As tall as the sentence and no taller: a second line held open for
+   a sentence that fits on one is a band of nothing under every slider, and
+   the columns balance themselves without needing the rows to match. */
+.leverHelp {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   overflow: hidden;
-  min-height: calc(2 * 1.45 * var(--text-tiny));
   margin-top: var(--space-2);
   font-size: var(--text-tiny);
   line-height: 1.45;
@@ -160,7 +165,7 @@
 .money {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
 .stats {
@@ -251,13 +256,14 @@
 
 /* Every line ------------------------------------------------------------ */
 
-/* The card is taller than the groups when the window is tall. Rather than
-   leaving the bottom of it empty, the total sits at the foot of the sheet,
-   the way it would on a printed statement. */
+/* The breakdown is as tall as the lines in it, and the total sits directly
+   under the last group the way it would on a printed statement. Nothing here
+   scrolls on its own: a panel with its own scrollbar is a second chute down
+   the same screen, and pushing the total to the foot of a stretched card
+   left a hole the height of a hand above it. */
 .ledger {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
 }
 
 .groups {
@@ -274,7 +280,7 @@
   grid-template-columns: 14px minmax(0, 1fr) auto auto;
   align-items: center;
   gap: var(--space-3);
-  min-height: var(--control-md);
+  min-height: 38px;
   padding: 0 var(--space-2);
   margin: 0 calc(-1 * var(--space-2));
   border-radius: var(--radius-sm);
@@ -336,7 +342,7 @@
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
   gap: var(--space-4);
-  padding: var(--space-3) 0 var(--space-3) var(--space-5);
+  padding: var(--space-2) 0 var(--space-2) var(--space-5);
 }
 
 .line + .line {
@@ -387,8 +393,8 @@
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  margin-top: auto;
-  padding-top: var(--space-4);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
   border-top: 1px solid var(--border-strong);
   font-weight: 550;
 }
@@ -406,46 +412,44 @@
 }
 
 @media (min-width: 1100px) {
-  /* Levers on top of the money, with the breakdown down the side. The board
-     fills the region rather than ending halfway down it: on a tall window the
-     figures and the warnings take the extra room instead of leaving a band of
-     nothing above the dock. */
+  /* The figures run the full width; under them, one column for the controls
+     and one for the breakdown. Both are as tall as what is in them:
+     stretching them to the window put a hole under whichever was shorter. */
   .board {
-    flex: 1;
-    min-height: 0;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
-    /* The levers card takes the slack on a tall window:space inside a
-       panel reads as air, loose on the page it reads as a hole. */
-    grid-template-rows: minmax(0, 1fr) auto;
-    align-items: stretch;
-  }
-
-  .board > :first-child {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .side {
-    grid-column: 1;
-    grid-row: 2;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+    grid-template-areas:
+      'money alerts'
+      'levers ledger';
     align-items: start;
   }
 
+  .money {
+    grid-area: money;
+  }
+
+  .alerts {
+    grid-area: alerts;
+  }
+
+  .leversCard {
+    grid-area: levers;
+  }
+
   .breakdown {
-    grid-column: 2;
-    grid-row: 1 / 3;
-    align-self: stretch;
-    display: flex;
-    flex-direction: column;
+    grid-area: ledger;
   }
 
-  .breakdown > :last-child {
-    flex: 1;
-    min-height: 0;
-  }
-
+  /* Four figures in a row rather than a square of four: across the top of
+     the screen they are a headline, and a headline is one line. */
   .stats {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* Three options go in a row of three rather than two and a stray. Most
+     levers in every pack are written with exactly three, and the stray on
+     its own second row was the tallest thing on this screen — four of them
+     were a hundred pixels of nothing between the sliders and the sheet. */
+  .options:has(> :last-child:nth-child(3)) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

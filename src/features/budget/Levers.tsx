@@ -49,7 +49,7 @@ export function Levers({
                   onChange(variable.id, Number(event.target.value));
                 }}
               />
-              <p className={styles.leverNote}>{variable.help}</p>
+              <p className={styles.leverHelp}>{variable.help}</p>
             </div>
           );
         }
@@ -62,6 +62,10 @@ export function Levers({
           <div key={variable.id} className={styles.lever}>
             <div className={styles.leverHead} id={`${id}-label`}>
               <span>{variable.label}</span>
+              {/* What the chosen option means, on the label's own line. As a
+                  block underneath it was two reserved lines per lever and the
+                  largest run of small grey text on the screen. */}
+              <span className={styles.leverNote}>{note ?? variable.help}</span>
             </div>
             <div className={styles.options} role="radiogroup" aria-labelledby={`${id}-label`}>
               {variable.options.map((option) => (
@@ -83,7 +87,6 @@ export function Levers({
                 </label>
               ))}
             </div>
-            <p className={styles.leverNote}>{note ?? variable.help}</p>
           </div>
         );
       })}
