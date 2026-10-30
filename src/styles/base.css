@@ -12,6 +12,39 @@ html {
   scroll-padding-top: 88px;
 }
 
+/* Hairline, in the paper's own colours. The platform's default bar is a grey
+   chute down the side of every panel, and the application had grown four of
+   them. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--border-strong);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-faint);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -19,9 +52,7 @@ body {
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.6;
-  font-feature-settings:
-    'cv05' 1,
-    'ss03' 1;
+  font-feature-settings: 'cv11' 1;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -32,12 +63,9 @@ h3,
 h4 {
   margin: 0;
   font-family: var(--font-display);
-  font-weight: 600;
-  font-variation-settings:
-    'SOFT' 20,
-    'WONK' 1;
+  font-weight: 650;
   line-height: 1.08;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.028em;
   text-wrap: balance;
 }
 

@@ -62,10 +62,12 @@ test('a venue change adds the lines an open lawn implies', async ({ page }) => {
 
   const added = ['Rain cover', 'Power backup', 'Water and sanitation'];
 
-  // The dock names them as consequences where it has the room to.
+  // The dock names what it has room for and counts the rest: it reports a
+  // change, it does not grow to fit one.
   if (wide(page)) {
     const dock = page.getByRole('region', { name: 'Blast radius' });
-    for (const line of added) await expect(dock).toContainText(line);
+    await expect(dock).toContainText(new RegExp(added.join('|')));
+    await expect(dock).toContainText(/other change/);
   }
 
   // And they are in the breakdown on every screen, under the group they belong

@@ -22,32 +22,34 @@ export function TimelineView({ plan }: { plan: Plan }): React.JSX.Element {
         {current.deadlines.length === 0 ? (
           <EmptyState title="Nothing to decide yet." />
         ) : (
-          current.deadlines.map((deadline) => {
-            const away = countdown(today, deadline.dateIso);
-            const urgent = away === 'past' || away === 'today' || away === 'tomorrow';
-            const days = Number.parseInt(away, 10);
-            const soon = urgent || (Number.isFinite(days) && days <= SOON_DAYS);
+          <div className={styles.rows}>
+            {current.deadlines.map((deadline) => {
+              const away = countdown(today, deadline.dateIso);
+              const urgent = away === 'past' || away === 'today' || away === 'tomorrow';
+              const days = Number.parseInt(away, 10);
+              const soon = urgent || (Number.isFinite(days) && days <= SOON_DAYS);
 
-            return (
-              <div key={deadline.id} className={styles.row}>
-                <div>
-                  <span className={styles.label}>
-                    {deadline.label}
-                    {deadline.locked ? <Chip tone="paid">money paid</Chip> : null}
-                  </span>
-                  <span className={styles.note}>
-                    {deadline.daysBefore === 0
-                      ? 'No notice needed'
-                      : `Needs ${String(deadline.daysBefore)} days of notice`}
-                  </span>
+              return (
+                <div key={deadline.id} className={styles.row}>
+                  <div>
+                    <span className={styles.label}>
+                      {deadline.label}
+                      {deadline.locked ? <Chip tone="paid">money paid</Chip> : null}
+                    </span>
+                    <span className={styles.note}>
+                      {deadline.daysBefore === 0
+                        ? 'No notice needed'
+                        : `Needs ${String(deadline.daysBefore)} days of notice`}
+                    </span>
+                  </div>
+                  <div className={cx(styles.when, soon && styles.whenSoon)}>
+                    {longDate(deadline.dateIso)}
+                    <span className={styles.away}>{away}</span>
+                  </div>
                 </div>
-                <div className={cx(styles.when, soon && styles.whenSoon)}>
-                  {longDate(deadline.dateIso)}
-                  <span className={styles.away}>{away}</span>
-                </div>
-              </div>
-            );
-          })
+              );
+            })}
+          </div>
         )}
       </Card>
 

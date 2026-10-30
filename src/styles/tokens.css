@@ -30,8 +30,8 @@
   --surface: var(--paper-000);
   --surface-raised: var(--paper-000);
   --surface-sunken: var(--paper-100);
-  --border: #e7e1d4;
-  --border-strong: #cdc5b4;
+  --border: #e6e2d9;
+  --border-strong: #c9c3b6;
   --border-loud: var(--ink-700);
 
   --text: var(--ink-900);
@@ -74,18 +74,15 @@
   /* The dock is the one piece of chrome with a height of its own: the same
      resting as it is full, on every screen. */
   --dock-height: 140px;
-  /* The plan bar above the workspace: a reserved allowance, not a measurement,
-     used to keep the lever rail inside the content region. */
-  --plan-bar: 112px;
 
   /* One padding for every card, everywhere. */
-  --pad-card: clamp(16px, 4vw, 26px);
+  --pad-card: clamp(16px, 3vw, 22px);
   --pad-section: clamp(32px, 6vw, 56px);
 
-  --radius-sm: 8px;
-  --radius: 12px;
-  --radius-lg: 18px;
-  --radius-xl: 26px;
+  --radius-sm: 7px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
   --radius-pill: 999px;
 
   --space-1: 0.25rem;
@@ -98,11 +95,14 @@
   --space-8: 4.5rem;
   --space-9: 6.5rem;
 
-  --font-display: 'Fraunces Variable', ui-serif, Georgia, serif;
+  --font-display:
+    'Bricolage Grotesque Variable', 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
   --font-sans:
-    'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans',
+    'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans',
     'Noto Sans Devanagari', 'Noto Sans Telugu', sans-serif;
-  --font-num: 'Inter Variable', ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', monospace;
+  /* The arithmetic behind a figure reads as working, so it is set in a
+     monospace: the columns line up and nobody mistakes it for prose. */
+  --font-num: 'Geist Mono Variable', ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', monospace;
 
   /* A type scale that holds together from a phone to a wide screen. */
   --text-display: clamp(2.5rem, 1.5rem + 4.4vw, 4.5rem);
@@ -152,32 +152,32 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #100f0b;
-    --surface: #1a1813;
-    --surface-raised: #211e18;
-    --surface-sunken: #0b0a07;
-    --border: #2e2a22;
-    --border-strong: #4a443a;
-    --border-loud: #6d6557;
+    --bg: #0e0f11;
+    --surface: #16181b;
+    --surface-raised: #1c1f22;
+    --surface-sunken: #101214;
+    --border: #24282c;
+    --border-strong: #363c42;
+    --border-loud: #5a646c;
 
-    --text: #f4f0e6;
-    --text-muted: #afa89a;
-    --text-faint: #8f8a7c;
-    --text-inverse: #14130e;
+    --text: #edf0f2;
+    --text-muted: #a3abb2;
+    --text-faint: #7f888f;
+    --text-inverse: #0e0f11;
 
     --accent: #edb757;
     --accent-ink: #edb757;
     --accent-deep: #f6d79b;
-    --accent-wash: #3a2c11;
+    --accent-wash: #2a2316;
     --accent-on: #241a05;
 
-    --state-estimated-wash: #2b2820;
-    --state-estimated-ink: #afa89a;
-    --state-quoted-wash: #0f2e26;
+    --state-estimated-wash: #23272b;
+    --state-estimated-ink: #a3abb2;
+    --state-quoted-wash: #0f2a24;
     --state-quoted-ink: #7fd3b7;
-    --state-paid-wash: #3a1f13;
+    --state-paid-wash: #32201a;
     --state-paid-ink: #eb9d78;
-    --danger-wash: #3a1620;
+    --danger-wash: #311720;
     --danger-ink: #f08ea4;
 
     --focus: #8cb8f5;
@@ -201,32 +201,32 @@
 }
 
 :root[data-theme='dark'] {
-  --bg: #100f0b;
-  --surface: #1a1813;
-  --surface-raised: #211e18;
-  --surface-sunken: #0b0a07;
-  --border: #2e2a22;
-  --border-strong: #4a443a;
-  --border-loud: #6d6557;
+  --bg: #0e0f11;
+  --surface: #16181b;
+  --surface-raised: #1c1f22;
+  --surface-sunken: #101214;
+  --border: #24282c;
+  --border-strong: #363c42;
+  --border-loud: #5a646c;
 
-  --text: #f4f0e6;
-  --text-muted: #afa89a;
-  --text-faint: #8f8a7c;
-  --text-inverse: #14130e;
+  --text: #edf0f2;
+  --text-muted: #a3abb2;
+  --text-faint: #7f888f;
+  --text-inverse: #0e0f11;
 
   --accent: #edb757;
   --accent-ink: #edb757;
   --accent-deep: #f6d79b;
-  --accent-wash: #3a2c11;
+  --accent-wash: #2a2316;
   --accent-on: #241a05;
 
-  --state-estimated-wash: #2b2820;
-  --state-estimated-ink: #afa89a;
-  --state-quoted-wash: #0f2e26;
+  --state-estimated-wash: #23272b;
+  --state-estimated-ink: #a3abb2;
+  --state-quoted-wash: #0f2a24;
   --state-quoted-ink: #7fd3b7;
-  --state-paid-wash: #3a1f13;
+  --state-paid-wash: #32201a;
   --state-paid-ink: #eb9d78;
-  --danger-wash: #3a1620;
+  --danger-wash: #311720;
   --danger-ink: #f08ea4;
 
   --focus: #8cb8f5;

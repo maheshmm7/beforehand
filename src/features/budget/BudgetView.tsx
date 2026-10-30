@@ -31,7 +31,7 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
       </div>
 
       <div className={styles.right}>
-        <Card title="Where the money stands">
+        <section className={styles.money} aria-label="Where the money stands">
           <div className={styles.stats}>
             <Stat label="Total" value={moneyShort(totals.all)} note={money(totals.all)} live />
             <Stat label="Paid" value={moneyShort(totals.paid)} note="gone, not reversible" />
@@ -66,7 +66,7 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
               Estimated {money(totals.estimated)}
             </span>
           </p>
-        </Card>
+        </section>
 
         {violations.length === 0 ? null : (
           <div className={styles.alerts}>

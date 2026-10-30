@@ -11,6 +11,10 @@ const RINGS = [
   { id: 'work', where: 'Outer ring', means: 'work for somebody' },
 ] as const;
 
+/** The dock lists what fits in its own height and counts the rest. Nothing in
+ *  the dock scrolls: a scrollbar inside a strip this size is noise. */
+const SHOWN = 4;
+
 interface Row {
   readonly key: string;
   readonly what: string;
@@ -118,7 +122,9 @@ export function BlastRadiusDock({
   onKeep: () => void;
   onUndo: () => void;
 }): React.JSX.Element {
-  const rows = rowsFor(radius);
+  const all = rowsFor(radius);
+  const rows = all.length > SHOWN ? all.slice(0, SHOWN - 1) : all;
+  const hidden = all.length - rows.length;
   const live = !radius.isEmpty;
   const counts: Record<Ring, number> = {
     money: radius.changedLines.length + radius.addedLines.length + radius.removedLines.length,
@@ -130,76 +136,84 @@ export function BlastRadiusDock({
 
   return (
     <section className={cx(styles.dock, live && styles.dockLive)} aria-label="Blast radius">
-      <div className={styles.gauge} key={pulse}>
-        <Rings counts={counts} live={live} />
-      </div>
+      <div className={styles.inner}>
+        <div className={styles.gauge} key={pulse}>
+          <Rings counts={counts} live={live} />
+        </div>
 
-      <div className={styles.readout} role="status" aria-live="polite">
-        <p className={styles.caption}>{live ? 'Pending change' : 'Blast radius'}</p>
-        <p
-          className={cx(
-            styles.delta,
-            live && radius.totalDelta > 0 && styles.deltaUp,
-            live && radius.totalDelta < 0 && styles.deltaDown,
+        <div className={styles.readout} role="status" aria-live="polite">
+          <p className={styles.caption}>{live ? 'Pending change' : 'Blast radius'}</p>
+          <p
+            className={cx(
+              styles.delta,
+              live && radius.totalDelta > 0 && styles.deltaUp,
+              live && radius.totalDelta < 0 && styles.deltaDown,
+            )}
+          >
+            {live ? signedMoney(radius.totalDelta) : 'Nothing pending'}
+          </p>
+          {live ? (
+            <p className={styles.counts}>
+              <span className={styles.tagMoney}>{plural(counts.money, 'line')} moved</span>
+              <span className={styles.tagTime}>{plural(counts.time, 'deadline')} shifted</span>
+              <span className={styles.tagWork}>{plural(counts.work, 'task')} changed</span>
+              {radius.newViolations.length > 0 ? (
+                <span className={styles.tagBroken}>
+                  {plural(radius.newViolations.length, 'constraint')} broken
+                </span>
+              ) : null}
+            </p>
+          ) : (
+            <p className={styles.counts}>
+              <span>Move a lever to see what it sets off.</span>
+            </p>
           )}
-        >
-          {live ? signedMoney(radius.totalDelta) : 'Nothing pending'}
-        </p>
-        {live ? (
-          <p className={styles.counts}>
-            <span className={styles.tagMoney}>{plural(counts.money, 'line')} moved</span>
-            <span className={styles.tagTime}>{plural(counts.time, 'deadline')} shifted</span>
-            <span className={styles.tagWork}>{plural(counts.work, 'task')} changed</span>
-            {radius.newViolations.length > 0 ? (
-              <span className={styles.tagBroken}>
-                {plural(radius.newViolations.length, 'constraint')} broken
-              </span>
-            ) : null}
-          </p>
-        ) : (
-          <p className={styles.counts}>
-            <span>Move a lever to see what it sets off.</span>
-          </p>
-        )}
-      </div>
+        </div>
 
-      <div className={styles.consequences}>
-        {!live ? (
-          <div className={styles.legend}>
-            <p className={styles.legendLead}>The rings light from the inside out.</p>
-            {RINGS.map((ring) => (
-              <div key={ring.id} className={cx(styles.row, styles[ring.id])}>
-                <span className={styles.what}>{ring.where}</span>
-                <span className={styles.detail}>{ring.means}</span>
-              </div>
-            ))}
-          </div>
-        ) : null}
-        {live ? (
-          <ul className={styles.list}>
-            {radius.newViolations.map((violation) => (
-              <li key={violation.id} className={cx(styles.row, styles.rowBroken)}>
-                <span className={styles.what}>{violation.message}</span>
-                <span className={styles.detail}>{violation.hint}</span>
-              </li>
-            ))}
-            {rows.map((row) => (
-              <li key={row.key} className={cx(styles.row, styles[row.ring])}>
-                <span className={styles.what}>{row.what}</span>
-                <span className={styles.detail}>{row.detail}</span>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-      </div>
+        <div className={styles.consequences}>
+          {!live ? (
+            <div className={styles.legend}>
+              <p className={styles.legendLead}>The rings light from the inside out.</p>
+              {RINGS.map((ring) => (
+                <div key={ring.id} className={cx(styles.row, styles[ring.id])}>
+                  <span className={styles.what}>{ring.where}</span>
+                  <span className={styles.detail}>{ring.means}</span>
+                </div>
+              ))}
+            </div>
+          ) : null}
+          {live ? (
+            <ul className={styles.list}>
+              {radius.newViolations.map((violation) => (
+                <li key={violation.id} className={cx(styles.row, styles.rowBroken)}>
+                  <span className={styles.what}>{violation.message}</span>
+                  <span className={styles.detail}>{violation.hint}</span>
+                </li>
+              ))}
+              {rows.map((row) => (
+                <li key={row.key} className={cx(styles.row, styles[row.ring])}>
+                  <span className={styles.what}>{row.what}</span>
+                  <span className={styles.detail}>{row.detail}</span>
+                </li>
+              ))}
+              {hidden > 0 ? (
+                <li className={cx(styles.row, styles.rowMore)}>
+                  <span className={styles.what}>and {plural(hidden, 'other change')}</span>
+                  <span className={styles.detail} />
+                </li>
+              ) : null}
+            </ul>
+          ) : null}
+        </div>
 
-      <div className={styles.actions}>
-        <Button variant="primary" onClick={onKeep} disabled={!live}>
-          Keep this change
-        </Button>
-        <Button onClick={onUndo} disabled={!live}>
-          Undo
-        </Button>
+        <div className={styles.actions}>
+          <Button variant="primary" onClick={onKeep} disabled={!live}>
+            Keep this change
+          </Button>
+          <Button onClick={onUndo} disabled={!live}>
+            Undo
+          </Button>
+        </div>
       </div>
     </section>
   );

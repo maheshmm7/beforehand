@@ -15,13 +15,19 @@
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: clamp(12px, 3vw, 24px) clamp(12px, 4vw, 16px) var(--space-6);
+  padding: clamp(12px, 3vw, 24px) clamp(12px, 4vw, 16px) var(--space-4);
 }
 
+/* Fills the content region, so a short screen can sit in the middle of it
+   rather than pinned to the top with the rest of the window empty. */
 .inner {
-  max-width: 1120px;
+  display: flex;
+  flex-direction: column;
+  max-width: 1600px;
+  min-height: 100%;
   margin: 0 auto;
   min-width: 0;
+  width: 100%;
 }
 
 .topbar {
@@ -145,7 +151,7 @@
   .main {
     grid-column: 2;
     grid-row: 1;
-    padding: var(--space-5) clamp(16px, 3vw, 32px) var(--space-6);
+    padding: var(--space-5) clamp(16px, 3vw, 32px) var(--space-3);
   }
 
   .dock {

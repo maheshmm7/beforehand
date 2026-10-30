@@ -1,3 +1,21 @@
+/* Two abreast where there is room: the checklist is the longest thing in the
+   application, and a wide screen can show twice as much of it at once. */
+.list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 var(--space-6);
+}
+
+@media (min-width: 1200px) {
+  .list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.entry {
+  min-width: 0;
+}
+
 .intro {
   color: var(--text-muted);
   font-size: var(--text-small);
@@ -10,7 +28,7 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: var(--space-3);
-  padding: var(--space-4) 0;
+  padding: var(--space-3) 0;
   border-bottom: 1px solid var(--border);
 }
 

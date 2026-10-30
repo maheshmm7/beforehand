@@ -6,8 +6,10 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-5);
-  max-width: 980px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 1040px;
+  /* Centred in whatever room the window has, horizontally and vertically. */
+  margin: auto;
 }
 
 .head {

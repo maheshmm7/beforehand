@@ -76,6 +76,66 @@ test('nothing above the dock moves when the dock fills', async ({ page }) => {
   );
 });
 
+test('the application scrolls in one place, not four', async ({ page }) => {
+  await createPlan(page);
+  const base = page.url().replace(/\/[a-z]+$/, '');
+
+  for (const view of ['budget', 'timeline', 'vendors', 'ideas']) {
+    await page.goto(`${base}/${view}`);
+    await page.waitForTimeout(250);
+
+    const scrollers = await page.evaluate(() =>
+      Array.from(document.querySelectorAll<HTMLElement>('*'))
+        .filter((element) => {
+          const style = getComputedStyle(element);
+          return (
+            (element.scrollHeight > element.clientHeight + 1 &&
+              ['auto', 'scroll'].includes(style.overflowY)) ||
+            (element.scrollWidth > element.clientWidth + 1 &&
+              ['auto', 'scroll'].includes(style.overflowX))
+          );
+        })
+        .map(
+          (element) => `${element.tagName}.${(element.getAttribute('class') ?? '').slice(0, 24)}`,
+        ),
+    );
+
+    // A sidebar, a rail, a panel and the page all scrolling at once is four
+    // grey chutes down one screen. The content region is the only one allowed
+    // to scroll; everything else must fit what it is given.
+    expect(
+      scrollers.filter((name) => !name.startsWith('MAIN')),
+      `${view} scrolls elsewhere`,
+    ).toEqual([]);
+  }
+});
+
+for (const width of [1000, 1280, 1920]) {
+  test(`the dock's controls fit at ${String(width)} pixels`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await createPlan(page);
+
+    const boxes = await page
+      .getByRole('region', { name: 'Blast radius' })
+      .locator('button')
+      .evaluateAll((nodes) =>
+        nodes.map((node) => {
+          const box = node.getBoundingClientRect();
+          return { left: Math.round(box.left), right: Math.round(box.right) };
+        }),
+      );
+
+    // The list beside them is what gives way on a narrow window. The two
+    // controls once squeezed into each other and overlapped.
+    const [keep, undo] = boxes;
+    expect(boxes, 'both controls are drawn').toHaveLength(2);
+    expect(keep?.right ?? 0, `the controls overlap at ${String(width)}`).toBeLessThanOrEqual(
+      undo?.left ?? 0,
+    );
+    expect(undo?.right ?? 0, 'the controls run off the window').toBeLessThanOrEqual(width);
+  });
+}
+
 test('buttons come from one scale', async ({ page }) => {
   const seen = new Set<number>();
 

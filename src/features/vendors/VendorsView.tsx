@@ -24,53 +24,55 @@ export function VendorsView({ plan }: { plan: Plan }): React.JSX.Element {
           makes this the real checklist.
         </p>
 
-        {current.lines.map((line) => (
-          <div key={line.ruleId}>
-            <div className={styles.row}>
-              <div>
-                <span className={styles.name}>
-                  {line.label}
-                  <Chip tone={line.state}>{line.state}</Chip>
-                </span>
-                <span className={styles.detail}>
-                  {line.decision} · needs {plural(line.leadTimeDays, 'day')} of notice
-                  {line.vendor === undefined ? '' : ` · ${line.vendor}`}
-                </span>
-                {line.quote === undefined || line.quote === '' ? null : (
-                  <span className={styles.evidence}>“{line.quote}”</span>
-                )}
+        <div className={styles.list}>
+          {current.lines.map((line) => (
+            <div key={line.ruleId} className={styles.entry}>
+              <div className={styles.row}>
+                <div>
+                  <span className={styles.name}>
+                    {line.label}
+                    <Chip tone={line.state}>{line.state}</Chip>
+                  </span>
+                  <span className={styles.detail}>
+                    {line.decision} · needs {plural(line.leadTimeDays, 'day')} of notice
+                    {line.vendor === undefined ? '' : ` · ${line.vendor}`}
+                  </span>
+                  {line.quote === undefined || line.quote === '' ? null : (
+                    <span className={styles.evidence}>“{line.quote}”</span>
+                  )}
+                </div>
+                <div className={styles.right}>
+                  <span className={styles.amount}>{money(line.amount)}</span>
+                  <Button
+                    small
+                    onClick={() => {
+                      setEditing(editing === line.ruleId ? null : line.ruleId);
+                    }}
+                  >
+                    {line.state === 'estimated' ? 'Record a quote' : 'Edit'}
+                  </Button>
+                </div>
               </div>
-              <div className={styles.right}>
-                <span className={styles.amount}>{money(line.amount)}</span>
-                <Button
-                  small
-                  onClick={() => {
-                    setEditing(editing === line.ruleId ? null : line.ruleId);
-                  }}
-                >
-                  {line.state === 'estimated' ? 'Record a quote' : 'Edit'}
-                </Button>
-              </div>
-            </div>
 
-            {editing === line.ruleId ? (
-              <QuoteForm
-                line={line}
-                onCancel={() => {
-                  setEditing(null);
-                }}
-                onSave={(commitment) => {
-                  dispatch({
-                    type: 'addCommitment',
-                    planId: plan.id,
-                    commitment: { ...commitment, id: newId('c') },
-                  });
-                  setEditing(null);
-                }}
-              />
-            ) : null}
-          </div>
-        ))}
+              {editing === line.ruleId ? (
+                <QuoteForm
+                  line={line}
+                  onCancel={() => {
+                    setEditing(null);
+                  }}
+                  onSave={(commitment) => {
+                    dispatch({
+                      type: 'addCommitment',
+                      planId: plan.id,
+                      commitment: { ...commitment, id: newId('c') },
+                    });
+                    setEditing(null);
+                  }}
+                />
+              ) : null}
+            </div>
+          ))}
+        </div>
       </Card>
 
       {promised.length === 0 ? null : (

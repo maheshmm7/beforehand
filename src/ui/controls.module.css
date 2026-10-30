@@ -97,7 +97,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: var(--pad-card);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-raised);
 }
 
 .cardTitle {
@@ -110,7 +110,7 @@
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--text-faint);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
 }
 
 .chip {
@@ -158,50 +158,61 @@
   color: var(--danger-ink);
 }
 
+/* A figure, not a card: a tile wide enough to read and no taller than it has
+   to be, with a rule along the top that carries the colour. */
 .stat {
+  position: relative;
   background: var(--surface-sunken);
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: var(--space-4);
-  transition:
-    border-color var(--dur-base) var(--ease-out),
-    transform var(--dur-base) var(--ease-out);
+  padding: var(--space-3);
+  overflow: hidden;
+  transition: border-color var(--dur-base) var(--ease-out);
+}
+
+.stat::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: var(--border-strong);
 }
 
 .stat:hover {
-  border-color: var(--border);
-  transform: translateY(-2px);
+  border-color: var(--border-strong);
 }
 
-.statLive {
-  background: var(--accent-wash);
+.statLive::before {
+  background: var(--accent);
 }
 
-.statLive .statLabel,
-.statLive .statNote {
+.statLive .statValue {
   color: var(--accent-ink);
 }
 
 .statLabel {
   display: block;
-  font-size: var(--text-small);
-  color: var(--text-muted);
+  font-size: var(--text-tiny);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-faint);
 }
 
 .statValue {
   display: block;
-  margin-top: 4px;
+  margin-top: 2px;
   font-size: var(--text-figure);
-  font-weight: 600;
+  font-weight: 650;
+  line-height: 1.1;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
   font-family: var(--font-display);
-  font-variation-settings: 'SOFT' 20;
 }
 
 .statNote {
   display: block;
-  margin-top: 2px;
+  margin-top: 1px;
   font-size: var(--text-tiny);
   color: var(--text-faint);
 }

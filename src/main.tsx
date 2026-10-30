@@ -1,7 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import '@fontsource-variable/inter/wght.css';
-import '@fontsource-variable/fraunces/wght.css';
+import '@fontsource-variable/geist/wght.css';
+import '@fontsource-variable/geist-mono/wght.css';
+import '@fontsource-variable/bricolage-grotesque/wght.css';
 import { App } from './App';
 import { WorkspaceProvider } from './state/WorkspaceProvider';
 import { applyStoredTheme } from './lib/theme';

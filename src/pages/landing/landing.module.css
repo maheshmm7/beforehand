@@ -179,9 +179,6 @@
 .titleMark {
   color: var(--accent-ink);
   font-style: italic;
-  font-variation-settings:
-    'WONK' 1,
-    'SOFT' 40;
 }
 
 .lead {

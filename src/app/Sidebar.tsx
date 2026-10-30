@@ -119,9 +119,7 @@ export function Sidebar({ route }: { route: Route }): React.JSX.Element {
         </>
       )}
 
-      <p className={styles.disclaimer}>
-        Every figure here is a planning estimate, not a quote, until a vendor gives you one.
-      </p>
+      <p className={styles.disclaimer}>Every figure is an estimate until a vendor quotes it.</p>
 
       <div className={styles.footer}>
         <a className={styles.footerLink} href={hrefFor({ name: 'about' })}>

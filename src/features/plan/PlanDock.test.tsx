@@ -65,9 +65,14 @@ describe('PlanDock', () => {
 
     await user.click(screen.getByRole('radio', { name: 'Open lawn' }));
 
-    // Once in the dock as a consequence, once in the breakdown as a line.
-    expect(screen.getAllByText('Rain cover')).toHaveLength(2);
-    expect(screen.getAllByText('Power backup')).toHaveLength(2);
+    // Every new line is in the breakdown; the dock names what it has room for
+    // and counts the rest, rather than growing or scrolling.
+    for (const line of ['Rain cover', 'Power backup', 'Water and sanitation']) {
+      expect(screen.getAllByText(line).length).toBeGreaterThan(0);
+    }
+    const dock = screen.getByRole('region', { name: 'Blast radius' });
+    expect(dock).toHaveTextContent(/Rain cover|Power backup|Water and sanitation/);
+    expect(dock).toHaveTextContent(/other change/);
   });
 
   it('removes lines again when the venue goes back indoors', async () => {

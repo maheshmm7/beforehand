@@ -2,17 +2,25 @@
    screen that must never move anything else when it changes. */
 
 .dock {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  grid-template-areas: 'gauge readout actions';
-  align-items: center;
-  gap: var(--space-4);
   height: var(--dock-height);
   overflow: hidden;
   padding: var(--space-3) clamp(12px, 3vw, 24px);
   border-top: 1px solid var(--border);
   background: var(--surface);
   transition: background-color var(--dur-base) var(--ease-out);
+}
+
+/* The same measure as the workspace above it, so the dock's own columns line
+   up with the ones it is reporting on. */
+.inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: 'gauge readout actions';
+  align-items: center;
+  gap: var(--space-4);
+  height: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
 .dockLive {
@@ -235,6 +243,11 @@
   background: var(--state-paid-ink);
 }
 
+.rowMore {
+  color: var(--text-faint);
+  font-style: italic;
+}
+
 .rowBroken {
   background: var(--danger-wash);
   color: var(--danger-ink);
@@ -284,6 +297,9 @@
     height: auto;
     min-height: var(--dock-height);
     overflow: visible;
+  }
+
+  .inner {
     grid-template-columns: auto minmax(0, 1fr);
     grid-template-areas:
       'gauge readout'
@@ -324,19 +340,25 @@
 }
 
 @media (min-width: 1000px) {
-  .dock {
+  .inner {
+    /* The actions keep their own width: it is the list that gives way on a
+       narrower window, never the two controls. */
     grid-template-columns: auto minmax(0, 260px) minmax(0, 1fr) auto;
     grid-template-areas: 'gauge readout list actions';
     gap: var(--space-5);
+  }
+
+  .actions {
+    justify-content: flex-end;
   }
 
   .consequences {
     grid-area: list;
     display: block;
     min-width: 0;
+    max-width: 440px;
     height: calc(var(--dock-height) - var(--space-6));
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    overflow: hidden;
     border-left: 1px solid var(--border);
     padding-left: var(--space-4);
   }

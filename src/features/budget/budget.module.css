@@ -14,42 +14,8 @@
 
 @media (min-width: 1000px) {
   .columns {
-    grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
     align-items: start;
-  }
-
-  /* The levers stay on screen while the breakdown is read past them: they are
-     the controls, not part of the document. The rail scrolls on its own if a
-     pack has more levers than the window has room for. */
-  .left {
-    position: sticky;
-    /* The content region's own top padding: sticky measures from the padding
-       box, so without this the rail rides up and overshoots the bottom. */
-    top: var(--space-5);
-    /* The window, less the dock, the content region's padding and the plan
-       bar the rail starts under. The allowance is what keeps the foot of the
-       rail inside the region before the bar has scrolled away. */
-    max-height: calc(
-      100svh - var(--dock-height) - var(--space-5) - var(--space-6) - var(--plan-bar)
-    );
-    display: flex;
-  }
-
-  .left > * {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    width: 100%;
-  }
-
-  /* Faded at the foot rather than cut, so a rail with more below it says so. */
-  .levers {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding-right: var(--space-2);
-    mask-image: linear-gradient(to bottom, #000 calc(100% - 20px), transparent);
   }
 }
 
@@ -99,17 +65,21 @@
   color: var(--text-faint);
 }
 
+/* A block of equal cells rather than a ragged wrap: with two or four options
+   it reads as a row, with three as a row and a half, and never as litter. */
 .options {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-2);
 }
 
 .option {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   min-height: var(--control-sm);
   padding: 0 var(--space-3);
+  text-align: center;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-pill);
   background: var(--surface);
@@ -157,15 +127,23 @@
 
 /* Where the money stands ------------------------------------------------ */
 
+/* The money strip. No card around it: a row of figures and the bar under
+   them, which is all it is. */
+.money {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
 /* Two by two rather than whatever fits: three across left the fourth figure
    stranded on a row of its own. */
 .stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 760px) {
   .stats {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -173,11 +151,11 @@
 
 .bar {
   display: flex;
-  height: 10px;
+  height: 8px;
   border-radius: var(--radius-pill);
   overflow: hidden;
-  margin: var(--space-4) 0 var(--space-3);
   background: var(--surface-sunken);
+  border: 1px solid var(--border);
 }
 
 .bar > * {
@@ -367,4 +345,17 @@
   font-weight: 600;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
+}
+
+/* Wide enough for the levers to sit two abreast, which is what keeps the
+   whole workspace inside one screen with nothing to scroll. */
+@media (min-width: 1500px) {
+  .columns {
+    grid-template-columns: minmax(0, 600px) minmax(0, 1fr);
+  }
+
+  .levers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3) var(--space-5);
+  }
 }
