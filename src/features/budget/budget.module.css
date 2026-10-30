@@ -1,34 +1,53 @@
-.columns {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-4);
-}
+/* Three bands: the levers across the top, then the money and anything broken
+   beside the breakdown. */
 
-.left,
-.right {
+.board {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-4);
+  gap: var(--space-2);
   align-content: start;
 }
 
-@media (min-width: 1000px) {
-  .columns {
-    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
-    align-items: start;
-  }
+.side {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+  align-content: start;
+  min-width: 0;
 }
 
 /* Levers --------------------------------------------------------------- */
 
+/* Columns rather than a grid: a grid of fixed cells leaves holes when the
+   pack has six levers and the row holds four, and makes every row as tall as
+   its tallest lever. Columns pack and balance themselves. */
 .levers {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-4);
+  columns: 1;
+  column-gap: var(--space-5);
+}
+
+@media (min-width: 640px) {
+  .levers {
+    columns: 2;
+  }
+}
+
+@media (min-width: 1500px) {
+  .levers {
+    columns: 3;
+  }
 }
 
 .lever {
   min-width: 0;
+  break-inside: avoid;
+  padding-bottom: var(--space-3);
+}
+
+/* Pulls back the last lever's own spacing, which would otherwise leave a
+   band of nothing along the bottom of the card. */
+.levers {
+  margin-bottom: calc(-1 * var(--space-3));
 }
 
 .leverHead {
@@ -45,7 +64,7 @@
 
 .leverValue {
   color: var(--text);
-  font-weight: 600;
+  font-weight: 650;
   font-variant-numeric: tabular-nums;
   font-feature-settings: 'tnum' 1;
 }
@@ -59,7 +78,7 @@
   line-clamp: 2;
   overflow: hidden;
   min-height: calc(2 * 1.45 * var(--text-tiny));
-  margin-top: var(--space-1);
+  margin-top: var(--space-2);
   font-size: var(--text-tiny);
   line-height: 1.45;
   color: var(--text-faint);
@@ -70,21 +89,23 @@
 .options {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-2);
+  gap: 6px;
 }
 
 .option {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: var(--control-sm);
-  padding: 0 var(--space-3);
-  text-align: center;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-pill);
-  background: var(--surface);
+  padding: 0 var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
   color: var(--text-muted);
   font-size: var(--text-caption);
+  line-height: 1.25;
+  text-align: center;
   cursor: pointer;
   transition:
     background-color var(--dur-fast) var(--ease-out),
@@ -92,12 +113,8 @@
     color var(--dur-fast) var(--ease-out);
 }
 
-/* The control fills the pill rather than hiding in a corner of it, so the
-   whole pill is the hit area and the real input is what gets pressed. */
-.option {
-  position: relative;
-}
-
+/* The control fills the cell rather than hiding in a corner of it, so the
+   whole cell is the hit area and the real input is what gets pressed. */
 .option input {
   position: absolute;
   inset: 0;
@@ -109,7 +126,7 @@
 }
 
 .option:hover {
-  border-color: var(--border-loud);
+  border-color: var(--border-strong);
   color: var(--text);
 }
 
@@ -120,33 +137,23 @@
 
 .option[data-on] {
   background: var(--accent);
-  border-color: transparent;
+  border-color: var(--accent);
   color: var(--accent-on);
   font-weight: 600;
 }
 
 /* Where the money stands ------------------------------------------------ */
 
-/* The money strip. No card around it: a row of figures and the bar under
-   them, which is all it is. */
 .money {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
-/* Two by two rather than whatever fits: three across left the fourth figure
-   stranded on a row of its own. */
 .stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-2);
-}
-
-@media (min-width: 760px) {
-  .stats {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
 }
 
 .bar {
@@ -184,9 +191,9 @@
 
 .swatch {
   display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: var(--radius-sm);
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
   margin-right: var(--space-2);
 }
 
@@ -209,41 +216,54 @@
 }
 
 .alert {
-  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--danger-ink);
+  border-left-width: 3px;
   border-radius: var(--radius);
   background: var(--danger-wash);
   color: var(--danger-ink);
-  font-size: var(--text-small);
+  font-size: var(--text-caption);
+  line-height: 1.4;
+  font-weight: 600;
 }
 
 .alertHint {
   display: block;
   margin-top: 1px;
+  font-weight: 400;
+  opacity: 0.95;
 }
 
 /* Every line ------------------------------------------------------------ */
 
 .lineGroup {
+  break-inside: avoid;
   border-bottom: 1px solid var(--border);
 }
 
 .groupHead {
   display: grid;
-  grid-template-columns: 16px minmax(0, 1fr) auto auto;
+  grid-template-columns: 14px minmax(0, 1fr) auto auto;
   align-items: center;
   gap: var(--space-2);
   min-height: var(--control-sm);
-  padding: var(--space-1) 0;
+  padding: 0 var(--space-2);
+  margin: 0 calc(-1 * var(--space-2));
+  border-radius: var(--radius-sm);
   cursor: pointer;
   list-style: none;
+  transition: background-color var(--dur-fast) var(--ease-out);
 }
 
 .groupHead::-webkit-details-marker {
   display: none;
 }
 
-.groupHead:hover .groupName {
-  color: var(--text);
+.groupHead:hover {
+  background: var(--surface-sunken);
 }
 
 .groupChevron {
@@ -258,20 +278,20 @@
 }
 
 .groupName {
-  font-size: var(--text-tiny);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-faint);
-  font-weight: 600;
+  font-size: var(--text-small);
+  font-weight: 550;
+  color: var(--text);
 }
 
 .groupCount {
-  min-width: 20px;
-  padding: 0 6px;
+  min-width: 19px;
+  padding: 0 5px;
   border-radius: var(--radius-pill);
   background: var(--surface-sunken);
+  border: 1px solid var(--border);
   color: var(--text-faint);
   font-size: var(--text-tiny);
+  font-variant-numeric: tabular-nums;
   text-align: center;
 }
 
@@ -287,6 +307,9 @@
   align-items: start;
   gap: var(--space-3);
   padding: var(--space-2) 0 var(--space-2) var(--space-5);
+}
+
+.line + .line {
   border-top: 1px dashed var(--border);
 }
 
@@ -334,28 +357,54 @@
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  margin-top: var(--space-4);
+  margin-top: var(--space-3);
   padding-top: var(--space-3);
   border-top: 2px solid var(--border-strong);
+  font-weight: 550;
 }
 
 .totalValue {
   font-family: var(--font-display);
-  font-size: var(--text-figure-lg);
-  font-weight: 600;
+  font-size: var(--text-figure);
+  font-weight: 650;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
 }
 
-/* Wide enough for the levers to sit two abreast, which is what keeps the
-   whole workspace inside one screen with nothing to scroll. */
-@media (min-width: 1500px) {
-  .columns {
-    grid-template-columns: minmax(0, 600px) minmax(0, 1fr);
+@media (min-width: 1100px) {
+  /* Levers on top of the money, with the breakdown down the side. The board
+     fills the region rather than ending halfway down it: on a tall window the
+     figures and the warnings take the extra room instead of leaving a band of
+     nothing above the dock. */
+  .board {
+    flex: 1;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+    /* The levers card takes the slack on a tall window:space inside a
+       panel reads as air, loose on the page it reads as a hole. */
+    grid-template-rows: minmax(0, 1fr) auto;
+    align-items: stretch;
   }
 
-  .levers {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-3) var(--space-5);
+  .board > :first-child {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .side {
+    grid-column: 1;
+    grid-row: 2;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .breakdown {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: stretch;
+  }
+
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

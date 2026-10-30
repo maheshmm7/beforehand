@@ -37,7 +37,7 @@ describe('PlanDock', () => {
 
     const radius = screen.getByRole('status');
     expect(radius).toHaveTextContent('+₹76,275');
-    expect(radius).toHaveTextContent('1 task changed');
+    expect(radius).toHaveTextContent('one new thing to do');
     expect(screen.getByText('Add a second serving line')).toBeInTheDocument();
   });
 

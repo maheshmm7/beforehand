@@ -20,8 +20,10 @@
 
 @media (min-width: 900px) {
   .grid {
+    flex: 1;
+    min-height: 0;
     grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
-    align-items: start;
+    align-items: stretch;
   }
 }
 

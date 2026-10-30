@@ -17,8 +17,11 @@ export function VendorsView({ plan }: { plan: Plan }): React.JSX.Element {
   const promised = current.lines.filter((line) => line.state !== 'estimated');
 
   return (
-    <>
-      <Card title={`Still nobody’s promise — ${plural(unpromised.length, 'line')}`}>
+    <div className={styles.view}>
+      <Card
+        className={styles.checklist}
+        title={`Still nobody’s promise — ${plural(unpromised.length, 'line')}`}
+      >
         <p className={styles.intro}>
           These are the model’s estimates. Nobody has actually agreed to them yet, which is what
           makes this the real checklist.
@@ -111,6 +114,6 @@ export function VendorsView({ plan }: { plan: Plan }): React.JSX.Element {
           ))}
         </Card>
       )}
-    </>
+    </div>
   );
 }

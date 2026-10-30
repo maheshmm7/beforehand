@@ -8,6 +8,11 @@ import { CostLines } from './CostLines';
 import { Levers } from './Levers';
 import styles from './budget.module.css';
 
+/**
+ * The levers take the width they need, the money and anything broken sit in a
+ * narrow column beside them, and the breakdown runs the full width beneath. Two columns of very different
+ * lengths left a window-sized hole beside the short one.
+ */
 export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
   const { dispatch } = useWorkspace();
   const { pack, scenario, current } = usePlanModel(plan);
@@ -17,20 +22,18 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
   const width = (part: number): string => `${String(Math.max(0, (part / span) * 100))}%`;
 
   return (
-    <div className={styles.columns}>
-      <div className={styles.left}>
-        <Card title="Levers">
-          <Levers
-            pack={pack}
-            values={scenario.values}
-            onChange={(variableId, value) => {
-              dispatch({ type: 'setValue', planId: plan.id, variableId, value });
-            }}
-          />
-        </Card>
-      </div>
+    <div className={styles.board}>
+      <Card title="Levers">
+        <Levers
+          pack={pack}
+          values={scenario.values}
+          onChange={(variableId, value) => {
+            dispatch({ type: 'setValue', planId: plan.id, variableId, value });
+          }}
+        />
+      </Card>
 
-      <div className={styles.right}>
+      <div className={styles.side}>
         <section className={styles.money} aria-label="Where the money stands">
           <div className={styles.stats}>
             <Stat label="Total" value={moneyShort(totals.all)} note={money(totals.all)} live />
@@ -78,11 +81,11 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
             ))}
           </div>
         )}
-
-        <Card title="Every line, and how we got there">
-          <CostLines model={current} />
-        </Card>
       </div>
+
+      <Card title="Every line, and how we got there" className={styles.breakdown}>
+        <CostLines model={current} />
+      </Card>
     </div>
   );
 }

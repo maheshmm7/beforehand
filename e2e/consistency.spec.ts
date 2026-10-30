@@ -136,6 +136,33 @@ for (const width of [1000, 1280, 1920]) {
   });
 }
 
+test('a plan fits a desktop window with nothing to scroll', async ({ page }) => {
+  // A laptop at 1920 by 923 is the window this was reported broken in: four
+  // scrollbars, then one, then a band of nothing above the dock.
+  await page.setViewportSize({ width: 1920, height: 923 });
+  await createPlan(page);
+  const base = page.url().replace(/\/[a-z]+$/, '');
+
+  for (const view of ['budget', 'timeline', 'vendors', 'ideas']) {
+    await page.goto(`${base}/${view}`);
+    await page.waitForTimeout(250);
+
+    const fit = await page.evaluate(() => {
+      const region = document.getElementById('main');
+      return {
+        over: (region?.scrollHeight ?? 0) - (region?.clientHeight ?? 0),
+        // How much of the region the content actually covers.
+        filled:
+          (region?.firstElementChild?.getBoundingClientRect().height ?? 0) /
+          (region?.clientHeight ?? 1),
+      };
+    });
+
+    expect(fit.over, `${view} scrolls on a desktop window`).toBeLessThanOrEqual(0);
+    expect(fit.filled, `${view} leaves the window half empty`).toBeGreaterThan(0.9);
+  }
+});
+
 test('buttons come from one scale', async ({ page }) => {
   const seen = new Set<number>();
 

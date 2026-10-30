@@ -1,69 +1,101 @@
 /* Design tokens. Every colour, size and motion value is defined once here, in
-   both themes, so no component can hard-code something that breaks elsewhere. */
+   both themes, so no component can hard-code something that breaks elsewhere.
+
+   The scheme is an instrument, not a brochure: a cool, quiet surface so that
+   the only coloured things on screen are the three kinds of consequence a
+   decision has — money, the calendar, and work for somebody — plus one blue
+   for anything you can act on. A warm cream and gold palette read as a
+   wedding invitation; this is a tool for deciding what one costs. */
 
 :root {
-  /* Ink and paper: warm neutrals, never pure black on pure white. */
-  --ink-900: #14130e;
-  --ink-800: #211f18;
-  --ink-700: #33302a;
-  --ink-500: #5b574e;
-  --ink-300: #6e6a60;
-  --paper-000: #ffffff;
-  --paper-050: #fbf9f4;
-  --paper-100: #f4f0e7;
-  --paper-200: #e6e0d3;
+  /* Surface, lightest to deepest. Barely blue, never pure white. */
+  --slate-000: #ffffff;
+  --slate-025: #f7f9fb;
+  --slate-050: #f1f4f8;
+  --slate-100: #e7ebf1;
+  --slate-200: #d6dde6;
+  --slate-400: #8b97a6;
+  --slate-600: #51607180;
+  --ink-900: #0d1420;
+  --ink-700: #1f2a3a;
+  --ink-500: #4a5868;
+  --ink-300: #5a6778;
 
-  --marigold-700: #6d4708;
-  --marigold-600: #8a5a0c;
-  --marigold-500: #e09a2b;
-  --marigold-400: #edb757;
-  --marigold-100: #faecd2;
-  --teal-600: #11705a;
-  --teal-100: #d9eee7;
-  --clay-600: #9a4423;
-  --clay-100: #f7e3d9;
-  --rose-600: #a8324a;
-  --rose-100: #f9e0e5;
+  /* One blue for anything a person can act on. */
+  --blue-700: #1b3fb8;
+  --blue-600: #2450d8;
+  --blue-500: #3a6bf0;
+  --blue-300: #8fb0ff;
+  --blue-050: #e9efff;
 
-  /* Surfaces, lightest to deepest. */
-  --bg: var(--paper-050);
-  --surface: var(--paper-000);
-  --surface-raised: var(--paper-000);
-  --surface-sunken: var(--paper-100);
-  --border: #e6e2d9;
-  --border-strong: #c9c3b6;
+  /* The three consequences, and the one failure. */
+  --amber-700: #8a5305;
+  --amber-500: #d98208;
+  --amber-300: #f2b24a;
+  --amber-050: #fdf1dd;
+  --violet-700: #5b32b8;
+  --violet-500: #7c4ddb;
+  --violet-300: #b79bf5;
+  --violet-050: #f1ebff;
+  --teal-700: #06635a;
+  --teal-500: #0d9488;
+  --teal-300: #4fd5c3;
+  --teal-050: #dff5f1;
+  --rose-700: #a81638;
+  --rose-500: #d92a52;
+  --rose-300: #fb8da8;
+  --rose-050: #fdeaef;
+
+  --bg: var(--slate-025);
+  --surface: var(--slate-000);
+  --surface-raised: var(--slate-000);
+  --surface-sunken: var(--slate-050);
+  --border: #e3e8ef;
+  --border-strong: #c7d0dc;
   --border-loud: var(--ink-700);
 
   --text: var(--ink-900);
   --text-muted: var(--ink-500);
   --text-faint: var(--ink-300);
-  --text-inverse: var(--paper-050);
+  --text-inverse: var(--slate-025);
 
-  --accent: var(--marigold-500);
-  --accent-ink: var(--marigold-600);
-  --accent-deep: var(--marigold-700);
-  --accent-wash: var(--marigold-100);
-  --accent-on: #241a05;
+  --accent: var(--blue-600);
+  --accent-ink: var(--blue-700);
+  --accent-deep: var(--blue-700);
+  --accent-wash: var(--blue-050);
+  --accent-on: #ffffff;
 
-  --state-estimated-wash: var(--paper-200);
+  /* Money, the calendar, work. Used by the rings, the tags beside them and
+     every row that belongs to one of the three. */
+  --money: var(--amber-500);
+  --money-ink: var(--amber-700);
+  --money-wash: var(--amber-050);
+  --time: var(--violet-500);
+  --time-ink: var(--violet-700);
+  --time-wash: var(--violet-050);
+  --work: var(--teal-500);
+  --work-ink: var(--teal-700);
+  --work-wash: var(--teal-050);
+
+  --state-estimated-wash: var(--slate-100);
   --state-estimated-ink: var(--ink-500);
-  --state-quoted-wash: var(--teal-100);
-  --state-quoted-ink: var(--teal-600);
-  --state-paid-wash: var(--clay-100);
-  --state-paid-ink: var(--clay-600);
-  --danger-wash: var(--rose-100);
-  --danger-ink: var(--rose-600);
+  --state-quoted-wash: var(--teal-050);
+  --state-quoted-ink: var(--teal-700);
+  --state-paid-wash: var(--violet-050);
+  --state-paid-ink: var(--violet-700);
+  --danger-wash: var(--rose-050);
+  --danger-ink: var(--rose-700);
 
-  --focus: #1b64c8;
+  --focus: var(--blue-500);
 
-  /* A warm wash used behind the hero and section breaks. */
+  /* A cool wash behind the hero and section breaks. */
   --veil: radial-gradient(
     120% 100% at 50% 0%,
-    rgb(224 154 43 / 14%) 0%,
-    rgb(224 154 43 / 4%) 42%,
+    rgb(36 80 216 / 10%) 0%,
+    rgb(36 80 216 / 3%) 42%,
     transparent 72%
   );
-  --hairline: rgb(20 19 14 / 8%);
+  --hairline: rgb(13 20 32 / 8%);
 
   /* Control sizes. sm is for an action inside a row, md is the default for
      any action in a form or panel, lg is reserved for a page's main call. */
@@ -71,18 +103,18 @@
   --control-md: 44px;
   --control-lg: 52px;
 
-  /* The dock is the one piece of chrome with a height of its own: the same
-     resting as it is full, on every screen. */
-  --dock-height: 140px;
-
   /* One padding for every card, everywhere. */
   --pad-card: clamp(16px, 3vw, 22px);
   --pad-section: clamp(32px, 6vw, 56px);
 
-  --radius-sm: 7px;
-  --radius: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
+  /* The dock is the one piece of chrome with a height of its own: the same
+     resting as it is full, on every screen. */
+  --dock-height: 140px;
+
+  --radius-sm: 6px;
+  --radius: 9px;
+  --radius-lg: 13px;
+  --radius-xl: 18px;
   --radius-pill: 999px;
 
   --space-1: 0.25rem;
@@ -120,12 +152,12 @@
   --text-caption: 0.8125rem;
   --text-tiny: 0.75rem;
 
-  --shadow-raised: 0 1px 2px rgb(20 19 14 / 6%);
-  --shadow-sm: 0 2px 6px rgb(20 19 14 / 6%);
-  --shadow-md: 0 10px 28px -12px rgb(20 19 14 / 22%);
-  --shadow-lg: 0 28px 60px -28px rgb(20 19 14 / 32%);
+  --shadow-raised: 0 1px 2px rgb(13 20 32 / 5%);
+  --shadow-sm: 0 1px 3px rgb(13 20 32 / 7%);
+  --shadow-md: 0 10px 28px -12px rgb(13 20 32 / 20%);
+  --shadow-lg: 0 28px 60px -28px rgb(13 20 32 / 28%);
   --shadow-float: var(--shadow-md);
-  --shadow-accent: 0 12px 30px -14px rgb(224 154 43 / 70%);
+  --shadow-accent: 0 10px 24px -12px rgb(36 80 216 / 55%);
 
   --dur-fast: 120ms;
   --dur-base: 220ms;
@@ -150,100 +182,122 @@
   }
 }
 
+/* The dark scheme is the same instrument at night: the surfaces go to a blue
+   charcoal and the three consequence colours lift rather than change. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #0e0f11;
-    --surface: #16181b;
-    --surface-raised: #1c1f22;
-    --surface-sunken: #101214;
-    --border: #24282c;
-    --border-strong: #363c42;
-    --border-loud: #5a646c;
+    --bg: #0a0d13;
+    --surface: #121722;
+    --surface-raised: #171d29;
+    --surface-sunken: #0e131c;
+    --border: #202838;
+    --border-strong: #313c50;
+    --border-loud: #55637a;
 
-    --text: #edf0f2;
-    --text-muted: #a3abb2;
-    --text-faint: #7f888f;
-    --text-inverse: #0e0f11;
+    --text: #e9eef6;
+    --text-muted: #9fadc0;
+    --text-faint: #7a899e;
+    --text-inverse: #0a0d13;
 
-    --accent: #edb757;
-    --accent-ink: #edb757;
-    --accent-deep: #f6d79b;
-    --accent-wash: #2a2316;
-    --accent-on: #241a05;
+    --accent: #3663ea;
+    --accent-ink: var(--blue-300);
+    --accent-deep: var(--blue-300);
+    --accent-wash: #15233f;
+    --accent-on: #ffffff;
 
-    --state-estimated-wash: #23272b;
-    --state-estimated-ink: #a3abb2;
-    --state-quoted-wash: #0f2a24;
-    --state-quoted-ink: #7fd3b7;
-    --state-paid-wash: #32201a;
-    --state-paid-ink: #eb9d78;
-    --danger-wash: #311720;
-    --danger-ink: #f08ea4;
+    --money: var(--amber-300);
+    --money-ink: var(--amber-300);
+    --money-wash: #2c2110;
+    --time: var(--violet-300);
+    --time-ink: var(--violet-300);
+    --time-wash: #241a3a;
+    --work: var(--teal-300);
+    --work-ink: var(--teal-300);
+    --work-wash: #0d2a28;
 
-    --focus: #8cb8f5;
+    --state-estimated-wash: #1d2534;
+    --state-estimated-ink: #9fadc0;
+    --state-quoted-wash: #0d2a28;
+    --state-quoted-ink: var(--teal-300);
+    --state-paid-wash: #241a3a;
+    --state-paid-ink: var(--violet-300);
+    --danger-wash: #35121f;
+    --danger-ink: var(--rose-300);
+
+    --focus: var(--blue-300);
 
     --veil: radial-gradient(
       120% 100% at 50% 0%,
-      rgb(237 183 87 / 13%) 0%,
-      rgb(237 183 87 / 4%) 42%,
+      rgb(58 107 240 / 12%) 0%,
+      rgb(58 107 240 / 4%) 42%,
       transparent 72%
     );
-    --hairline: rgb(244 240 230 / 9%);
+    --hairline: rgb(233 238 246 / 9%);
 
     --shadow-raised: 0 1px 2px rgb(0 0 0 / 40%);
-    --shadow-sm: 0 2px 8px rgb(0 0 0 / 45%);
+    --shadow-sm: 0 1px 3px rgb(0 0 0 / 50%);
     --shadow-md: 0 12px 30px -14px rgb(0 0 0 / 70%);
     --shadow-lg: 0 30px 64px -30px rgb(0 0 0 / 80%);
-    --shadow-accent: 0 12px 30px -16px rgb(237 183 87 / 45%);
+    --shadow-accent: 0 10px 24px -14px rgb(58 107 240 / 60%);
 
     color-scheme: dark;
   }
 }
 
 :root[data-theme='dark'] {
-  --bg: #0e0f11;
-  --surface: #16181b;
-  --surface-raised: #1c1f22;
-  --surface-sunken: #101214;
-  --border: #24282c;
-  --border-strong: #363c42;
-  --border-loud: #5a646c;
+  --bg: #0a0d13;
+  --surface: #121722;
+  --surface-raised: #171d29;
+  --surface-sunken: #0e131c;
+  --border: #202838;
+  --border-strong: #313c50;
+  --border-loud: #55637a;
 
-  --text: #edf0f2;
-  --text-muted: #a3abb2;
-  --text-faint: #7f888f;
-  --text-inverse: #0e0f11;
+  --text: #e9eef6;
+  --text-muted: #9fadc0;
+  --text-faint: #7a899e;
+  --text-inverse: #0a0d13;
 
-  --accent: #edb757;
-  --accent-ink: #edb757;
-  --accent-deep: #f6d79b;
-  --accent-wash: #2a2316;
-  --accent-on: #241a05;
+  --accent: #3663ea;
+  --accent-ink: var(--blue-300);
+  --accent-deep: var(--blue-300);
+  --accent-wash: #15233f;
+  --accent-on: #ffffff;
 
-  --state-estimated-wash: #23272b;
-  --state-estimated-ink: #a3abb2;
-  --state-quoted-wash: #0f2a24;
-  --state-quoted-ink: #7fd3b7;
-  --state-paid-wash: #32201a;
-  --state-paid-ink: #eb9d78;
-  --danger-wash: #311720;
-  --danger-ink: #f08ea4;
+  --money: var(--amber-300);
+  --money-ink: var(--amber-300);
+  --money-wash: #2c2110;
+  --time: var(--violet-300);
+  --time-ink: var(--violet-300);
+  --time-wash: #241a3a;
+  --work: var(--teal-300);
+  --work-ink: var(--teal-300);
+  --work-wash: #0d2a28;
 
-  --focus: #8cb8f5;
+  --state-estimated-wash: #1d2534;
+  --state-estimated-ink: #9fadc0;
+  --state-quoted-wash: #0d2a28;
+  --state-quoted-ink: var(--teal-300);
+  --state-paid-wash: #241a3a;
+  --state-paid-ink: var(--violet-300);
+  --danger-wash: #35121f;
+  --danger-ink: var(--rose-300);
+
+  --focus: var(--blue-300);
 
   --veil: radial-gradient(
     120% 100% at 50% 0%,
-    rgb(237 183 87 / 13%) 0%,
-    rgb(237 183 87 / 4%) 42%,
+    rgb(58 107 240 / 12%) 0%,
+    rgb(58 107 240 / 4%) 42%,
     transparent 72%
   );
-  --hairline: rgb(244 240 230 / 9%);
+  --hairline: rgb(233 238 246 / 9%);
 
   --shadow-raised: 0 1px 2px rgb(0 0 0 / 40%);
-  --shadow-sm: 0 2px 8px rgb(0 0 0 / 45%);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 50%);
   --shadow-md: 0 12px 30px -14px rgb(0 0 0 / 70%);
   --shadow-lg: 0 30px 64px -30px rgb(0 0 0 / 80%);
-  --shadow-accent: 0 12px 30px -16px rgb(237 183 87 / 45%);
+  --shadow-accent: 0 10px 24px -14px rgb(58 107 240 / 60%);
 
   color-scheme: dark;
 }

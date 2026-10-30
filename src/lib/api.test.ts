@@ -103,7 +103,28 @@ describe('the api client', () => {
     const result = await readQuote({ text: 'x', lineLabel: 'Venue' });
 
     expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.message).toContain('unreadable');
+    if (!result.ok) expect(result.message).toContain('could not verify');
+  });
+
+  it('says nothing answered when the gateway returns a page instead of json', async () => {
+    // What a dev proxy sends when the api behind it is not running: a 500
+    // with an HTML body. Blaming the reply sends people looking in the wrong
+    // place; the api simply is not there.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() =>
+        Promise.resolve({
+          ok: false,
+          status: 500,
+          json: () => Promise.reject(new Error('Unexpected token <')),
+        }),
+      ),
+    );
+
+    const result = await describePlan({ text: 'x', kind: 'birthday', levers: [] });
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.message).toContain('not answering');
   });
 
   it('carries the describe and ideas contracts too', async () => {

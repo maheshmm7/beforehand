@@ -32,9 +32,9 @@ test('moving a lever reports its blast radius before it is accepted', async ({ p
   for (let press = 0; press < 5; press += 1) await page.keyboard.press('ArrowRight');
 
   await expect(page.getByRole('status')).toContainText('+₹76,275');
-  await expect(page.getByRole('status')).toContainText('1 task changed');
+  await expect(page.getByRole('status')).toContainText('one new thing to do');
   // A longer guest list takes longer to print and cater for.
-  await expect(page.getByRole('status')).toContainText('2 deadlines shifted');
+  await expect(page.getByRole('status')).toContainText('2 dates move');
   // Which lines moved is listed where there is room to list it.
   if (wide(page)) await expect(dock).toContainText('Add a second serving line');
 

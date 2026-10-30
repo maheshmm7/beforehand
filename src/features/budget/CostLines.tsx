@@ -79,48 +79,50 @@ export function CostLines({ model }: { model: Model }): React.JSX.Element {
 
   return (
     <div>
-      {groups.map((group) => (
-        <details
-          key={group.category}
-          className={styles.lineGroup}
-          open={open.has(group.category)}
-          onToggle={(event) => {
-            toggle(group.category, event.currentTarget.open);
-          }}
-        >
-          <summary className={styles.groupHead}>
-            <span className={styles.groupChevron}>
-              <IconChevron size={15} />
-            </span>
-            <span className={styles.groupName}>{GROUP_NAMES[group.category]}</span>
-            <span className={styles.groupCount}>{group.lines.length}</span>
-            <span className={styles.groupTotal}>{money(group.total)}</span>
-          </summary>
+      <div className={styles.groups}>
+        {groups.map((group) => (
+          <details
+            key={group.category}
+            className={styles.lineGroup}
+            open={open.has(group.category)}
+            onToggle={(event) => {
+              toggle(group.category, event.currentTarget.open);
+            }}
+          >
+            <summary className={styles.groupHead}>
+              <span className={styles.groupChevron}>
+                <IconChevron size={15} />
+              </span>
+              <span className={styles.groupName}>{GROUP_NAMES[group.category]}</span>
+              <span className={styles.groupCount}>{group.lines.length}</span>
+              <span className={styles.groupTotal}>{money(group.total)}</span>
+            </summary>
 
-          {group.lines.map((line) => (
-            <div key={line.ruleId} className={styles.line}>
-              <div className={styles.lineMain}>
-                <span className={styles.lineName}>
-                  {line.label}
-                  <Chip tone={TONE[line.state]}>{line.state}</Chip>
-                </span>
-                <span className={styles.lineBasis}>{line.basis}</span>
-                {line.quote === undefined ? null : (
-                  <span className={styles.lineQuote}>
-                    {line.vendor}: “{line.quote}”
+            {group.lines.map((line) => (
+              <div key={line.ruleId} className={styles.line}>
+                <div className={styles.lineMain}>
+                  <span className={styles.lineName}>
+                    {line.label}
+                    <Chip tone={TONE[line.state]}>{line.state}</Chip>
                   </span>
-                )}
+                  <span className={styles.lineBasis}>{line.basis}</span>
+                  {line.quote === undefined ? null : (
+                    <span className={styles.lineQuote}>
+                      {line.vendor}: “{line.quote}”
+                    </span>
+                  )}
+                </div>
+                <div className={styles.lineAmount}>
+                  {money(line.amount)}
+                  {line.state !== 'estimated' && line.amount !== line.estimate ? (
+                    <span className={styles.lineWas}>we estimated {money(line.estimate)}</span>
+                  ) : null}
+                </div>
               </div>
-              <div className={styles.lineAmount}>
-                {money(line.amount)}
-                {line.state !== 'estimated' && line.amount !== line.estimate ? (
-                  <span className={styles.lineWas}>we estimated {money(line.estimate)}</span>
-                ) : null}
-              </div>
-            </div>
-          ))}
-        </details>
-      ))}
+            ))}
+          </details>
+        ))}
+      </div>
 
       <div className={styles.total}>
         <span>Total</span>

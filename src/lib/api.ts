@@ -44,7 +44,16 @@ async function post<T>(
   try {
     payload = await response.json();
   } catch {
-    return { ok: false, message: 'The server sent something unreadable.' };
+    // A body that is not JSON almost always means nothing answered: a
+    // development proxy with no api behind it, or a gateway between the two.
+    // Blaming the reply for being unreadable sends people looking in the
+    // wrong place.
+    return {
+      ok: false,
+      message: response.ok
+        ? 'The assistant replied with something this app could not verify. Nothing changed.'
+        : 'The assistant is not answering. Everything else on this page still works.',
+    };
   }
 
   if (!response.ok) {

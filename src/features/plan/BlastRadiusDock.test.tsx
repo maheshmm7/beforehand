@@ -86,10 +86,12 @@ describe('BlastRadiusDock', () => {
       ],
     });
 
+    // In the words somebody would use about their own wedding, not a reading
+    // off a gauge.
     const status = screen.getByRole('status');
-    expect(status).toHaveTextContent('2 lines moved');
-    expect(status).toHaveTextContent('1 deadline shifted');
-    expect(status).toHaveTextContent('1 task changed');
+    expect(status).toHaveTextContent('2 costs change');
+    expect(status).toHaveTextContent('a date moves');
+    expect(status).toHaveTextContent('one new thing to do');
   });
 
   it('raises a broken constraint ahead of everything else, with what to do about it', () => {
@@ -109,12 +111,19 @@ describe('BlastRadiusDock', () => {
     const rows = screen.getAllByRole('listitem').map((item) => item.textContent);
     expect(rows[0]).toContain('More guests than the venue holds.');
     expect(rows[0]).toContain('Cut the list.');
-    expect(screen.getByRole('status')).toHaveTextContent('1 constraint broken');
+    expect(screen.getByRole('status')).toHaveTextContent('something no longer works');
   });
 
   it('says nothing about constraints when none broke', () => {
     show({ totalDelta: 1000, changedLines: changed(1) });
 
-    expect(screen.getByRole('status')).not.toHaveTextContent('broken');
+    expect(screen.getByRole('status')).not.toHaveTextContent('no longer works');
+  });
+
+  it('states an absence quietly rather than as a count of zero', () => {
+    show({ totalDelta: 1000, changedLines: changed(1) });
+
+    expect(screen.getByRole('status')).toHaveTextContent('no date moves');
+    expect(screen.getByRole('status')).toHaveTextContent('nothing new to do');
   });
 });

@@ -1,3 +1,22 @@
+/* Fills the content region: the checklist takes whatever height is left
+   rather than stopping halfway down the window. */
+.view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 0;
+}
+
+@media (min-width: 900px) {
+  .view {
+    flex: 1;
+  }
+
+  .checklist {
+    flex: 1;
+  }
+}
+
 /* Two abreast where there is room: the checklist is the longest thing in the
    application, and a wide screen can show twice as much of it at once. */
 .list {

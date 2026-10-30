@@ -4,6 +4,17 @@ import { Button } from '@/ui/controls';
 import { cx } from '@/ui/cx';
 import styles from './BlastRadiusDock.module.css';
 
+/**
+ * Counts in the words a person would use. "0 deadlines shifted" is a reading
+ * off a gauge; "no deadline moves" is what somebody would actually say about
+ * their own wedding.
+ */
+function tally(count: number, none: string, one: string, many: string): string {
+  if (count === 0) return none;
+  if (count === 1) return one;
+  return many.replace('#', String(count));
+}
+
 /** What each ring stands for, said plainly while there is nothing to report. */
 const RINGS = [
   { id: 'money', where: 'Inner ring', means: 'money' },
@@ -154,12 +165,28 @@ export function BlastRadiusDock({
           </p>
           {live ? (
             <p className={styles.counts}>
-              <span className={styles.tagMoney}>{plural(counts.money, 'line')} moved</span>
-              <span className={styles.tagTime}>{plural(counts.time, 'deadline')} shifted</span>
-              <span className={styles.tagWork}>{plural(counts.work, 'task')} changed</span>
+              <span className={cx(styles.tagMoney, counts.money === 0 && styles.tagQuiet)}>
+                {tally(counts.money, 'no cost changes', 'one cost changes', '# costs change')}
+              </span>
+              <span className={cx(styles.tagTime, counts.time === 0 && styles.tagQuiet)}>
+                {tally(counts.time, 'no date moves', 'a date moves', '# dates move')}
+              </span>
+              <span className={cx(styles.tagWork, counts.work === 0 && styles.tagQuiet)}>
+                {tally(
+                  counts.work,
+                  'nothing new to do',
+                  'one new thing to do',
+                  '# new things to do',
+                )}
+              </span>
               {radius.newViolations.length > 0 ? (
                 <span className={styles.tagBroken}>
-                  {plural(radius.newViolations.length, 'constraint')} broken
+                  {tally(
+                    radius.newViolations.length,
+                    '',
+                    'something no longer works',
+                    '# things no longer work',
+                  )}
                 </span>
               ) : null}
             </p>

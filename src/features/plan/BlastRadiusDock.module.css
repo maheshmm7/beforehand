@@ -23,9 +23,11 @@
   margin: 0 auto;
 }
 
+/* A live dock is lifted and ruled, not flooded: a full-width wash of accent
+   colour under every screen was the loudest thing in the application. */
 .dockLive {
-  background: var(--accent-wash);
-  border-top-color: var(--accent);
+  background: var(--surface-raised);
+  box-shadow: inset 0 2px 0 var(--accent);
 }
 
 .gauge {
@@ -59,15 +61,15 @@
 }
 
 .ringMoney.ringOn {
-  stroke: var(--accent);
+  stroke: var(--money);
 }
 
 .ringTime.ringOn {
-  stroke: var(--state-quoted-ink);
+  stroke: var(--time);
 }
 
 .ringWork.ringOn {
-  stroke: var(--state-paid-ink);
+  stroke: var(--work);
 }
 
 .core {
@@ -76,7 +78,7 @@
 }
 
 .coreLive {
-  fill: var(--accent-ink);
+  fill: var(--accent);
 }
 
 .ripple {
@@ -133,7 +135,7 @@
 }
 
 .deltaDown {
-  color: var(--state-quoted-ink);
+  color: var(--work-ink);
 }
 
 .counts {
@@ -164,20 +166,30 @@
 }
 
 .tagMoney {
-  color: var(--accent-ink);
+  color: var(--money-ink);
 }
 
 .tagTime {
-  color: var(--state-quoted-ink);
+  color: var(--time-ink);
 }
 
 .tagWork {
-  color: var(--state-paid-ink);
+  color: var(--work-ink);
 }
 
 .tagBroken {
   color: var(--danger-ink);
   font-weight: 600;
+}
+
+/* Nothing of that kind moved: still listed, so the absence is stated, but not
+   coloured as though it were news. */
+.tagQuiet {
+  color: var(--text-faint);
+}
+
+.tagQuiet::before {
+  opacity: 0.45;
 }
 
 /* Hidden on a narrow screen, where the readout alone is the dock. */
@@ -232,15 +244,15 @@
 }
 
 .money::before {
-  background: var(--accent);
+  background: var(--money);
 }
 
 .time::before {
-  background: var(--state-quoted-ink);
+  background: var(--time);
 }
 
 .work::before {
-  background: var(--state-paid-ink);
+  background: var(--work);
 }
 
 .rowMore {
