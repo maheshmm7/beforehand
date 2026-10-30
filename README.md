@@ -15,6 +15,8 @@ need a second serving line — before you commit to any of it.
 
 ## The challenge, and how this answers it
 
+**Vertical:** event planning — weddings, birthdays and community events.
+
 Challenge 5: _"Create a GenAI-powered planning assistant that helps users organize weddings,
 birthdays, and community events with budgets, timelines, vendor checklists, and personalized
 ideas."_

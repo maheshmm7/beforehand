@@ -1,5 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import { addDays } from '@/lib/calendar';
+import { longDate, todayIso } from '@/lib/format';
 import { user } from '@/testing/support';
 import { DateField } from './DateField';
 import { TimeField } from './TimeField';
@@ -77,6 +79,61 @@ describe('DateField', () => {
 
     expect(early).toBeDisabled();
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('pages a month at a time with PageUp and PageDown', async () => {
+    showDate();
+
+    await user.click(screen.getByRole('button', { name: /2 Mar 2027/ }));
+    await user.keyboard('{PageDown}');
+    expect(screen.getByRole('grid')).toHaveAccessibleName('April 2027');
+
+    await user.keyboard('{PageUp}{PageUp}');
+    expect(screen.getByRole('grid')).toHaveAccessibleName('February 2027');
+  });
+
+  it('stops at the earliest day allowed rather than walking past it', async () => {
+    const { onChange } = showDate({ value: '2027-03-02', min: '2027-03-01' });
+
+    await user.click(screen.getByRole('button', { name: /2 Mar 2027/ }));
+    // Three days back from the second would be February.
+    await user.keyboard('{ArrowLeft}{ArrowLeft}{ArrowLeft}{Enter}');
+
+    expect(onChange).toHaveBeenCalledWith('2027-03-01');
+  });
+
+  it('marks today, so the month has a landmark', async () => {
+    showDate({ value: todayIso() });
+
+    await user.click(screen.getByRole('button', { name: new RegExp(longDate(todayIso())) }));
+
+    expect(screen.getByRole('gridcell', { name: longDate(todayIso()) })).toHaveAttribute(
+      'aria-current',
+      'date',
+    );
+  });
+
+  it('offers today, and the earliest allowed day when today is too early', async () => {
+    const soon = addDays(todayIso(), 10);
+    const { onChange } = showDate({ value: addDays(todayIso(), 20), min: soon });
+
+    await user.click(
+      screen.getByRole('button', { name: new RegExp(longDate(addDays(todayIso(), 20))) }),
+    );
+    await user.click(screen.getByRole('button', { name: 'Today' }));
+
+    expect(onChange).toHaveBeenCalledWith(soon);
+  });
+
+  it('closes when the press lands somewhere else entirely', async () => {
+    showDate();
+
+    await user.click(screen.getByRole('button', { name: /2 Mar 2027/ }));
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+    await user.click(document.body);
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   it('offers the dates somebody actually wants', async () => {
