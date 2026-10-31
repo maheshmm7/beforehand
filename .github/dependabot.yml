@@ -6,6 +6,13 @@ updates:
       interval: weekly
     open-pull-requests-limit: 5
     versioning-strategy: increase
+    # Majors are not proposed automatically. The one that was broke the
+    # install outright: ESLint 10 against a plugin whose peer range stops at
+    # 9, so npm could not resolve the tree and every build on that branch
+    # failed. A major needs a person to check what still supports it.
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
     commit-message:
       prefix: 'deps'
     groups:
