@@ -80,7 +80,8 @@ Context, so a report can be aimed well.
 - **Nine security headers**, declared once in `server/securityHeaders.ts`, sent by the API and
   repeated for the static host in `vercel.json`, with a test that fails if the two ever drift.
 - **Errors carry stable codes only** — never a stack trace, never an upstream message.
-- **Dependencies are pinned exactly**, with no `^` or `~`, and `npm audit` runs in CI.
+- **Dependencies are pinned exactly**, with no `^` or `~`, and `npm audit` runs in CI at
+  `--audit-level=high`. Nothing the browser or the function ships has an advisory against it.
 
 ## Known limitations
 
@@ -91,3 +92,8 @@ Stated here so nobody has to find them twice.
 - There is no audit log, because there is nothing and nobody to attribute an action to.
 - A deployment's model quota is protected by rate limiting, not by a spend cap. Set a quota on the
   key in Google AI Studio if that matters to you.
+- `npm audit` currently reports moderate advisories against `minimatch` reached through ESLint and
+  its plugins. They are development dependencies: they are not installed by the serverless
+  function, are not part of the browser bundle, and cannot be reached by a request. Forcing a
+  newer `minimatch` past ESLint's own expectations would break linting without closing any path
+  that exists, so the advisories are recorded here rather than papered over.
