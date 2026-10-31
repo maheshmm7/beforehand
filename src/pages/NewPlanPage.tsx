@@ -1,18 +1,20 @@
 import { useId, useMemo, useState } from 'react';
 import type { EventKind } from '@shared/plan';
-import { packFor, packList, defaultValues } from '@shared/packs';
+import { packFor, defaultValues } from '@shared/packs';
 import { applyDescribedSettings, describeLevers } from '@shared/describeSettings';
 import { describePlan } from '@/lib/api';
 import { buildModel, shiftDays } from '@shared/engine';
 import { redact } from '@shared/redact';
-import { moneyShort, plural, todayIso } from '@/lib/format';
+import { todayIso } from '@/lib/format';
 import { useNavigate } from '@/lib/router';
 import { useWorkspace } from '@/state/useWorkspace';
 import { newId, newPlan } from '@/state/workspace';
 import { Button } from '@/ui/controls';
 import { DateField } from '@/ui/DateField';
 import { controlStyles } from '@/ui/controlStyles';
-import { IconSpark } from '@/ui/icons';
+import { DescribePanel } from './newPlan/DescribePanel';
+import { KindPicker } from './newPlan/KindPicker';
+import { StartingPoint } from './newPlan/StartingPoint';
 import styles from './pages.module.css';
 
 const DEFAULT_ANCHOR: Readonly<Record<EventKind, string>> = {
@@ -21,6 +23,11 @@ const DEFAULT_ANCHOR: Readonly<Record<EventKind, string>> = {
   community: '10:00',
 };
 
+/**
+ * Creating a plan: the kind of event, the three facts that cannot be derived,
+ * and — beside them — the assistant, for somebody who would rather type a
+ * sentence. Nothing is written until the form is submitted.
+ */
 export function NewPlanPage(): React.JSX.Element {
   const ids = useId();
   const navigate = useNavigate();
@@ -36,8 +43,6 @@ export function NewPlanPage(): React.JSX.Element {
   const [notes, setNotes] = useState<readonly string[]>([]);
   const [values, setValues] = useState(() => defaultValues(packFor('wedding')));
 
-  // The point of the product, before anything is committed to: what this
-  // shape of event costs as it stands.
   const preview = useMemo(
     () =>
       buildModel(packFor(kind), {
@@ -54,6 +59,7 @@ export function NewPlanPage(): React.JSX.Element {
     setValues(defaultValues(packFor(next)));
   }
 
+  /** Asks the assistant to read the description and set what it can. */
   async function setItUp(): Promise<void> {
     const text = redact(description).trim();
     if (text === '') {
@@ -129,28 +135,7 @@ export function NewPlanPage(): React.JSX.Element {
         </p>
       </div>
 
-      <fieldset className={styles.fieldset}>
-        <legend className={styles.legend}>What are you planning?</legend>
-        <div className={styles.kindRow}>
-          {packList.map((pack) => (
-            <label key={pack.kind} className={styles.kind} htmlFor={`${ids}-${pack.kind}`}>
-              <input
-                id={`${ids}-${pack.kind}`}
-                type="radio"
-                name={`${ids}-kind`}
-                value={pack.kind}
-                checked={kind === pack.kind}
-                onChange={() => {
-                  changeKind(pack.kind);
-                }}
-              />
-              <span className={styles.kindMark} aria-hidden="true" />
-              <span className={styles.kindName}>{pack.label}</span>
-              <span className={styles.kindBlurb}>{pack.blurb}</span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
+      <KindPicker ids={ids} kind={kind} onChange={changeKind} />
 
       <div className={styles.split}>
         <div className={styles.facts}>
@@ -204,15 +189,7 @@ export function NewPlanPage(): React.JSX.Element {
             </div>
           </div>
 
-          <div className={styles.preview}>
-            <span className={styles.previewLabel}>Starting point</span>
-            <span className={styles.previewFigure}>{moneyShort(preview.totals.all)}</span>
-            <span className={styles.previewNote}>
-              {plural(preview.lines.length, 'line')} ·{' '}
-              {plural(preview.deadlines.length, 'decision')} ·{' '}
-              {plural(preview.tasks.length, 'task')}
-            </span>
-          </div>
+          <StartingPoint model={preview} />
 
           {problem === null ? null : (
             <p className={styles.error} role="alert">
@@ -225,47 +202,19 @@ export function NewPlanPage(): React.JSX.Element {
           </Button>
         </div>
 
-        <section className={styles.describe}>
-          <h2 className={styles.describeTitle}>
-            <IconSpark size={17} />
-            Or just describe it
-          </h2>
-          <label className={styles.label} htmlFor={`${ids}-description`}>
-            In your own words
-          </label>
-          <textarea
-            id={`${ids}-description`}
-            className={controlStyles.textarea}
-            maxLength={4000}
-            placeholder="A Telugu wedding in Hyderabad in March, around 350 guests, three functions, mum wants a hotel"
-            value={description}
-            onChange={(event) => {
-              setDescription(event.target.value);
-              setProblem(null);
-            }}
-          />
-          <div className={styles.describeFoot}>
-            <Button
-              disabled={busy}
-              onClick={() => {
-                void setItUp();
-              }}
-            >
-              {busy ? 'Reading…' : 'Set it up for me'}
-            </Button>
-            <span className={styles.hint}>
-              The assistant only sets the levers; every number is worked out here, by code. Phone
-              numbers and links are removed before sending.
-            </span>
-          </div>
-          {notes.length === 0 ? null : (
-            <ul className={styles.notes}>
-              {notes.map((note) => (
-                <li key={note}>{note}</li>
-              ))}
-            </ul>
-          )}
-        </section>
+        <DescribePanel
+          ids={ids}
+          value={description}
+          busy={busy}
+          notes={notes}
+          onChange={(next) => {
+            setDescription(next);
+            setProblem(null);
+          }}
+          onRun={() => {
+            void setItUp();
+          }}
+        />
       </div>
     </form>
   );
