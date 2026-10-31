@@ -6,6 +6,10 @@
     "moduleDetection": "force",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    // The serverless function is loaded by whatever the platform uses:
+    // a bundler, or Node's own type-stripping loader, which resolves the
+    // file that is actually there. Only an explicit .ts works for both.
+    "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "noEmit": true,

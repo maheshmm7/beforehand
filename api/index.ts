@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { createApp } from '../server/app';
-import { readConfig } from '../server/config';
+import { createApp } from '../server/app.ts';
+import { readConfig } from '../server/config.ts';
 
 /**
  * One serverless function serves every /api route.

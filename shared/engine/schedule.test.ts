@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { contextFor } from './expr';
-import { EngineError } from './errors';
-import { daysBetween, deadlinesFor, runOfShowFor, shiftDays } from './schedule';
-import type { ActiveTask, CostLine, EventPack } from './types';
+import { contextFor } from './expr.ts';
+import { EngineError } from './errors.ts';
+import { daysBetween, deadlinesFor, runOfShowFor, shiftDays } from './schedule.ts';
+import type { ActiveTask, CostLine, EventPack } from './types.ts';
 
 const pack: EventPack = {
   kind: 'birthday',

@@ -1,5 +1,5 @@
 import { type ErrorRequestHandler } from 'express';
-import { HttpError, errorBody, statusFor } from './errors';
+import { HttpError, errorBody, statusFor } from './errors.ts';
 
 function bodyParserCode(error: unknown): 'payload_too_large' | 'bad_request' | undefined {
   if (typeof error !== 'object' || error === null || !('type' in error)) return undefined;

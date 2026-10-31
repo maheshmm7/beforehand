@@ -4,9 +4,9 @@ import { type AddressInfo } from 'node:net';
 import { type Server } from 'node:http';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { createApp } from './app';
-import { readConfig } from './config';
-import { SECURITY_HEADERS } from './securityHeaders';
+import { createApp } from './app.ts';
+import { readConfig } from './config.ts';
+import { SECURITY_HEADERS } from './securityHeaders.ts';
 
 /**
  * The policy is declared twice: Helmet serves it for the API, and vercel.json

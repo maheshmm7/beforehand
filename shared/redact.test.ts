@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { hasPersonalDetail, redact } from './redact';
+import { hasPersonalDetail, redact } from './redact.ts';
 
 describe('redact', () => {
   it('removes an email address', () => {

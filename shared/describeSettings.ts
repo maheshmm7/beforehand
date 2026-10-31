@@ -1,5 +1,5 @@
-import type { DescribeLever, DescribeSetting } from './api';
-import type { EventPack, VariableValues } from './engine/types';
+import type { DescribeLever, DescribeSetting } from './api.ts';
+import type { EventPack, VariableValues } from './engine/types.ts';
 
 /**
  * Turns what the assistant understood into values the engine will accept.

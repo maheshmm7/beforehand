@@ -3,10 +3,10 @@ import { type Server } from 'node:http';
 import { type AddressInfo } from 'node:net';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { createApp } from './app';
-import { readConfig } from './config';
-import { HttpError } from './errors';
-import type { Assistant } from './gemini';
+import { createApp } from './app.ts';
+import { readConfig } from './config.ts';
+import { HttpError } from './errors.ts';
+import type { Assistant } from './gemini.ts';
 
 /** Records what the assistant was asked and answers with whatever the test
  *  queued. Nothing reaches the network. */

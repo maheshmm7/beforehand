@@ -1,7 +1,7 @@
-import { evaluateCondition } from './expr';
-import type { EvalContext } from './context';
-import { EngineError } from './errors';
-import type { ActiveTask, CostLine, Deadline, EventPack, ScheduledSegment } from './types';
+import { evaluateCondition } from './expr.ts';
+import type { EvalContext } from './context.ts';
+import { EngineError } from './errors.ts';
+import type { ActiveTask, CostLine, Deadline, EventPack, ScheduledSegment } from './types.ts';
 
 const DAY_MS = 86_400_000;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;

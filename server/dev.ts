@@ -1,5 +1,5 @@
-import { createApp } from './app';
-import { readConfig } from './config';
+import { createApp } from './app.ts';
+import { readConfig } from './config.ts';
 
 const config = readConfig();
 const app = createApp(config);

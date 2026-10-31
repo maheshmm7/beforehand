@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { eventKindSchema } from './plan';
+import { eventKindSchema } from './plan.ts';
 
 /**
  * One schema per exchange, shared by the browser, the server and the model's

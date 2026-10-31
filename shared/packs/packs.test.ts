@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { buildModel } from '../engine/model';
-import { defaultValues, packList } from './index';
-import type { Condition, EventPack, Expr, VariableValues } from '../engine/types';
+import { buildModel } from '../engine/model.ts';
+import { defaultValues, packList } from './index.ts';
+import type { Condition, EventPack, Expr, VariableValues } from '../engine/types.ts';
 
 /** Every variable and quantity an expression leans on. */
 function referencesIn(expr: Expr, into: { vars: Set<string>; quantities: Set<string> }): void {

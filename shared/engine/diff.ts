@@ -1,5 +1,5 @@
-import { daysBetween } from './schedule';
-import type { ActiveTask, CostLine, Deadline, Model, Violation } from './types';
+import { daysBetween } from './schedule.ts';
+import type { ActiveTask, CostLine, Deadline, Model, Violation } from './types.ts';
 
 export interface LineChange {
   readonly ruleId: string;

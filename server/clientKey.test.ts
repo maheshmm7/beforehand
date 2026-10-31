@@ -1,8 +1,8 @@
 // @vitest-environment node
 import type { Request } from 'express';
 import { describe, expect, it } from 'vitest';
-import { clientKey } from './app';
-import { readConfig } from './config';
+import { clientKey } from './app.ts';
+import { readConfig } from './config.ts';
 
 /**
  * A rate limit is only worth the address it is keyed on. This server trusted

@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
-import { readConfig } from './config';
+import { readConfig } from './config.ts';
 
 describe('readConfig', () => {
   it('falls back to defaults when nothing is set', () => {

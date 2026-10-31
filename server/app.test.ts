@@ -3,8 +3,8 @@ import { type AddressInfo } from 'node:net';
 import { type Server } from 'node:http';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { createApp } from './app';
-import { readConfig } from './config';
+import { createApp } from './app.ts';
+import { readConfig } from './config.ts';
 
 const ErrorBody = z.object({ error: z.object({ code: z.string(), message: z.string() }) });
 

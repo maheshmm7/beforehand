@@ -1,7 +1,7 @@
-import type { EventKind, EventPack, VariableValues } from '../engine/types';
-import { birthdayPack } from './birthday';
-import { communityPack } from './community';
-import { weddingPack } from './wedding';
+import type { EventKind, EventPack, VariableValues } from '../engine/types.ts';
+import { birthdayPack } from './birthday.ts';
+import { communityPack } from './community.ts';
+import { weddingPack } from './wedding.ts';
 
 /** One engine, three packs. The difference between the event types is data. */
 export const packs: Readonly<Record<EventKind, EventPack>> = {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { applyDescribedSettings } from './describeSettings';
-import { weddingPack } from './packs/wedding';
+import { applyDescribedSettings } from './describeSettings.ts';
+import { weddingPack } from './packs/wedding.ts';
 
 const apply = (settings: { id: string; value: string }[]) =>
   applyDescribedSettings(weddingPack, settings);

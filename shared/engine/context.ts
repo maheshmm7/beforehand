@@ -1,4 +1,4 @@
-import { EngineError } from './errors';
+import { EngineError } from './errors.ts';
 import type {
   EventPack,
   QuantityDef,
@@ -6,7 +6,7 @@ import type {
   VariableDef,
   VariableId,
   VariableValues,
-} from './types';
+} from './types.ts';
 
 export interface EvalContext {
   readonly pack: EventPack;

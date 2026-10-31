@@ -1,5 +1,5 @@
-import { expr } from '../engine/expr';
-import type { EventPack } from '../engine/types';
+import { expr } from '../engine/expr.ts';
+import type { EventPack } from '../engine/types.ts';
 
 const e = expr;
 

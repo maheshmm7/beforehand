@@ -1,6 +1,6 @@
-import { createContext, type EvalContext } from './context';
-import { EngineError } from './errors';
-import type { Comparator, Condition, EventPack, Expr, VariableValues } from './types';
+import { createContext, type EvalContext } from './context.ts';
+import { EngineError } from './errors.ts';
+import type { Comparator, Condition, EventPack, Expr, VariableValues } from './types.ts';
 
 export interface Evaluated {
   readonly value: number;

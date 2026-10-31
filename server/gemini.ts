@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import { GoogleGenAI, ThinkingLevel } from '@google/genai';
 import { z } from 'zod';
-import type { Config } from './config';
-import { HttpError } from './errors';
+import type { Config } from './config.ts';
+import { HttpError } from './errors.ts';
 
 const PRIMARY_BUDGET_MS = 20_000;
 const TOTAL_BUDGET_MS = 55_000;

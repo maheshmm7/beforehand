@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { contextFor, evaluate, evaluateCondition, expr as e } from './expr';
-import { EngineError } from './errors';
-import type { EventPack } from './types';
+import { contextFor, evaluate, evaluateCondition, expr as e } from './expr.ts';
+import { EngineError } from './errors.ts';
+import type { EventPack } from './types.ts';
 
 const pack: EventPack = {
   kind: 'wedding',

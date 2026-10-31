@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
-import { ERROR_CODES, HttpError, errorBody, statusFor } from './errors';
+import { ERROR_CODES, HttpError, errorBody, statusFor } from './errors.ts';
 
 describe('errors', () => {
   it('maps every code to a status and a message', () => {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { buildModel, type PlanInputs } from './model';
-import { expr as e } from './expr';
-import type { Commitment, EventPack } from './types';
+import { buildModel, type PlanInputs } from './model.ts';
+import { expr as e } from './expr.ts';
+import type { Commitment, EventPack } from './types.ts';
 
 const pack: EventPack = {
   kind: 'wedding',

@@ -1,8 +1,8 @@
 // @vitest-environment node
 import { type Request, type Response } from 'express';
 import { describe, expect, it, vi } from 'vitest';
-import { errorHandler } from './errorHandler';
-import { HttpError, errorBody } from './errors';
+import { errorHandler } from './errorHandler.ts';
+import { HttpError, errorBody } from './errors.ts';
 
 function fakeResponse(headersSent = false): Response & {
   body: unknown;

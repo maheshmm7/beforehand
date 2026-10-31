@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { blastRadius } from './diff';
-import { buildModel, type PlanInputs } from './model';
-import { weddingPack } from '../packs/wedding';
+import { blastRadius } from './diff.ts';
+import { buildModel, type PlanInputs } from './model.ts';
+import { weddingPack } from '../packs/wedding.ts';
 
 function plan(values: Record<string, number | string>): PlanInputs {
   return {

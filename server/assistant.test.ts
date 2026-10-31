@@ -29,9 +29,9 @@ vi.mock('@google/genai', () => ({
   },
 }));
 
-const { createAssistant } = await import('./gemini');
-const { readConfig } = await import('./config');
-const { HttpError } = await import('./errors');
+const { createAssistant } = await import('./gemini.ts');
+const { readConfig } = await import('./config.ts');
+const { HttpError } = await import('./errors.ts');
 
 const schema = z.strictObject({ vendor: z.string(), amount: z.number() });
 const good = '{"vendor":"Lotus","amount":165000}';

@@ -7,11 +7,11 @@ import {
   ideasResponseSchema,
   readQuoteRequestSchema,
   readQuoteResponseSchema,
-} from '../shared/api';
-import { redact } from '../shared/redact';
-import type { Assistant } from './gemini';
-import { fence } from './gemini';
-import { HttpError } from './errors';
+} from '../shared/api.ts';
+import { redact } from '../shared/redact.ts';
+import type { Assistant } from './gemini.ts';
+import { fence } from './gemini.ts';
+import { HttpError } from './errors.ts';
 
 /** Parses a body against the contract, or refuses it. Unknown fields are
  *  rejected by the schemas themselves. */

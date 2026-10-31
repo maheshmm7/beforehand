@@ -1,6 +1,6 @@
-import { contextFor, evaluate, evaluateCondition } from './expr';
-import { deadlinesFor, runOfShowFor } from './schedule';
-import type { EvalContext } from './context';
+import { contextFor, evaluate, evaluateCondition } from './expr.ts';
+import { deadlinesFor, runOfShowFor } from './schedule.ts';
+import type { EvalContext } from './context.ts';
 import type {
   ActiveTask,
   Commitment,
@@ -11,7 +11,7 @@ import type {
   Totals,
   Violation,
   VariableValues,
-} from './types';
+} from './types.ts';
 
 export interface PlanInputs {
   readonly values: VariableValues;

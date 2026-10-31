@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { activeScenarioOf, emptyWorkspace, type Plan } from './plan';
+import { activeScenarioOf, emptyWorkspace, type Plan } from './plan.ts';
 
 function plan(overrides: Partial<Plan> = {}): Plan {
   return {

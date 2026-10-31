@@ -1,12 +1,12 @@
 import express, { type Express, type Request, type RequestHandler, type Response } from 'express';
 import helmet from 'helmet';
 import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
-import { type Config } from './config';
-import { errorBody, statusFor } from './errors';
-import { errorHandler } from './errorHandler';
-import { createAssistant, type Assistant } from './gemini';
-import { createRoutes } from './routes';
-import { HSTS_MAX_AGE_SECONDS, PERMISSIONS_POLICY } from './securityHeaders';
+import { type Config } from './config.ts';
+import { errorBody, statusFor } from './errors.ts';
+import { errorHandler } from './errorHandler.ts';
+import { createAssistant, type Assistant } from './gemini.ts';
+import { createRoutes } from './routes.ts';
+import { HSTS_MAX_AGE_SECONDS, PERMISSIONS_POLICY } from './securityHeaders.ts';
 
 const JSON_BODY_LIMIT = '32kb';
 

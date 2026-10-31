@@ -1,9 +1,9 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { createAssistant, fence, parseReply, responseSchemaFor } from './gemini';
-import { readConfig } from './config';
-import { HttpError } from './errors';
+import { createAssistant, fence, parseReply, responseSchemaFor } from './gemini.ts';
+import { readConfig } from './config.ts';
+import { HttpError } from './errors.ts';
 
 const schema = z.strictObject({ vendor: z.string(), amount: z.number() });
 
