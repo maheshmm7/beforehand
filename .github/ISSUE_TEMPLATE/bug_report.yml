@@ -1,0 +1,59 @@
+name: Bug report
+description: Something behaves differently from how it should
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. **If this is a security problem, do not file it here** —
+        see [SECURITY.md](https://github.com/maheshmm7/beforehand/blob/main/SECURITY.md).
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you saw, in a sentence or two.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Start from a fresh plan if you can.
+      placeholder: |
+        1. Create a wedding plan
+        2. Drag the guest count to 400
+        3. Open the timeline
+    validations:
+      required: true
+  - type: dropdown
+    id: screen
+    attributes:
+      label: Where
+      options:
+        - Landing page
+        - Start a plan
+        - Budget
+        - Timeline
+        - Vendors
+        - Ideas
+        - Somewhere else
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser, operating system and window size
+      placeholder: Chrome 141, Windows 11, 1366x768
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshot or console output
+      description: Optional, but a screenshot settles most layout questions in one go.

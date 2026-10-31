@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/maheshmm7/beforehand/security/advisories/new
+    about: Report it privately. Please do not open a public issue.
+  - name: How to contribute
+    url: https://github.com/maheshmm7/beforehand/blob/main/CONTRIBUTING.md
+    about: Setup, the verify gate, and what a change needs.

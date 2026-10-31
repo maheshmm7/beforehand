@@ -1,0 +1,36 @@
+name: Idea or improvement
+description: Something the planner should do, or should do better
+labels: ['enhancement']
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is hard right now
+      description: The situation you are in, not the solution you have in mind.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would like it to do
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part
+      options:
+        - The engine, or a cost rule
+        - A new kind of event
+        - Budget
+        - Timeline
+        - Vendors
+        - Ideas and the assistant
+        - Accessibility
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What you have tried, or what you would settle for
