@@ -12,11 +12,11 @@ export default defineConfig({
     environment: 'jsdom',
     globals: false,
     setupFiles: ['./vitest.setup.ts'],
-    include: ['{src,shared,server}/**/*.test.{ts,tsx}'],
+    include: ['{src,shared,server,api}/**/*.test.{ts,tsx}'],
     coverage: {
       provider: 'v8',
       reporter: ['text-summary', 'lcov'],
-      include: ['src/**/*.{ts,tsx}', 'shared/**/*.ts', 'server/**/*.ts'],
+      include: ['src/**/*.{ts,tsx}', 'shared/**/*.ts', 'server/**/*.ts', 'api/**/*.ts'],
       exclude: [
         '**/*.test.{ts,tsx}',
         'src/main.tsx',

@@ -10,17 +10,7 @@ export default tseslint.config(
     // video/ produces the launch film. It is media tooling run by hand, not
     // application code, and it sits outside every tsconfig the type-aware
     // rules are built from.
-    ignores: [
-      'dist',
-      'coverage',
-      'node_modules',
-      'playwright-report',
-      'test-results',
-      'video',
-      // A deployment probe in plain JavaScript, outside every tsconfig the
-      // type-aware rules are built from. Goes when the question is settled.
-      'api/pong.js',
-    ],
+    ignores: ['dist', 'coverage', 'node_modules', 'playwright-report', 'test-results', 'video'],
   },
 
   js.configs.recommended,

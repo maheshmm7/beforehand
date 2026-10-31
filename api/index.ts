@@ -14,12 +14,14 @@ import { readConfig } from '../server/config.ts';
  * stable code and nothing else.
  */
 let app: ReturnType<typeof createApp> | undefined;
-let bootError: string | undefined;
+let bootError = 'unknown';
 
 try {
   app = createApp(readConfig());
 } catch (error) {
-  bootError = error instanceof Error ? `${error.name}: ${error.message}` : String(error);
+  // String() on an Error already reads "TypeError: the message", which is
+  // what the log and the health route both want.
+  bootError = String(error);
   console.error('api: could not start', error);
 }
 
@@ -31,7 +33,7 @@ export default function handler(request: IncomingMessage, response: ServerRespon
 
   const body =
     request.url?.startsWith('/api/health') === true
-      ? { status: 'error', assistant: 'off', reason: (bootError ?? 'unknown').slice(0, 300) }
+      ? { status: 'error', assistant: 'off', reason: bootError.slice(0, 300) }
       : { error: { code: 'ai_unavailable', message: 'The server is not available right now.' } };
 
   response.statusCode = 503;
