@@ -57,6 +57,26 @@ afterEach(() => {
 });
 
 describe('the assistant', () => {
+  it('writes the upstream reason to the server log, with the key scrubbed', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    reply = () =>
+      Promise.reject(
+        // secret-scan-allow: a fixture, not a credential
+        Object.assign(new Error('API key not valid: test-key-value'), { status: 400 }),
+      );
+
+    await expect(ask()).rejects.toBeInstanceOf(HttpError);
+
+    const written = warn.mock.calls.map((call) => String(call[0])).join(' ');
+    // Enough to tell a revoked key from a retired model, which the stable
+    // code the client gets cannot say.
+    expect(written).toContain('API key not valid');
+    // secret-scan-allow: a fixture, not a credential
+    expect(written).not.toContain('test-key-value');
+    expect(written).toContain('[key]');
+    warn.mockRestore();
+  });
+
   it('asks once, with a schema, when the model answers', async () => {
     await expect(ask()).resolves.toEqual({ vendor: 'Lotus', amount: 165000 });
 

@@ -170,6 +170,11 @@ and `api/index.ts` mounts the same Express application as one serverless functio
    - Create a plan and move a lever. That path needs no key at all.
    - Open the Ideas screen and ask for suggestions. That one proves the key is wired.
 
+   If the assistant says it is not answering, `/api/health` tells you which half is wrong:
+   `"assistant":"off"` means the key never reached the function, and `"assistant":"on"` means it
+   did and the call itself failed — in which case the reason is in the function's log, under
+   _Deployments → the deployment → Functions_, as `assistant: <model> did not answer: …`.
+
 ### What is already handled
 
 | Concern                      | How                                                                                                                                                                  |

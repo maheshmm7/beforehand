@@ -90,7 +90,22 @@ export interface Assistant {
 export function createAssistant(config: Config): Assistant | undefined {
   if (config.geminiApiKey === undefined) return undefined;
 
-  const client = new GoogleGenAI({ apiKey: config.geminiApiKey });
+  const key = config.geminiApiKey;
+  const client = new GoogleGenAI({ apiKey: key });
+
+  /**
+   * The client is told a stable code and nothing else, which is right, and
+   * leaves whoever runs this with nothing to work from when a key has been
+   * revoked or a model retired. The reason goes to the server log instead,
+   * where only the operator sees it, with the key scrubbed in case the
+   * upstream message quotes it back.
+   */
+  function note(model: string, error: unknown): void {
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn(
+      `assistant: ${model} did not answer: ${message.split(key).join('[key]').slice(0, 300)}`,
+    );
+  }
 
   async function callOnce<T>(
     model: string,
@@ -156,6 +171,7 @@ export function createAssistant(config: Config): Assistant | undefined {
         return parseReply(text, schema);
       } catch (error) {
         const last = index === attempts.length - 1;
+        note(attempt.model, error);
 
         if (error instanceof HttpError) {
           // An unreadable reply is worth another attempt with a different
