@@ -18,3 +18,9 @@ blob-report/
 Thumbs.db
 *.log
 npm-debug.log*
+
+# The launch film: sources are kept, renders and intermediates are not.
+video/frames/
+video/out/*.mp4
+video/out/*.wav
+video/shots/

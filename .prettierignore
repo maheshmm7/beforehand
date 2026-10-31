@@ -5,3 +5,8 @@ node_modules
 playwright-report
 test-results
 package-lock.json
+
+# The launch film's captured stills and renders.
+video/shots
+video/out
+video/frames

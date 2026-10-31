@@ -7,7 +7,10 @@ import globals from 'globals';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'coverage', 'node_modules', 'playwright-report', 'test-results'],
+    // video/ produces the launch film. It is media tooling run by hand, not
+    // application code, and it sits outside every tsconfig the type-aware
+    // rules are built from.
+    ignores: ['dist', 'coverage', 'node_modules', 'playwright-report', 'test-results', 'video'],
   },
 
   js.configs.recommended,
