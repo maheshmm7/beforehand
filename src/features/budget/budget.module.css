@@ -35,13 +35,13 @@
 .lever {
   min-width: 0;
   break-inside: avoid;
-  padding-bottom: var(--space-3);
+  padding-bottom: var(--space-2);
 }
 
 /* Pulls back the last lever's own spacing, which would otherwise leave a
    band of nothing along the bottom of the card. */
 .levers {
-  margin-bottom: calc(-1 * var(--space-3));
+  margin-bottom: calc(-1 * var(--space-2));
 }
 
 .leverHead {
@@ -162,68 +162,10 @@
 
 /* Where the money stands ------------------------------------------------ */
 
-.money {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-2);
-}
-
 .stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-3);
-}
-
-.bar {
-  display: flex;
-  height: 7px;
-  border-radius: var(--radius-pill);
-  overflow: hidden;
-  background: var(--ivory-100);
-}
-
-.bar > * {
-  transition: width var(--dur-slow) var(--ease-out);
-}
-
-.barPaid {
-  background: var(--state-paid-ink);
-}
-
-.barQuoted {
-  background: var(--state-quoted-ink);
-}
-
-.barEstimated {
-  background: var(--gold-300);
-}
-
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-4);
-  font-size: var(--text-caption);
-  color: var(--text-muted);
-}
-
-.swatch {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin-right: var(--space-2);
-}
-
-.swatchPaid {
-  background: var(--state-paid-ink);
-}
-
-.swatchQuoted {
-  background: var(--state-quoted-ink);
-}
-
-.swatchEstimated {
-  background: var(--gold-300);
 }
 
 .alerts {
@@ -254,183 +196,227 @@
   opacity: 0.95;
 }
 
-/* Every line ------------------------------------------------------------ */
+/* Where the money goes --------------------------------------------------- */
 
-/* The breakdown is as tall as the lines in it, and the total sits directly
-   under the last group the way it would on a printed statement. Nothing here
-   scrolls on its own: a panel with its own scrollbar is a second chute down
-   the same screen, and pushing the total to the foot of a stretched card
-   left a hole the height of a hand above it. */
-.ledger {
+/* The ring and its list, at one height always. Nothing here folds: a sheet
+   that opened and shut a category at a time moved everything under it every
+   time somebody looked at it. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: var(--space-4);
+}
+
+.ring {
+  position: relative;
+  width: 132px;
+  flex: none;
+}
+
+.donut {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform: rotate(-90deg);
+}
+
+.track {
+  fill: none;
+  stroke: var(--surface-sunken);
+}
+
+.slice {
+  fill: none;
+  stroke-linecap: butt;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+/* The ring is decoration over a list that already says all of it, so a
+   screen reader is given the list and not the same figures twice. */
+.ring:hover .slice {
+  opacity: 0.45;
+}
+
+.ring .slice:hover {
+  opacity: 1;
+}
+
+.slice[data-category='venue'] {
+  stroke: var(--cat-venue);
+}
+
+.slice[data-category='food'] {
+  stroke: var(--cat-food);
+}
+
+.slice[data-category='people'] {
+  stroke: var(--cat-people);
+}
+
+.slice[data-category='things'] {
+  stroke: var(--cat-things);
+}
+
+.slice[data-category='travel'] {
+  stroke: var(--cat-travel);
+}
+
+.slice[data-category='paperwork'] {
+  stroke: var(--cat-paperwork);
+}
+
+.ringMiddle {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
-}
-
-.groups {
-  min-width: 0;
-}
-
-.lineGroup {
-  break-inside: avoid;
-  border-bottom: 1px solid var(--border);
-}
-
-.groupHead {
-  display: grid;
-  grid-template-columns: 14px minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: var(--space-3);
-  min-height: 38px;
-  padding: 0 var(--space-2);
-  margin: 0 calc(-1 * var(--space-2));
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  list-style: none;
-  transition: background-color var(--dur-fast) var(--ease-out);
+  justify-content: center;
+  gap: 1px;
+  pointer-events: none;
 }
 
-.groupHead::-webkit-details-marker {
-  display: none;
-}
-
-.groupHead:hover {
-  background: var(--surface-sunken);
-}
-
-.groupChevron {
-  display: inline-flex;
-  color: var(--text-faint);
-  transform: rotate(-90deg);
-  transition: transform var(--dur-fast) var(--ease-out);
-}
-
-[open] > .groupHead .groupChevron {
-  transform: rotate(0deg);
-}
-
-.groupName {
-  font-size: var(--text-small);
-  font-weight: 550;
-  color: var(--text);
-}
-
-.groupTotal,
-.lineAmount,
-.totalValue {
-  font-feature-settings: 'tnum' 1;
-}
-
-.groupCount {
-  min-width: 19px;
-  padding: 0 5px;
-  border-radius: var(--radius-pill);
-  background: var(--ivory-100);
-  color: var(--text-faint);
+.ringCaption {
   font-size: var(--text-tiny);
-  font-variant-numeric: tabular-nums;
-  text-align: center;
-}
-
-.groupTotal {
-  font-size: var(--text-small);
   font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.line {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: start;
-  gap: var(--space-4);
-  padding: var(--space-2) 0 var(--space-2) var(--space-5);
-}
-
-.line + .line {
-  border-top: 1px dashed var(--border);
-}
-
-.lineMain {
-  min-width: 0;
-}
-
-.lineName {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  flex-wrap: wrap;
-  font-size: var(--text-body);
-}
-
-.lineBasis {
-  display: block;
-  font-size: var(--text-tiny);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--text-faint);
-  font-family: var(--font-num);
 }
 
-.lineQuote {
-  display: block;
-  font-size: var(--text-caption);
-  color: var(--state-quoted-ink);
-}
-
-.lineAmount {
-  font-variant-numeric: tabular-nums;
-  font-weight: 550;
-  white-space: nowrap;
-  text-align: right;
-}
-
-.lineWas {
-  display: block;
-  font-size: var(--text-tiny);
-  color: var(--text-faint);
-  font-weight: 400;
-}
-
-.total {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-top: var(--space-3);
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--border-strong);
-  font-weight: 550;
-}
-
-.totalValue {
+.ringTotal {
   font-family: var(--font-display);
   font-variant-numeric: lining-nums tabular-nums;
   font-feature-settings:
     'lnum' 1,
     'tnum' 1;
-  font-size: var(--text-figure);
+  font-size: 1.35rem;
   font-weight: 600;
   letter-spacing: -0.012em;
+  line-height: 1.1;
+}
+
+.legend,
+.legend dt,
+.legend dd {
+  margin: 0;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: baseline;
+  width: 100%;
+  min-width: 0;
+  column-gap: var(--space-3);
+}
+
+/* Each row is its own subgrid so the three columns line up down the list
+   while the row stays one element to tint and to read. */
+.legendRow {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: baseline;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.legendRow:last-child {
+  border-bottom: 0;
+}
+
+/* The swatch is what ties a row to its slice; the name beside it is what
+   makes the tie readable without colour. */
+.legendName {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-small);
+  color: var(--text);
+}
+
+.legendName::before {
+  content: '';
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  background: var(--border-strong);
+}
+
+.legendRow[data-category='venue'] .legendName::before {
+  background: var(--cat-venue);
+}
+
+.legendRow[data-category='food'] .legendName::before {
+  background: var(--cat-food);
+}
+
+.legendRow[data-category='people'] .legendName::before {
+  background: var(--cat-people);
+}
+
+.legendRow[data-category='things'] .legendName::before {
+  background: var(--cat-things);
+}
+
+.legendRow[data-category='travel'] .legendName::before {
+  background: var(--cat-travel);
+}
+
+.legendRow[data-category='paperwork'] .legendName::before {
+  background: var(--cat-paperwork);
+}
+
+.legendRow[data-category='income'] .legendName::before {
+  background: var(--cat-income);
+}
+
+.legendShare {
+  font-size: var(--text-caption);
   font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.legendAmount {
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings:
+    'lnum' 1,
+    'tnum' 1;
+  font-size: var(--text-small);
+  font-weight: 550;
+  color: var(--text);
+  white-space: nowrap;
 }
 
 @media (min-width: 1100px) {
-  /* The figures run the full width; under them, one column for the controls
-     and one for the breakdown. Both are as tall as what is in them:
-     stretching them to the window put a hole under whichever was shorter. */
+  /* The figures and anything they broke share the top row; under them, one
+     column for the controls and one for where the money goes. Both are as
+     tall as what is in them: stretching them to the window put a hole under
+     whichever was shorter. */
   .board {
+    gap: var(--space-2);
     grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
     grid-template-areas:
-      'money alerts'
-      'levers ledger';
+      'money money'
+      'levers ledger'
+      'levers alerts';
     align-items: start;
-  }
-
-  .money {
-    grid-area: money;
   }
 
   .alerts {
     grid-area: alerts;
   }
 
+  /* The levers run down the whole left side; the right side is the ring,
+     and under it anything the levers broke. A warning at the foot of its own
+     column cannot move what is above it when it appears. */
   .leversCard {
     grid-area: levers;
   }
@@ -439,9 +425,18 @@
     grid-area: ledger;
   }
 
+  /* The ring beside its list rather than above it: stacked, the card ran
+     the height of the levers beside it for no reading gained. */
+  .split {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    justify-items: stretch;
+  }
+
   /* Four figures in a row rather than a square of four: across the top of
      the screen they are a headline, and a headline is one line. */
   .stats {
+    grid-area: money;
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 

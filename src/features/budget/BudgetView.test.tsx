@@ -3,21 +3,24 @@ import { describe, expect, it } from 'vitest';
 import { makePlan, PlanHost, renderWith, workspaceWith } from '@/testing/support';
 import { BudgetView } from './BudgetView';
 
-function show(): void {
+function show(): ReturnType<typeof renderWith> {
   const plan = makePlan();
-  renderWith(
+  return renderWith(
     <PlanHost planId={plan.id}>{(current) => <BudgetView plan={current} />}</PlanHost>,
     workspaceWith(plan),
   );
 }
 
 describe('BudgetView', () => {
-  it('derives every line and shows the arithmetic behind it', () => {
+  it('names every kind of spending, with its share and its total', () => {
     show();
 
-    expect(screen.getByText('Catering')).toBeInTheDocument();
-    expect(screen.getByText('770 servings × 450 (Standard)')).toBeInTheDocument();
-    expect(screen.getByText('35 tables × 900')).toBeInTheDocument();
+    expect(screen.getByText('Food')).toBeInTheDocument();
+    expect(screen.getByText('₹3,46,500')).toBeInTheDocument();
+    expect(screen.getByText('Things to hire')).toBeInTheDocument();
+    expect(screen.getByText('₹2,32,560')).toBeInTheDocument();
+    // Shares, so the ring beside the list can be read as proportions.
+    expect(screen.getAllByText(/^\d+%$/).length).toBeGreaterThan(3);
   });
 
   it('lays the levers out as options rather than hiding them in a menu', () => {
@@ -27,12 +30,15 @@ describe('BudgetView', () => {
     expect(screen.getByRole('radio', { name: 'Open lawn' })).not.toBeChecked();
   });
 
-  it('folds each category away with its total still showing', () => {
-    show();
+  it('shows every kind of spending at once, with nothing to unfold', () => {
+    const { container } = show();
 
-    const food = screen.getByText('Food').closest('summary');
-    expect(food).not.toBeNull();
-    expect(food).toHaveTextContent('₹3,46,500');
+    // Folding a category away moved everything under it each time somebody
+    // looked at it. Nothing on this screen opens or shuts.
+    expect(container.querySelectorAll('details')).toHaveLength(0);
+    for (const name of ['Venue', 'Food', 'People', 'Things to hire', 'Travel', 'Paperwork']) {
+      expect(screen.getAllByText(name).length).toBeGreaterThan(0);
+    }
   });
 
   it('warns when the venue is too small, with what to do about it', () => {
@@ -54,7 +60,7 @@ describe('BudgetView', () => {
     expect(screen.getAllByText('₹12,69,775').length).toBeGreaterThan(0);
   });
 
-  it('shows a saved quote with the vendor and their own words', () => {
+  it('counts a recorded quote as promised rather than movable', () => {
     const plan = makePlan();
     const first = plan.scenarios[0];
     if (first === undefined) throw new Error('no scenario');
@@ -85,9 +91,8 @@ describe('BudgetView', () => {
       workspaceWith(withQuote),
     );
 
-    expect(screen.getByText(/Sri Caterers/)).toBeInTheDocument();
-    expect(screen.getByText(/starters included/)).toBeInTheDocument();
-    expect(screen.getByText('we estimated ₹3,46,500')).toBeInTheDocument();
-    expect(screen.getAllByText('quoted').length).toBeGreaterThan(0);
+    // The catering line is a vendor's price now, so it leaves the estimate.
+    expect(screen.getByText('Quoted').closest('div')).toHaveTextContent('₹3.0L');
+    expect(screen.getByText('₹12,23,275')).toBeInTheDocument();
   });
 });

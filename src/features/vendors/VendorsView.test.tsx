@@ -37,10 +37,11 @@ describe('VendorsView', () => {
     expect(screen.getByText('Catering')).toBeInTheDocument();
   });
 
-  it('says how much notice each line needs', () => {
+  it('shows the arithmetic behind every figure', () => {
     show();
 
-    expect(screen.getAllByText(/Venue · needs 120 days of notice/).length).toBeGreaterThan(0);
+    expect(screen.getByText('770 servings × 450 (Standard)')).toBeInTheDocument();
+    expect(screen.getByText('35 tables × 900')).toBeInTheDocument();
   });
 
   it('records a quote typed by hand and moves the line off the estimate', async () => {

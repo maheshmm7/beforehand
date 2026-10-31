@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, type Locator, type Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 
 /** WCAG 2.2 AA, with no exclusions. A violation fails the test. */
 export async function expectNoAxeViolations(page: Page): Promise<void> {
@@ -27,16 +27,6 @@ export async function createPlan(page: Page, name = 'Priya and Arjun'): Promise<
 /** Wide enough for the dock to list what changed beside the summary. */
 export function wide(page: Page): boolean {
   return (page.viewportSize()?.width ?? 0) >= 1000;
-}
-
-/** Opens a category of the breakdown if it is not open already, and hands
- *  back that category so its own lines can be read. */
-export async function openGroup(page: Page, name: string): Promise<Locator> {
-  const group = page.locator('details', { has: page.getByText(name, { exact: true }) }).first();
-  const open = await group.evaluate((node) => (node as HTMLDetailsElement).open);
-  if (!open) await group.getByText(name, { exact: true }).click();
-  await expect(group).toHaveJSProperty('open', true);
-  return group;
 }
 
 export async function setDarkMode(page: Page): Promise<void> {

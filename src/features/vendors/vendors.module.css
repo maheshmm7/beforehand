@@ -1,5 +1,5 @@
-/* Fills the content region: the checklist takes whatever height is left
-   rather than stopping halfway down the window. */
+/* Each card is as tall as what is in it: stretched to the window, the
+   checklist carried a band of nothing under its last row. */
 .view {
   display: flex;
   flex-direction: column;
@@ -7,14 +7,9 @@
   min-height: 0;
 }
 
-@media (min-width: 900px) {
-  .view {
-    flex: 1;
-  }
-
-  .checklist {
-    flex: 1;
-  }
+/* The list inside asks this card how wide it is, so measure it. */
+.checklist {
+  container-type: inline-size;
 }
 
 /* Two abreast where there is room: the checklist is the longest thing in the
@@ -25,7 +20,10 @@
   gap: 0 var(--space-6);
 }
 
-@media (min-width: 1200px) {
+/* Measured on the card rather than the window: a row carries a name, the
+   arithmetic behind it, a figure and a button, and splitting into two
+   columns before there is room for all four wraps every row instead. */
+@container (min-width: 760px) {
   .list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -41,13 +39,16 @@
   margin-bottom: var(--space-2);
 }
 
+/* Two columns rather than a wrapping row: when a long name and its
+   arithmetic met the figure and the button, the whole right-hand side
+   dropped to a second line and the row grew by half again. The text gives
+   way instead. */
 .row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
   gap: var(--space-3);
-  padding: var(--space-3) 0;
+  padding: var(--space-2) 0;
   border-bottom: 1px solid var(--border);
 }
 
@@ -76,7 +77,6 @@
 
 .right {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
 }
@@ -84,6 +84,15 @@
 .amount {
   font-variant-numeric: tabular-nums;
   font-weight: 550;
+  text-align: right;
+}
+
+.was {
+  display: block;
+  font-size: var(--text-tiny);
+  font-weight: 400;
+  color: var(--text-faint);
+  white-space: nowrap;
 }
 
 .form {

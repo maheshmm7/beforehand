@@ -60,16 +60,13 @@ describe('PlanDock', () => {
     expect(screen.getAllByText('₹12,69,775').length).toBeGreaterThan(0);
   });
 
-  it('adds the lines an open lawn implies, and says they are new', async () => {
+  it('names the lines an open lawn implies, and counts the rest', async () => {
     show();
 
     await user.click(screen.getByRole('radio', { name: 'Open lawn' }));
 
-    // Every new line is in the breakdown; the dock names what it has room for
-    // and counts the rest, rather than growing or scrolling.
-    for (const line of ['Rain cover', 'Power backup', 'Water and sanitation']) {
-      expect(screen.getAllByText(line).length).toBeGreaterThan(0);
-    }
+    // The dock names what it has room for and counts the rest, rather than
+    // growing or scrolling.
     const dock = screen.getByRole('region', { name: 'Blast radius' });
     expect(dock).toHaveTextContent(/Rain cover|Power backup|Water and sanitation/);
     expect(dock).toHaveTextContent(/other change/);

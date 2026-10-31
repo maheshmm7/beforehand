@@ -32,7 +32,7 @@ test('the application meets the pre-submission checklist', async ({ page }) => {
 
   // --- Main workflow end to end ------------------------------------------
   await createPlan(page, 'Priya and Arjun');
-  await expect(page.getByText('Catering')).toBeVisible();
+  await expect(page.locator('dl').getByText('Food')).toBeVisible();
   ok('workflow: a plan is created and priced');
 
   const base = page.url().replace(/\/[a-z]+$/, '');

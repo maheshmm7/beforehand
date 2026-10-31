@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { createPlan, expectNoSidewaysScroll, openGroup, wide } from './helpers';
+import { createPlan, expectNoSidewaysScroll, wide } from './helpers';
 
 test('the landing page states what the product does', async ({ page }) => {
   await page.goto('/#/');
@@ -13,11 +13,16 @@ test('the landing page states what the product does', async ({ page }) => {
 test('a plan can be created and shows costs derived from the model', async ({ page }) => {
   await createPlan(page);
 
-  await expect(page.getByText('Catering')).toBeVisible();
-  // Every figure shows the arithmetic that produced it. The group holding the
-  // money is open already; the rest open on asking.
+  // Where the money goes, every kind of it at once and none of it folded away.
+  const legend = page.locator('dl');
+  await expect(legend.getByText('Food')).toBeVisible();
+  await expect(legend.getByText('₹3,46,500')).toBeVisible();
+  await expect(legend.getByText('Things to hire')).toBeVisible();
+  await expect(page.locator('details')).toHaveCount(0);
+
+  // And the arithmetic behind each figure is on the list of the figures.
+  await page.getByRole('link', { name: 'Vendors' }).first().click();
   await expect(page.getByText('770 servings × 450 (Standard)')).toBeVisible();
-  await openGroup(page, 'Things to hire');
   await expect(page.getByText('35 tables × 900')).toBeVisible();
 });
 
@@ -70,10 +75,11 @@ test('a venue change adds the lines an open lawn implies', async ({ page }) => {
     await expect(dock).toContainText(/other change/);
   }
 
-  // And they are in the breakdown on every screen, under the group they belong
-  // to, priced.
-  const group = await openGroup(page, 'Things to hire');
-  for (const line of added) await expect(group.getByText(line)).toBeVisible();
+  // And they are on the vendor list on every screen, priced, because they are
+  // three more things nobody has promised yet.
+  await page.getByRole('link', { name: 'Vendors' }).first().click();
+  const list = page.locator('#main');
+  for (const line of added) await expect(list.getByText(line)).toBeVisible();
 });
 
 test('the timeline gives decision deadlines and a run of show', async ({ page }) => {

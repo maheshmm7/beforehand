@@ -16,8 +16,10 @@ function tally(count: number, none: string, one: string, many: string): string {
 }
 
 /** The dock lists what fits in its own height and counts the rest. Nothing in
- *  the dock scrolls: a scrollbar inside a strip this size is noise. */
-const SHOWN = 4;
+ *  the dock scrolls: a scrollbar inside a strip this size is noise, and a row
+ *  half-cut by the strip's own edge is worse than one the count stands in
+ *  for. Three rows is what the height holds. */
+const SHOWN = 3;
 
 interface Row {
   readonly key: string;

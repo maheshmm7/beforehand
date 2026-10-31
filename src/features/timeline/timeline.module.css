@@ -1,12 +1,14 @@
-/* The decision list is the long one. Two abreast on a wide screen, where the
-   dates still have room to sit beside what they belong to. */
+/* The decision list is the long one. Two abreast once the card itself is
+   wide enough for a date to sit beside what it belongs to — measured on the
+   card, not on the window, because the window says nothing about how much
+   room the card beside it has left this one. */
 .rows {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0 var(--space-6);
 }
 
-@media (min-width: 1500px) {
+@container (min-width: 560px) {
   .rows {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -19,11 +21,15 @@
 }
 
 @media (min-width: 900px) {
+  /* Each card is as tall as what is in it. Stretched to match its neighbour,
+     the shorter one carried a band of nothing at its foot. */
   .grid {
-    flex: 1;
-    min-height: 0;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
-    align-items: stretch;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+    align-items: start;
+  }
+
+  .grid > * {
+    container-type: inline-size;
   }
 }
 
@@ -33,7 +39,7 @@
   justify-content: space-between;
   align-items: baseline;
   gap: var(--space-3);
-  padding: var(--space-2) 0;
+  padding: 6px 0;
   border-bottom: 1px solid var(--border);
 }
 
@@ -91,5 +97,5 @@
 .intro {
   color: var(--text-muted);
   font-size: var(--text-small);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-2);
 }

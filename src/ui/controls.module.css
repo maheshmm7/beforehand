@@ -302,6 +302,34 @@
   color: var(--text-faint);
 }
 
+/* Where a tile is wider than it needs to be, the figure moves up beside its
+   own label rather than under it: the same four figures, a third less of the
+   screen, and the width used instead of left empty. */
+@media (min-width: 1100px) {
+  .stat {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    column-gap: var(--space-3);
+  }
+
+  .statHead {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .statValue {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  .statNote {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
 .field {
   display: block;
   min-width: 0;

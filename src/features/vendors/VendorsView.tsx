@@ -22,11 +22,6 @@ export function VendorsView({ plan }: { plan: Plan }): React.JSX.Element {
         className={styles.checklist}
         title={`Still nobody’s promise — ${plural(unpromised.length, 'line')}`}
       >
-        <p className={styles.intro}>
-          These are the model’s estimates. Nobody has actually agreed to them yet, which is what
-          makes this the real checklist.
-        </p>
-
         <div className={styles.list}>
           {current.lines.map((line) => (
             <div key={line.ruleId} className={styles.entry}>
@@ -40,8 +35,12 @@ export function VendorsView({ plan }: { plan: Plan }): React.JSX.Element {
                       <Chip tone={line.state}>{line.state}</Chip>
                     )}
                   </span>
+                  {/* The arithmetic behind the figure, on the one screen
+                      that is a list of the figures. How much notice the
+                      decision needs is the timeline's job, and saying it
+                      twice cost this row a second line. */}
                   <span className={styles.detail}>
-                    {line.decision} · needs {plural(line.leadTimeDays, 'day')} of notice
+                    {line.basis}
                     {line.vendor === undefined ? '' : ` · ${line.vendor}`}
                   </span>
                   {line.quote === undefined || line.quote === '' ? null : (
@@ -49,7 +48,15 @@ export function VendorsView({ plan }: { plan: Plan }): React.JSX.Element {
                   )}
                 </div>
                 <div className={styles.right}>
-                  <span className={styles.amount}>{money(line.amount)}</span>
+                  <span className={styles.amount}>
+                    {money(line.amount)}
+                    {/* What the model had guessed, kept beside what somebody
+                        actually quoted: the difference is the whole point of
+                        writing the quote down. */}
+                    {line.state !== 'estimated' && line.amount !== line.estimate ? (
+                      <span className={styles.was}>we estimated {money(line.estimate)}</span>
+                    ) : null}
+                  </span>
                   <Button
                     small
                     onClick={() => {

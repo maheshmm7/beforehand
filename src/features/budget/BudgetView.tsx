@@ -4,66 +4,53 @@ import { usePlanModel } from '@/state/usePlanModel';
 import { useWorkspace } from '@/state/useWorkspace';
 import { Card, Stat } from '@/ui/controls';
 import { IconLock, IconReceipt, IconRipple, IconScale } from '@/ui/icons';
-import { CostLines } from './CostLines';
 import { Levers } from './Levers';
+import { MoneySplit } from './MoneySplit';
 import styles from './budget.module.css';
 
 /**
- * Where the money stands runs along the top, with anything the levers broke
- * beside it, because together they are the answer the rest of this screen is
- * working towards. Under them the levers take the width they need and the
- * breakdown sits in a narrower column beside them.
+ * Four figures and anything the levers broke along the top, because together
+ * they are the answer the rest of the screen is working towards. Under them,
+ * the levers take the width they need and where the money goes sits in a
+ * narrower column beside them. Everything is on the screen at once and at a
+ * fixed height: nothing here folds, grows or scrolls while it is read.
  */
 export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
   const { dispatch } = useWorkspace();
   const { pack, scenario, current } = usePlanModel(plan);
   const { totals, violations } = current;
 
-  const span = Math.max(totals.paid + totals.quoted + Math.max(totals.estimated, 0), 1);
-  const width = (part: number): string => `${String(Math.max(0, (part / span) * 100))}%`;
-
   return (
     <div className={styles.board}>
-      <section className={styles.money} aria-label="Where the money stands">
-        <div className={styles.stats}>
-          <Stat
-            label="Total"
-            value={moneyShort(totals.all)}
-            note={money(totals.all)}
-            icon={<IconScale size={17} />}
-            live
-          />
-          <Stat
-            label="Paid"
-            value={moneyShort(totals.paid)}
-            note="gone, not reversible"
-            icon={<IconLock size={17} />}
-            tone="quiet"
-          />
-          <Stat
-            label="Quoted"
-            value={moneyShort(totals.quoted)}
-            note="promised by a vendor"
-            icon={<IconReceipt size={17} />}
-            tone="work"
-          />
-          <Stat
-            label="Movable"
-            value={moneyShort(totals.movable)}
-            note="only an estimate"
-            icon={<IconRipple size={17} />}
-            live
-          />
-        </div>
-
-        <div className={styles.bar}>
-          <div className={styles.barPaid} style={{ width: width(totals.paid) }} />
-          <div className={styles.barQuoted} style={{ width: width(totals.quoted) }} />
-          <div
-            className={styles.barEstimated}
-            style={{ width: width(Math.max(totals.estimated, 0)) }}
-          />
-        </div>
+      <section className={styles.stats} aria-label="Where the money stands">
+        <Stat
+          label="Total"
+          value={moneyShort(totals.all)}
+          note={money(totals.all)}
+          icon={<IconScale size={17} />}
+          live
+        />
+        <Stat
+          label="Paid"
+          value={moneyShort(totals.paid)}
+          note="gone, not reversible"
+          icon={<IconLock size={17} />}
+          tone="quiet"
+        />
+        <Stat
+          label="Quoted"
+          value={moneyShort(totals.quoted)}
+          note="promised by a vendor"
+          icon={<IconReceipt size={17} />}
+          tone="work"
+        />
+        <Stat
+          label="Movable"
+          value={moneyShort(totals.movable)}
+          note="only an estimate"
+          icon={<IconRipple size={17} />}
+          live
+        />
       </section>
 
       <Card
@@ -95,12 +82,12 @@ export function BudgetView({ plan }: { plan: Plan }): React.JSX.Element {
         </div>
       )}
       <Card
-        title="Every line, and how we got there"
+        title="Where the money goes"
         tone="money"
         icon={<IconReceipt size={18} />}
         className={styles.breakdown}
       >
-        <CostLines model={current} />
+        <MoneySplit model={current} />
       </Card>
     </div>
   );

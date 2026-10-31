@@ -73,7 +73,9 @@ describe('BlastRadiusDock', () => {
     const rows = screen.getAllByRole('listitem').map((item) => item.textContent);
     expect(rows[0]).toContain('Add a second serving line');
     expect(rows[1]).toContain('Caterer deadline');
-    expect(rows[2]).toContain('Line 0');
+    // The money detail is the first thing the strip gives up: with more than
+    // it can hold, the rest is counted rather than listed.
+    expect(rows[2]).toContain('other change');
   });
 
   it('counts each kind of consequence, so the rings can be read', () => {

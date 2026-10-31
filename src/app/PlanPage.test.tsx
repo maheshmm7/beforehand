@@ -23,7 +23,7 @@ describe('PlanPage', () => {
     show('budget');
 
     expect(screen.getByText('Levers')).toBeInTheDocument();
-    expect(screen.getByText('Catering')).toBeInTheDocument();
+    expect(screen.getByText('Where the money goes')).toBeInTheDocument();
   });
 
   it('opens the timeline', () => {
