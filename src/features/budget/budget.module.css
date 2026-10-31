@@ -15,7 +15,7 @@
    its tallest lever. Columns pack and balance themselves. */
 .levers {
   columns: 1;
-  column-gap: var(--space-5);
+  column-gap: var(--space-6);
 }
 
 @media (min-width: 640px) {
@@ -35,13 +35,26 @@
 .lever {
   min-width: 0;
   break-inside: avoid;
-  padding-bottom: var(--space-2);
+  padding-bottom: var(--space-3);
 }
 
 /* Pulls back the last lever's own spacing, which would otherwise leave a
    band of nothing along the bottom of the card. */
 .levers {
-  margin-bottom: calc(-1 * var(--space-2));
+  margin-bottom: calc(-1 * var(--space-3));
+}
+
+/* Where the window has the height to spare, the levers stand further apart.
+   A slider and the next lever's label a hand's width apart is the difference
+   between a panel somebody reads and one they squint at. */
+@media (min-width: 1340px) {
+  .lever {
+    padding-bottom: var(--space-4);
+  }
+
+  .levers {
+    margin-bottom: calc(-1 * var(--space-4));
+  }
 }
 
 .leverHead {
@@ -100,7 +113,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-auto-rows: 1fr;
-  gap: 6px;
+  gap: var(--space-2);
 }
 
 /* A cell with no vertical padding is fine until a label wraps, and then the

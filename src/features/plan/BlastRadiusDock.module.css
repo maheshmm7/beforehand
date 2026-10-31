@@ -108,12 +108,26 @@
   }
 }
 
+/* The caption sits on the figure's own line rather than above it: three
+   stacked lines did not fit the strip's height, and the last of them was
+   cut off by its own edge. */
 .readout {
   grid-area: readout;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.headline {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
   min-width: 0;
 }
 
 .caption {
+  flex: none;
   font-size: var(--text-tiny);
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -122,6 +136,7 @@
 }
 
 .delta {
+  min-width: 0;
   font-family: var(--font-display);
   font-variant-numeric: lining-nums tabular-nums;
   font-feature-settings:
@@ -346,9 +361,17 @@
   .inner {
     /* The actions keep their own width: it is the list that gives way on a
        narrower window, never the two controls. */
-    grid-template-columns: auto minmax(0, 260px) minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 320px) minmax(0, 1fr) auto;
     grid-template-areas: 'gauge readout list actions';
     gap: var(--space-5);
+  }
+
+  /* Two tags to a line, so four of them are two rows and never three: the
+     strip has one height, and what it holds has to be known in advance. */
+  .counts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2px var(--space-3);
   }
 
   .actions {

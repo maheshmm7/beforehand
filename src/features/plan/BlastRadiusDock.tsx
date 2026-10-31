@@ -148,15 +148,17 @@ export function BlastRadiusDock({
         </div>
 
         <div className={styles.readout} role="status" aria-live="polite">
-          <p className={styles.caption}>{live ? 'Pending change' : 'Blast radius'}</p>
-          <p
-            className={cx(
-              styles.delta,
-              live && radius.totalDelta > 0 && styles.deltaUp,
-              live && radius.totalDelta < 0 && styles.deltaDown,
-            )}
-          >
-            {live ? signedMoney(radius.totalDelta) : 'Nothing pending'}
+          <p className={styles.headline}>
+            <span className={styles.caption}>{live ? 'Pending change' : 'Blast radius'}</span>
+            <span
+              className={cx(
+                styles.delta,
+                live && radius.totalDelta > 0 && styles.deltaUp,
+                live && radius.totalDelta < 0 && styles.deltaDown,
+              )}
+            >
+              {live ? signedMoney(radius.totalDelta) : 'Nothing pending'}
+            </span>
           </p>
           {live ? (
             <p className={styles.counts}>

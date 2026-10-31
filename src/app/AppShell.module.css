@@ -151,7 +151,7 @@
   .main {
     grid-column: 2;
     grid-row: 1;
-    padding: var(--space-4) clamp(16px, 3vw, 32px) var(--space-3);
+    padding: var(--space-3) clamp(16px, 3vw, 32px) var(--space-2);
   }
 
   .dock {

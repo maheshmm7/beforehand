@@ -31,13 +31,19 @@ async function spacingFaults(page: Page, where: string): Promise<string[]> {
     }
 
     // The glyphs, not the boxes: a block that fills its column always abuts
-    // the next one, and that is not what anybody sees.
+    // the next one, and that is not what anybody sees. Glyphs its own element
+    // clips away are not seen either, so the ink is bounded by the box that
+    // hides it — a line cut short by an ellipsis ends at the ellipsis.
     const ink = (el: Element): DOMRect => {
       const range = document.createRange();
       range.selectNodeContents(el);
       const rect = range.getBoundingClientRect();
       range.detach();
-      return rect;
+      const clip = getComputedStyle(el).overflowX === 'visible' ? null : el.getBoundingClientRect();
+      if (clip === null) return rect;
+      const left = Math.max(rect.left, clip.left);
+      const right = Math.min(rect.right, clip.right);
+      return new DOMRect(left, rect.top, Math.max(right - left, 0), rect.height);
     };
 
     const leaves = Array.from(document.querySelectorAll<HTMLElement>('body *')).filter((el) => {
